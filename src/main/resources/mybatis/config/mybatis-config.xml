@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- settings -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
+	<!-- typeAliases -->
+	<typeAliases>
+		<typeAlias alias="UserDTO" type="com.hdd.hdeco.domain.UserDTO" />
+		<typeAlias alias="UserAccessDTO" type="com.hdd.hdeco.domain.UserAccessDTO" />
+		<typeAlias alias="OutUserDTO" type="com.hdd.hdeco.domain.OutUserDTO" />
+		<typeAlias alias="SleepUserDTO" type="com.hdd.hdeco.domain.SleepUserDTO" />
+		<typeAlias alias="CartDTO" type="com.hdd.hdeco.domain.CartDTO" />
+		<typeAlias alias="ItemDTO" type="com.hdd.hdeco.domain.ItemDTO" />
+		<typeAlias alias="CartDetailDTO" type="com.hdd.hdeco.domain.CartDetailDTO" />
+		<typeAlias alias="ItemOrderDTO" type="com.hdd.hdeco.domain.ItemOrderDTO" />
+	</typeAliases>
+
+</configuration>
