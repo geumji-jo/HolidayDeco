@@ -1,23 +1,107 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<style>
-	@font-face {
-	    font-family: 'iceJaram-Rg';
-	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/iceJaram-Rg.woff2') format('woff2');
-	    font-weight: normal;
-	    font-style: normal;
-	}
-	
-
-</style>
 <head th:fragment="headFrag(title)">
 <meta charset="UTF-8">
 <title th:text="${title}"></title>
+<link rel="stylesheet" th:href="@{/css/font.css}">
 <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+  }
+ 
+  .text {
+    font-family: 'InkLipquid';
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-150%, 550%); 
+    font-size: 48px;
+  
+  }
+
+  .login {
+    font-family: 'InkLipquid';
+    font-size: 30px;
+    text-align: right; 
+    text-decoration: none; 
+    color : black; 
+    margin-right: 35px;
+  }
+  
+  .login > span {
+    padding: 15px;
+    color : black; 
+  }
+  
+  a {
+    text-decoration: none; 
+  }
+  
+  .logo  {
+    text-align :center;
+    margin-top : 50px;
+  }
+  .nav {
+    margin-top : 20px;
+    margin-bottom : 20px;
+    text-align: center;
+  }
+  .nav a {
+    font-size: 30px;
+    color: #004427;
+  }
+  
+/* nav 밑 라인 */
+
+  .separator--line--green {
+    border: 0;
+    border-bottom: 3px solid #004427;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    width: 0;
+    -webkit-animation: separator-width 1s ease-out forwards;
+            animation: separator-width 1s ease-out forwards;
+  }
+  .separator--line--red {
+    border: 0;
+    border-bottom: 3px solid #EB5858;
+    margin-bottom: 5px;
+    width: 0; 
+    -webkit-animation: separator-width 1s ease-out forwards;
+            animation: separator-width 1s ease-out forwards;
+  }
+  
+  
+  @-webkit-keyframes separator-width {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+    
+  }
+</style>
 </head>
 <body>
-	<div th:fragment="gnbFrag">
+  <div th:fragment="gnbFrag">
+  	<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
+  		<span>
+        <a th:href="@{/user/login.html}" style="color: black;">login</a>
+    		<a th:href="@{/user/join.html}" style="color: black;">join</a>
+      </span>
+  	</div>
+  	
 		<div class="logo" ><img th:src="@{/images/logo.png}"></div>
+<<<<<<< HEAD
 		<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
 			<span><a th:href="@{/user/login.html}">login</a></span>
 			<span><a th:href="@{/user/agree.html}">join</a></span>
@@ -32,5 +116,12 @@
 	<img class="line" th:src="@{/images/line.png}" width="1680px">
 	</div>
 
+=======
+    <div class="nav"><a th:href="@{/}">ornament</a></div>
+    <hr class="separator separator--line--green" />
+    <hr class="separator separator--line--red" />
+      
+  </div>
+>>>>>>> 206db76c5ef3dc5a74d073c82aa85983f4fbad2a
 </body>
 </html>

@@ -1,69 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<style>
-
-@font-face {
-    font-family: 'InkLipquid';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/InkLipquid.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body, html {
-        height: 100%;
-    }
-
-    .main {
-        background-image: url('/images/index.jpg');
-        background-size: cover;
-        width: 1680px;
-        height: 2550px;
-        color : white;
- 
-    }
-    
-    .text {
-    	font-family: 'InkLipquid';
-        position: absolute; 
-        top: 50%; 
-        left: 50%; 
-        transform: translate(-150%, 550%); 
-        font-size: 48px;
-    
-    }
-    
-    a, .login {
-       font-family: 'InkLipquid';
-       font-size: 25px;
-	   text-align: right; 
-	   text-decoration: none; 
-	   color : black; 
-	   margin-right: 25px;
-	}
-	
-	.logo  {
-	text-align :center;
-	margin-top : 100px;
-	}
-</style>
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+  }
+
+  .main {
+    background-image: url('/images/index.jpg');
+    background-size: cover;
+    width: 1680px;
+    height: 2550px;
+    color : white;
+  
+  }
+</style>
 <body>
 
-<div th:replace="~{/layout/header::gnbFrag}"></div>
-
   <div class="main"> 
-      <div class = "text">
-	      '집에서 만나는 크리스마스'<br>
-	      <br>
-	      Merry Christmas!<br>
-	      언제나 홀리데이데코와 포근하게
-      </div> 
+    <div class = "text">
+      '집에서 만나는 크리스마스'<br>
+      <br>
+      Merry Christmas!<br>
+      언제나 홀리데이데코와 포근하게
+    </div> 
   </div>
 
 </body>

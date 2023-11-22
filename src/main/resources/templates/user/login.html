@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<body>
+  <div class="main"> 
+    <h4 class="mb-4 pb-3">Log In</h4>
+    <div>
+      <input type="email" name="logID" placeholder="아이디" id="logID" autocomplete="off">
+    </div>  
+    <div>
+      <input type="password" name="logPass" placeholder="비밀번호" id="logPass" autocomplete="off">
+    </div>
+    <button>로그인</button>
+    <button>카카오 로그인</button>
+    <button>네이버 로그인</button>  
+    <div>아이디 또는 비밀번호를 잊으셨나요?</div>
+    <button>아이디 찾기</button>
+    <button>비밀번호 찾기</button> 
+  </div>
+</body>
+</html>
