@@ -8,7 +8,7 @@
 
 <style>
   * {
-    margin: 0;
+    margin: 0; 
     padding: 0;
     box-sizing: border-box;
   }
@@ -22,7 +22,7 @@
     position: absolute; 
     top: 50%; 
     left: 50%; 
-    transform: translate(-150%, 550%); 
+    transform: translate(-150%, 540%); 
     font-size: 48px;
   
   }
@@ -80,7 +80,7 @@
   }
   
   
-  @-webkit-keyframes separator-width {
+  @-webkit-keyframes separator-width {  
     0% {
       width: 0;
     }
@@ -93,19 +93,14 @@
 </head>
 <body>
   <div th:fragment="gnbFrag">
+		<div class="logo" ><img th:src="@{/images/logo.png}"></div>
   	<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
   		<span>
         <a th:href="@{/user/login.html}" style="color: black;">login</a>
-    		<a th:href="@{/user/join.html}" style="color: black;">join</a>
+    	<a th:href="@{/user/join.html}" style="color: black;">join</a>
       </span>
   	</div>
   	
-		<div class="logo" ><img th:src="@{/images/logo.png}"></div>
-<<<<<<< HEAD
-		<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
-			<span><a th:href="@{/user/login.html}">login</a></span>
-			<span><a th:href="@{/user/agree.html}">join</a></span>
-		</div>
 		<div th:unless="${#strings.isEmpty(session.loginId)}">
 			<span><a th:href="@{/user/checkPw.do}" th:text="${session.loginId}"></a>님 반갑습니다.</span>
 			<span><a th:href="@{/user/logout.do}">로그아웃</a></span>
@@ -116,12 +111,9 @@
 	<img class="line" th:src="@{/images/line.png}" width="1680px">
 	</div>
 
-=======
     <div class="nav"><a th:href="@{/}">ornament</a></div>
     <hr class="separator separator--line--green" />
     <hr class="separator separator--line--red" />
       
-  </div>
->>>>>>> 206db76c5ef3dc5a74d073c82aa85983f4fbad2a
 </body>
 </html>
