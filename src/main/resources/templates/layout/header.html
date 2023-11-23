@@ -16,14 +16,14 @@
 <body>
   <div th:fragment="gnbFrag">
   
-    <!-- 로그인 안했을때 네비바  -->
+  <!-- 로그인 안했을때 네비바  -->
   	<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
   		<span>
         <a th:href="@{/user/login.html}" style="color: black;">login</a>
-    		<a th:href="@{/user/join.html}" style="color: black;">join</a>
+      	<a th:href="@{/user/join.html}" style="color: black;">join</a>
       </span>
   	</div>
-    
+
     <!-- 로그인 했을때 네비바  -->
     <div th:unless="${#strings.isEmpty(session.loginId)}">
       <span>
@@ -39,13 +39,9 @@
     </div>
   	<!-- 글자의 색 변화를 위해 클래스와 id로 선택자를 나눠줌 -->
 		<div class="logoHappy">Happy <span id="logoHolidayDeco" >HolidayDeco</span></div>
-    
     <div class="nav"><a th:href="@{/}">ornament</a></div>
     <hr class="separator separator--line--green" />
     <hr class="separator separator--line--red" />
-      
   </div>
-  
-
 </body>
 </html>
