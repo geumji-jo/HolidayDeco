@@ -86,11 +86,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-  		  	<groupId>com.github.thelinmichael</groupId>
-  			<artifactId>spotify-web-api-java</artifactId>
-  			<version>master-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
@@ -100,36 +95,9 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- websocket과 stomp -->
-		<dependency>
-		   <groupId>org.springframework.boot</groupId>
-		   <artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
-		 <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.webjars/stomp-websocket -->
-		<dependency>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>stomp-websocket</artifactId>
-		    <version>2.3.3-1</version>
-		</dependency>
-        <!-- 아임포트 -->
-		<dependency>
-		    <groupId>com.github.iamport</groupId>
-		    <artifactId>iamport-rest-client-java</artifactId>
-		    <version>0.2.23</version>
-		</dependency>
-
 	</dependencies>
 	
-	<repositories>
-    	<repository>
-        	<id>jitpack.io</id>
-        	<url>https://jitpack.io</url>
-    	</repository>
-	</repositories>
+	
 	<build>
 		<plugins>
 			<plugin>

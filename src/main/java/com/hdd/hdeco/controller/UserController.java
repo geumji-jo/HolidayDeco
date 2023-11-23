@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hdd.hdeco.service.UserService;
+
 import lombok.RequiredArgsConstructor;	
 
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class UserController {
 
-  // field
-  //private final UserService userService;
+  //field
+  private final UserService userService;
     
 	// 로그인
 	@GetMapping("/login.html")
@@ -32,6 +34,11 @@ public class UserController {
 	model.addAttribute("url", url);
 	return "user/login";
 	  }
+	
+  @PostMapping("/login.do")
+  public void login(HttpServletRequest request, HttpServletResponse response) {
+    userService.login(request, response);
+  }
 
   // 이용약관-회원가입
   @GetMapping("/agree.html")
@@ -78,17 +85,14 @@ public class UserController {
   
 
   
-//  @PostMapping("/login.do")
-//  public void login(HttpServletRequest request, HttpServletResponse response) {
-//    userService.login(request, response);
-//  }
-//  
-//  @GetMapping("/logout.do")
-//  public String logout(HttpServletRequest request, HttpServletResponse response) {
-//    // 로그인이 되어 있는지 확인
-//    userService.logout(request, response);
-//    return "redirect:/";
-//  }
+
+  
+  @GetMapping("/logout.do")
+  public String logout(HttpServletRequest request, HttpServletResponse response) {
+    // 로그인이 되어 있는지 확인
+    userService.logout(request, response);
+    return "redirect:/";
+  }
   
 //  @GetMapping("/leave.do")
 //  public void leave(HttpServletRequest request, HttpServletResponse response) {

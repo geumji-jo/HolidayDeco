@@ -3,108 +3,49 @@
 <head th:fragment="headFrag(title)">
 <meta charset="UTF-8">
 <title th:text="${title}"></title>
-<link rel="stylesheet" th:href="@{/css/font.css}">
+<link rel="stylesheet" th:href="@{/css/font.css}"> <!-- 폰트 css모음 -->
+<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- header css모음 -->
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Island+Moments&display=swap" rel="stylesheet">
+
 <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+<script th:src="@{/js/logoTitle.js}"></script>
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body, html {
-    height: 100%;
-  }
- 
-  .text {
-    font-family: 'InkLipquid';
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-150%, 550%); 
-    font-size: 48px;
-  
-  }
-
-  .login {
-    font-family: 'InkLipquid';
-    font-size: 30px;
-    text-align: right; 
-    text-decoration: none; 
-    color : black; 
-    margin-right: 35px;
-  }
-  
-  .login > span {
-    padding: 15px;
-    color : black; 
-  }
-  
-  a {
-    text-decoration: none; 
-  }
-  
-  .logo  {
-    text-align :center;
-    margin-top : 50px;
-  }
-  .nav {
-    margin-top : 20px;
-    margin-bottom : 20px;
-    text-align: center;
-  }
-  .nav a {
-    font-size: 30px;
-    color: #004427;
-  }
-  
-/* nav 밑 라인 */
-
-  .separator--line--green {
-    border: 0;
-    border-bottom: 3px solid #004427;
-    margin-top: 25px;
-    margin-bottom: 15px;
-    width: 0;
-    -webkit-animation: separator-width 1s ease-out forwards;
-            animation: separator-width 1s ease-out forwards;
-  }
-  .separator--line--red {
-    border: 0;
-    border-bottom: 3px solid #EB5858;
-    margin-bottom: 5px;
-    width: 0; 
-    -webkit-animation: separator-width 1s ease-out forwards;
-            animation: separator-width 1s ease-out forwards;
-  }
-  
-  
-  @-webkit-keyframes separator-width {
-    0% {
-      width: 0;
-    }
-    100% {
-      width: 100%;
-    }
-    
-  }
-</style>
 </head>
 <body>
   <div th:fragment="gnbFrag">
+  
+    <!-- 로그인 안했을때 네비바  -->
   	<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
   		<span>
         <a th:href="@{/user/login.html}" style="color: black;">login</a>
     		<a th:href="@{/user/join.html}" style="color: black;">join</a>
       </span>
   	</div>
-  	
-		<div class="logo" ><img th:src="@{/images/logo.png}"></div>
+    
+    <!-- 로그인 했을때 네비바  -->
+    <div th:unless="${#strings.isEmpty(session.loginId)}">
+      <span>
+        <span th:text="|${session.loginId} 님 반갑습니다|"></span>
+        <a th:href="@{/user/logout.do}">로그아웃</a>
+        <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
+          <a class="aa nav-link" th:href="@{/user/mypage.html}">마이페이지</a>
+        </th:block>
+        <th:block th:if="${session.loginId != null and session.adminChk == 1}">
+          <a class="aa nav-link" th:href="@{/admin/adminMain.html}">관리자페이지</a>
+        </th:block>
+      </span>
+    </div>
+  	<!-- 글자의 색 변화를 위해 클래스와 id로 선택자를 나눠줌 -->
+		<div class="logoHappy">Happy <span id="logoHolidayDeco" >HolidayDeco</span></div>
+    
     <div class="nav"><a th:href="@{/}">ornament</a></div>
     <hr class="separator separator--line--green" />
     <hr class="separator separator--line--red" />
       
   </div>
+  
+
 </body>
 </html>
