@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.hdd.hdeco.mapper.ItemMapper">
+
+	<select id="getItemCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM ITEM_T
+	</select>
+
+	<select id="getItemList" parameterType="Map" resultType="ItemDTO">
+		SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITE_AT
+		FROM ITEM_T
+			<where>
+				<if test= "column != '' and query != ''">
+					${column} LIKE CONCAT('%', UPPER(#{query}, '%') OR ${column} LIKE CONCAT('%', LOWER(#{query}), '%'))
+				</if>
+			</where>
+			ORDER BY ITEM_WRITE_AT DESC
+			LIMIT #{begin}, #{recordPerPage}
+	</select>
+
+
+</mapper>
