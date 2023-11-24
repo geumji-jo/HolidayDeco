@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/list.css}">
+<link rel="stylesheet" th:href="@{/css/font.css}">
+</head>
+<body>
+  <div id="itemList">
+      <form id="itemSearch">
+        <select name="sort" id="sort" class="sort">
+          <option value="priceHigh" id="priceHigh">Price : High-Low</option>
+          <option value="priceLow" id="priceLow">Price : Low-High</option>
+        </select> <input type="text" id="searchBar" name="searchBar"
+          class="searchBar" placeholder="Search"> <span
+          class="material-icons" id="searchicons" onclick="fnSearch()">검색</span>
+      </form>
+    <div class="itemList">
+      <th:block th:each="item, vs:${itemList}">
+        <div class="item">
+          <div class="MainImg">
+            <div class="photo_feather"></div>
+            <img th:src="@{/item/display.do(itemNo=${item.itemNo})}"
+              class="photo_image">
+          </div>
+          <div class="itemInfo" th:text="${item.itemTitle}"></div>
+          <div class="itemInfo" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></div>
+        </div>
+      </th:block>
+    </div>
+    <div id="pagination" th:utext="${pagination}"></div>
+  </div>
+
+</body>
+</html>

@@ -116,7 +116,7 @@ ITEM_PRICE VARCHAR(40) ,                -- 아이템가격
 ITEM_MAIN_IMG VARCHAR(100) ,	        -- 아이템메인이미지
 ITEM_DETAIL_IMG VARCHAR(100),           -- 아이템상세이미지
 ITEM_STOCK INT,                         -- 아이템수량
-ITEM_WIRTED_AT DATETIME,                -- 아이템등록날짜
+ITEM_WRITED_AT DATETIME,                -- 아이템등록날짜
 CONSTRAINT PK_ITEM_T PRIMARY KEY(ITEM_NO)
 );	
 
@@ -194,3 +194,47 @@ VALUES ('admin', 'admin1!', '관리자', 'F', 'admin@naver.com', '01000000000','
 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
 VALUES ('user1', 'user1!', '사용자', 'F', 'user1@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-05-01 13:01:01', 0);
+
+
+-- -- -- -- -- -- -- -- -- --<item Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('tree paper bag','5700','/storage/itemImg/상품(1).jpg','/storage/itemImg/상품(1).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('cutie bear doll','12000','/storage/itemImg/상품(2).jpg','/storage/itemImg/상품(2).png',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_gold','5200','/storage/itemImg/상품(3).jpg','/storage/itemImg/상품(2).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('christmas candle','8900','/storage/itemImg/상품(4).jpg','/storage/itemImg/상품(4).png',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_snowman','6000','/storage/itemImg/상품(5).jpg','/storage/itemImg/상품(5).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('snowball','9200','/storage/itemImg/상품(6).jpg','/storage/itemImg/상품(6).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('christmas cookie','5000','/storage/itemImg/상품(7).jpg','/storage/itemImg/상품(7).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_snowman2','5300','/storage/itemImg/상품(8).jpg','/storage/itemImg/상품(8).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('cane candy','1200','/storage/itemImg/상품(9).jpg','/storage/itemImg/상품(9).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('snowball_house','15000','/storage/itemImg/상품(10).jpg','/storage/itemImg/상품(10).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('tree cookie tool','4500','/storage/itemImg/상품(11).jpg','/storage/itemImg/상품(11).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_twinkle','4600','/storage/itemImg/상품(12).jpg','/storage/itemImg/상품(12).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_bell','5000','/storage/itemImg/상품(13).jpg','/storage/itemImg/상품(13).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_horse','15700','/storage/itemImg/상품(14).jpg','/storage/itemImg/상품(14).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('ornament_red','5900','/storage/itemImg/상품(15).jpg','/storage/itemImg/상품(15).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('red candle set','22000','/storage/itemImg/상품(16).jpg','/storage/itemImg/상품(16).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('christmas card','3000','/storage/itemImg/상품(17).jpg','/storage/itemImg/상품(17).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('dishes','18200','/storage/itemImg/상품(18).jpg','/storage/itemImg/상품(18).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('tree wrapper','4000','/storage/itemImg/상품(19).jpg','/storage/itemImg/상품(19).jpg',100,NOW());
+INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
+VALUES ('wrapper set','8000','/storage/itemImg/상품(20).jpg','/storage/itemImg/상품(20).jpg',100,NOW());
+
