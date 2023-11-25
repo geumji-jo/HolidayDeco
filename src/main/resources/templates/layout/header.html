@@ -11,37 +11,44 @@
 
 <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
 <script th:src="@{/js/logoTitle.js}"></script>
-
 </head>
 <body>
   <div th:fragment="gnbFrag">
   
-  <!-- 로그인 안했을때 네비바  -->
-  	<div class="login" th:if="${#strings.isEmpty(session.loginId)}">
-  		<span>
-        <a th:href="@{/user/login.html}" style="color: black;">login</a>
-      	<a th:href="@{/user/join.html}" style="color: black;">join</a>
-      </span>
-  	</div>
-
-    <!-- 로그인 했을때 네비바  -->
-    <div th:unless="${#strings.isEmpty(session.loginId)}">
-      <span>
-        <span th:text="|${session.loginId} 님 반갑습니다|"></span>
-        <a th:href="@{/user/logout.do}">로그아웃</a>
-        <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
-          <a class="aa nav-link" th:href="@{/user/mypage.html}">마이페이지</a>
-        </th:block>
-        <th:block th:if="${session.loginId != null and session.adminChk == 1}">
-          <a class="aa nav-link" th:href="@{/admin/adminMain.html}">관리자페이지</a>
-        </th:block>
-      </span>
+    <div class="login">
+      <!-- 로그인 안했을때 네비바  -->
+	    <div th:if="${#strings.isEmpty(session.loginId)}">
+    		<span>
+          <a th:href="@{/user/login.html}" style="color: black;">login</a>
+        	<a th:href="@{/user/agree.html}" style="color: black;">join</a>
+        </span>
+	    </div>
+      <!-- 로그인 했을때 네비바  -->
+      <div th:unless="${#strings.isEmpty(session.loginId)}">
+        <span>
+          <span th:text="|${session.loginId} 님 반갑습니다|"></span>
+          <a class="nav-link" th:href="@{/user/logout.do}">logout</a>
+          <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
+            <a class="nav-link" th:href="@{/user/mypage.html}">mypage</a>
+          </th:block>
+          <th:block th:if="${session.loginId != null and session.adminChk == 1}">
+            <a class="nav-link" th:href="@{/admin/adminMain.html}">adminpage</a>
+          </th:block>
+        </span>
+      </div>
     </div>
-  	<!-- 글자의 색 변화를 위해 클래스와 id로 선택자를 나눠줌 -->
-		<div class="logoHappy">Happy <span id="logoHolidayDeco" >HolidayDeco</span></div>
-    <div class="nav"><a th:href="@{/}">ornament</a></div>
+    
+  	<!-- 글자의 색 변화를 위해 클래스와 id로 선택자를 나눠줌 / 색 변화주기는 logoTitle.js 색지정 : header.css-->
+    <div class="logo">
+      <a th:href="@{/}">
+        <span class="logoHappy">Happy </span>
+        <span id="logoHolidayDeco" >HolidayDeco</span>
+      </a>
+    </div>
+    <div class="item-link"><a th:href="@{/item/list.do}">ChristmasItem</a></div>
     <hr class="separator separator--line--green" />
     <hr class="separator separator--line--red" />
   </div>
+  
 </body>
 </html>

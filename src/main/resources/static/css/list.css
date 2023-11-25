@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+  #itemSearch {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+ .itemList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+    gap: 5px; /* 아이템 간의 간격 조절 */
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+
+  .item {
+    width: calc(33.33% - 20px); /* 3개씩 배치하므로 100% / 3, 간격은 margin을 이용해서 조절 */
+    margin: 5px; /* 아이템 사이의 간격 조절 */
+    box-sizing: border-box; /* width와 margin을 더할 때 요소의 크기가 변하지 않도록 box-sizing 속성 설정 */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .MainImg {
+    flex-grow: 1; /* 이미지가 세로로 최대한 늘어날 수 있도록 설정 */
+    position: relative; /* 이미지 컨테이너에 상대적 위치 설정 */
+    overflow: hidden; /* 넘치는 부분은 숨김 처리 */
+  }
+
+  .photo_feather {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+  }
+
+  .photo_image {
+    width: 100%; /* 이미지가 이미지 컨테이너에 가득 채우도록 설정 */
+    height: 100%; /* 이미지가 이미지 컨테이너에 가득 채우도록 설정 */
+    object-fit: cover; /* 이미지의 비율을 유지하면서 가득 차도록 설정 */
+  }
+  
+  .itemInfo {
+    font-family: 'InkLipquid';
+    font-size : 18px;
+    text-align: center;
+    margin-top: 10px;
+  
+  }
+  
+  #pagination {
+    text-align: center;
+    color: #004427;
+  }
+  
+  
+
+ 

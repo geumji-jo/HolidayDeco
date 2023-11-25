@@ -17,17 +17,17 @@ public interface UserService {
   public void login(HttpServletRequest request, HttpServletResponse response);
   public void autologin(HttpServletRequest request, HttpServletResponse response);
   public void logout(HttpServletRequest request, HttpServletResponse response);
-  public void leave(HttpServletRequest request, HttpServletResponse response);
-
-	/* public void sleepUserHandle(); */
-  public void restore(HttpServletRequest request, HttpServletResponse response);
-  public boolean checkPw(String id, String pw);
-  public UserDTO getUserById(String id);
-  public int updateMypage(HttpServletRequest request, HttpServletResponse response);
-  public int modifyUserInfo(UserDTO userDTO);
-  public Map<String, Object> findUser(String name, String email);
-  public void findPw(HttpServletRequest request, HttpServletResponse response);
-  public void modifyPw(HttpServletRequest request, HttpServletResponse response);
+//  public void out(HttpServletRequest request, HttpServletResponse response);
+//
+//	/* public void sleepUserHandle(); */
+//  public void restore(HttpServletRequest request, HttpServletResponse response);
+//  public boolean checkPw(String id, String pw);
+//  public UserDTO getUserById(String id);
+//  public int updateMypage(HttpServletRequest request, HttpServletResponse response);
+//  public int modifyUserInfo(UserDTO userDTO);
+//  public Map<String, Object> findUser(String name, String email);
+//  public void findPw(HttpServletRequest request, HttpServletResponse response);
+//  public void modifyPw(HttpServletRequest request, HttpServletResponse response);
  // public UserDTO verifyTemporaryPassword(String id, String temporaryPassword);  
 
  //public int updatePwd(int mobile, String password) throws Exception;

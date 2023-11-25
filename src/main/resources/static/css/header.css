@@ -41,19 +41,22 @@
     user-select: none;
   }
   
+  .logo {
+    text-align :center;
+  }
+  
   #logoHolidayDeco  {
     font-family: 'Island-Moments';
-    text-align :center;
     margin-top : 50px;
     font-size: 100px;
     user-select: none;
   }
   .logoHappy  {
     font-family: 'Island-Moments';
-    text-align :center;
     margin-top : 50px;
     font-size: 100px;
     user-select: none;
+    color: black;
   }
   
   .green {
@@ -64,16 +67,28 @@
     color: red;
   }
   
-  
-  .nav {
-    margin-top : 20px;
-    margin-bottom : 20px;
-    text-align: center;
+  .item-link {
+  text-align: center;
+  margin-top : 20px;
+  margin-bottom : 10px;
+  }
+  .item-link a {
+    font-family: 'InkLipquid';
+    font-size: 35px;
     user-select: none;
+    color: #004427;
   }
   .nav a {
-    font-size: 30px;
-    color: #004427;
+    font-family: 'InkLipquid';
+    font-size: 35px;
+    color: #595959;
+    user-select: none;
+  }
+  
+  .nav-link {
+    font-family: 'InkLipquid';
+    font-size: 35px;
+    color: #595959;
     user-select: none;
   }
   
@@ -84,21 +99,23 @@
     border-bottom: 3px solid #004427;
     margin-top: 25px;
     margin-bottom: 15px;
-    width: 0;
-    -webkit-animation: separator-width 1s ease-out forwards;
-            animation: separator-width 1s ease-out forwards;
+    width: 100%;
+    /* 애니메이션 */
+    /* -webkit-animation: separator-width 1s ease-out forwards;
+            animation: separator-width 1s ease-out forwards; */
   }
   .separator--line--red {
     border: 0;
     border-bottom: 3px solid #EB5858;
     margin-bottom: 5px;
-    width: 0; 
-    -webkit-animation: separator-width 1s ease-out forwards;
-            animation: separator-width 1s ease-out forwards;
+    width: 100%; 
+    /* 애니메이션 */
+  /*   -webkit-animation: separator-width 1s ease-out forwards;
+            animation: separator-width 1s ease-out forwards; */
   }
   
   
-  @-webkit-keyframes separator-width {
+ /*  @-webkit-keyframes separator-width {
     0% {
       width: 0;
     }
@@ -107,5 +124,5 @@
     }
     
   }
-  
+   */
 /* nav 밑 라인 끝 */
