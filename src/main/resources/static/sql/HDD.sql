@@ -45,7 +45,7 @@ CONSTRAINT PK_USER_T PRIMARY KEY(USER_NO)
 	
 -- 회원 접속 기록(회원마다 마지막 로그인 날짜 1개만 기록)	
 CREATE TABLE USER_ACCESS_T (	
-USER_NO        INT NOT NULL,	 -- FK회원 번호(회원테이블)
+USER_NO        INT,	 -- FK회원 번호(회원테이블)
 ID VARCHAR(40)  NOT NULL UNIQUE, -- 회원 아이디(회원테이블)
 JOINED_AT DATETIME,              -- 가입일(회원테이블)
 LAST_LOGIN_AT DATETIME,          -- 마지막로그인날짜
