@@ -10,15 +10,7 @@
     height: 100%;
   }
  
-  .text {
-    font-family: 'InkLipquid';
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-150%, 550%); 
-    font-size: 48px;
-  
-  }
+
 
   .login {
     font-family: 'InkLipquid';

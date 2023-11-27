@@ -16,9 +16,11 @@ public interface ItemService {
   public ResponseEntity<byte[]> display(int itemNo);
   public ResponseEntity<byte[]> displayDetail(int itemNo);
   
+  public Map<String, Object> addCartDetail(HttpServletRequest request); 
+  
 	/*
-	 * public Map<String, Object> addCartDetail(HttpServletRequest request); public
-	 * void getCartDetailList(int cartNo, Model model);
+	 * 
+	 * public void getCartDetailList(int cartNo, Model model);
 	 */
 
 }

@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.hdd.hdeco.domain.CartDTO;
+import com.hdd.hdeco.domain.CartDetailDTO;
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.mapper.ItemMapper;
 import com.hdd.hdeco.util.PageUtil;
@@ -103,62 +105,45 @@ public class ItemServiceImpl implements ItemService{
   	return image;
   }
   
-
-	/*
-	 * @Override public Map<String, Object> addCartDetail(HttpServletRequest
-	 * request) { // TODO Auto-generated method stub return null; }
-	 * 
-	 * @Override public void getCartDetailList(int cartNo, Model model) { // TODO
-	 * Auto-generated method stub
-	 * 
-	 * }
-	 */
-  
-
-/*
-  public List<HashtagDTO> getHashtagName(int cdNo) {
-     return shopMapper.getHashtagName(cdNo);
-  }
-  
   @Override
   public Map<String, Object> addCartDetail(HttpServletRequest request) {
      try {
         
         
         int userNo = Integer.parseInt(request.getParameter("userNo"));
-        int cdNo = Integer.parseInt(request.getParameter("cdNo"));
+        int cdNo = Integer.parseInt(request.getParameter("itemNo"));
         int count = Integer.parseInt(request.getParameter("count"));
      
         // 카트 존재 확인
-        CartDTO cartDTO = shopMapper.getCartByUserNo(userNo);
+        CartDTO cartDTO = itemMapper.getCartByUserNo(userNo);
 
         // 카트 없으면 만들기
         if(cartDTO == null) {
-           int insertResult = shopMapper.madeCart(userNo);  // int 결과는 어차피 1 아니면 0
+           int insertResult = itemMapper.madeCart(userNo);  // int 결과는 어차피 1 아니면 0
            if(insertResult == 1) {
-              cartDTO = shopMapper.getCartByUserNo(userNo);
+              cartDTO = itemMapper.getCartByUserNo(userNo);
            }
         }
         
         // 파라미터 전달용 Map
         Map<String, Object> map = new HashMap<>();
         map.put("cartNo", cartDTO.getCartNo());
-        map.put("cdNo", cdNo);
+        map.put("itemNo", cdNo);
         map.put("count", count);
 
         // 이 장바구니에 이 CD를 장바구니에 담은 적이 있는지 점검
-        CartDetailDTO cartDetailDTO = shopMapper.confirmCdInCart(map);
+        CartDetailDTO cartDetailDTO = itemMapper.confirmItemInCart(map);
         
         // 장바구니 추가 및 수량 업데이트 결과
         int addCartDetailResult = 0;
         
         // 장바구니에 담은 적이 없는 CD이면 장바구니에 추가
         if(cartDetailDTO == null) {
-           addCartDetailResult = shopMapper.addCartDetail(map);            
+           addCartDetailResult = itemMapper.addCartDetail(map);            
         }         
         // 이미 장바구니에 담은 CD이면 수량 업데이트
         else {
-           addCartDetailResult = shopMapper.modifyCartDetail(map);
+           addCartDetailResult = itemMapper.modifyCartDetail(map);
         }
         
         // 장바구니를 담고 이동하는데 필요한 것들 
@@ -175,6 +160,11 @@ public class ItemServiceImpl implements ItemService{
      
   }
   
+  
+
+/*
+  
+
 
   @Override
   public void getCartDetailList(int cartNo, Model model) {

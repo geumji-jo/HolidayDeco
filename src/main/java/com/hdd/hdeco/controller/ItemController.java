@@ -38,14 +38,19 @@ private final ItemService itemService;
 	@GetMapping("/displayDetail.do") 
 	public ResponseEntity<byte[]> displayDetail(@RequestParam("itemNo") int itemNo) {
 		return itemService.displayDetail(itemNo);
+		
+		
+	}
+	
+	 @GetMapping("/detail.do") public String Detail(@RequestParam(value="itemNo",required=false, defaultValue="0") int itemNo, Model model) {
+		 itemService.getItemByNo(itemNo, model); 
+		 return "item/detail"; 
 	}
 	
 	
 
 	/*
-	 * @GetMapping("/detail.do") public String Detail(@RequestParam(value="cdNo",
-	 * required=false, defaultValue="0") int cdNo, Model model) {
-	 * itemService.getCdByNo(cdNo, model); return "shop/detail"; }
+	
 	 * 
 	 * 
 	 * @GetMapping("/getCartDetailList.do") //shopservice를 컨트롤러에서 반환하고 있기 때문에

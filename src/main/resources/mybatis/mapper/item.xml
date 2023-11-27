@@ -33,8 +33,8 @@
        WHERE ITEM_NO = #{itemNo}
     </select>
    
-   
-  <!--  <select id="getCartByUserNo" parameterType="int" resultType="CartDTO">
+   <!-- userNo를 이용하여 카트 정보 읽어오기 -->
+  <select id="getCartByUserNo" parameterType="int" resultType="CartDTO">
       SELECT CART_NO
         FROM CART_T
        WHERE USER_NO = #{userNo}
@@ -56,20 +56,20 @@
       )
    </insert>
    
-   
+
    <select id="confirmItemInCart" parameterType="Map" resultType="CartDetailDTO">
       SELECT CART_DETAIL_NO
         FROM CART_DETAIL_T
        WHERE CART_NO = #{itemNo} AND ITEM_NO = #{itemNo}
    </select>
    
-   <select id="confirmUsersInOrder" parameterType="Map" resultType="OrderDTO">
+   <select id="confirmUsersInOrder" parameterType="Map" resultType="ItemOrderDTO">
       SELECT ORDER_NO
         FROM USER_T
        WHERE USER_NO = #{userNo} AND CART_NO = #{cartNo}
    </select>
    
-   <insert id="addCartDetail" parameterType="Map">
+ <!--   <insert id="addCartDetail" parameterType="Map">
       INSERT INTO CART_DETAIL (
           COUNT
         , CART_NO
@@ -144,7 +144,7 @@
    
    <select id="getOrderNoByUserNo" parameterType="int" resultType="OrderDTO">
     SELECT O.ORDER_NO
-     FROM ORDER_TBL O RIGHT JOIN USERS U
+     FROM ORDER_T O RIGHT JOIN USER U
      ON USER_NO = USER_NO
      WHERE USER_NO = #{userNo}
    </select>
@@ -206,7 +206,6 @@
         , #{CartDTO.cartNo}
         , #{CdDTO.cdNo}
       )
-   </insert>
- -->
+   </insert> -->
 
 </mapper>
