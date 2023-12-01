@@ -5,27 +5,56 @@
 
 }
 
-#itemSearch {
+#searchForm {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
+
 }
+
+#sort{
+  width: 120px;
+  padding: .8em .5em;
+  font-family: 'SUITE-Regular';
+  appearance: none;
+  border-width: 0 0 1px;
+  text-align: center;
+}
+
+ #searchBar {
+  width: 200px;
+  padding: .8em .5em;
+  font-family: 'SUITE-Regular';
+  appearance: none;
+  border-width: 0 0 1px;
+  text-align: center;
+}
+
+ #sort:focus, #searchBar:focus {
+ outline: none;
+}
+
+button {
+  border: none;
+  background-color: white;
+}
+
 
 .itemList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   gap: 5px;
   margin-left: 200px;
   margin-right: 200px;
 }
 
 .item {
-  width: calc(33.33% - 20px);
-  margin: 5px;
-  box-sizing: border-box;
+  width: calc(33.33% - 20px); 
+  margin: 5px; 
+  box-sizing: border-box; 
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
 }
 
 .MainImg {

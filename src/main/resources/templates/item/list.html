@@ -1,37 +1,95 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
-<div th:replace="~{/layout/header::gnbFrag}"></div>
-<title>Insert title here</title>
-<link rel="stylesheet" th:href="@{/css/list.css}">
-<link rel="stylesheet" th:href="@{/css/font.css}">
+<head>
+  <th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/list.css}">
+  <link rel="stylesheet" th:href="@{/css/font.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+  <div th:replace="~{/layout/header::gnbFrag}"></div>
+
 <body>
   <div id="itemList">
-      <form id="itemSearch">
-        <select name="sort" id="sort" class="sort">
-          <option value="priceHigh" id="priceHigh">Price : High-Low</option>
-          <option value="priceLow" id="priceLow">Price : Low-High</option>
-        </select> <input type="text" id="searchBar" name="searchBar"
-          class="searchBar" placeholder="Search"> <span
-          class="material-icons" id="searchicons" onclick="fnSearch()">검색</span>
-      </form>
-    <div class="itemList">
+    <form id="searchForm" th:action="@{/item/search.do}"  method="GET">
+      <select name="sort" id="sort" class="sort">
+        <option value="title" id="title">Title</option>
+      </select>
+      <input type="search" name="searchBar" id="searchBar" class="searchBar" placeholder="Search">
+      <button type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+    <div class="itemList" >
       <th:block th:each="item, vs:${itemList}">
         <div class="item">
           <div class="MainImg">
-            <div class="photo_feather"></div>
-            <img th:src="@{/item/display.do(itemNo=${item.itemNo})}"
-              class="photo_image">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+              <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+            </a>
           </div>
-          <div class="itemInfo" th:text="${item.itemTitle}"></div>
-          <div class="itemInfo" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></div>
+          <!-- itemTitle 클릭 시 이동 -->
+          <div class="itemInfo">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+          </div>
+          <!-- itemPrice 클릭 시 이동 -->
+          <div class="itemInfo">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+          </div>
         </div>
       </th:block>
     </div>
     <div id="pagination" th:utext="${pagination}"></div>
   </div>
-
 </body>
+<script>
+
+
+function fnSearch() {
+	  var searchBar = $('#searchBar').val();
+
+	  // 검색어를 입력하지 않았을 때 경고창 띄우기
+	  if (searchBar === '') {
+	    alert('검색어를 입력해주세요.');
+	    return;
+	  }
+
+	  $.ajax({
+		    type: 'GET',
+		    url: '/item/search.do',
+		    dataType: 'json',
+		    data: {
+		      query: searchBar
+		    },
+		    success:  
+		    	location.href="/item/search.do"
+		  });
+		}
+
+
+
+
+// 폼 서브밋 이벤트 리스너 추가
+$('#itemSearch').on('submit', function (event) {
+  event.preventDefault(); // 기본 동작 방지
+  fnSearch();
+}); 
+
+//돋보기 이미지 클릭 시 검색 결과 보여주는 함수
+$('.fa-magnifying-glass').click(function (event) {
+    event.preventDefault();
+    fnSearch();
+});
+//엔터 키 입력 시 폼 서브밋 방지
+$('#searchBar').on('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        fnSearch();
+    }
+});
+</script>
+
+
+  
+
 </html>
