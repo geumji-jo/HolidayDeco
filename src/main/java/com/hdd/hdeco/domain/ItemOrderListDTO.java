@@ -7,20 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemOrderDTO {
+public class ItemOrderListDTO {
 	
-	private int ItemOrderNo;
-	private int orderTotal;
-	private String id;
+	private int orderListNo;
+	private UserDTO userNo;
+	private String name;
 	private String mobile;
 	private String postcode;
+	private String roadAddress;
 	private String jibunAddress;
 	private String detailAddress;
-	private String name;
-	private String itemMainImg;
 	private int cartDetailCount;
-	private CartDTO cartNo;
-	private ItemDTO itemNo;
-	private UserDTO userNo;
+	private int orderTotal;
 
 }

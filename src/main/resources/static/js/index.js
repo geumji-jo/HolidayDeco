@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.querySelector("body");
-  const MIN_DURATION = 30;
+  const MIN_DURATION = 20;
 
   function makeSnowflake() {
     const snowflake = document.createElement("div");
     const delay = Math.random() * 20;
     const initialOpacity = Math.random();
-    const duration = Math.random() * 40 + MIN_DURATION;
+    const duration = Math.random() * 20 + MIN_DURATION;
 
     snowflake.classList.add("snowflake");
     snowflake.style.left = `${Math.random() * window.screen.width}px`;

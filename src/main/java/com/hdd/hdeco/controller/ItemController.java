@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.service.ItemService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,48 +23,39 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/item")
 @Controller
 public class ItemController {
-private final ItemService itemService;
-	
+	private final ItemService itemService;
+
 	@GetMapping("/list.do")
 	public String ItemList(HttpServletRequest request, Model model) {
 		itemService.getItemList(request, model);
 		return "item/list";
 	}
-	
-	@GetMapping("/display.do") 
+
+	@GetMapping("/display.do")
 	public ResponseEntity<byte[]> display(@RequestParam("itemNo") int itemNo) {
 		return itemService.display(itemNo);
 	}
-	
-	@GetMapping("/displayDetail.do") 
+
+	@GetMapping("/displayDetail.do")
 	public ResponseEntity<byte[]> displayDetail(@RequestParam("itemNo") int itemNo) {
 		return itemService.displayDetail(itemNo);
-		
-		
-	}
-	
-	 @GetMapping("/detail.do") public String Detail(@RequestParam(value="itemNo",required=false, defaultValue="0") int itemNo, Model model) {
-		 itemService.getItemByNo(itemNo, model); 
-		 return "item/detail"; 
-	}
-	
-	
 
-	/*
-	
-	 * 
-	 * 
-	 * @GetMapping("/getCartDetailList.do") //shopservice를 컨트롤러에서 반환하고 있기 때문에
-	 * service에서 getCartDetailList는 void 타입으로 해도 좋다 public String
-	 * getCartDetailList(@RequestParam("cartNo") int cartNo , Model model) {
-	 * itemService.getCartDetailList(cartNo, model); return "shop/cart"; }
-	 * 
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @PostMapping(value="/addCartDetail.do", produces="application/json") public
-	 * Map<String, Object> addCartDetail(HttpServletRequest request) { return
-	 * itemService.addCartDetail(request); }
-	 */
+	}
 
-}
+	@GetMapping("/detail.do")
+	public String Detail(@RequestParam(value = "itemNo", required = false, defaultValue = "0") int itemNo, Model model) {
+		itemService.getItemByNo(itemNo, model);
+		return "item/detail";
+	}
+
+	@GetMapping("/search.do")
+	public String searchItem(@RequestParam("searchBar") String searchBar, Model model) {
+	    if (searchBar.isEmpty()) {
+	        return "redirect:/item/search.do";
+	    }
+
+	    List<ItemDTO> itemList = itemService.searchItem(searchBar);
+	    model.addAttribute("itemList", itemList);
+	    return "item/search"; // 렌더링할 템플릿의 이름
+	}
+	}
