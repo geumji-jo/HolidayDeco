@@ -1,0 +1,45 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+}
+
+.snowflake {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white; 
+  position: absolute; /* 눈송이 감추기 위해 사용 */
+  top: 260px; /* 이미지 시작점부터 눈 내릴 수 있도록 함 */
+  box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.7);
+}
+ .main {
+  background-image: url('/images/index.jpg');
+  background-size: cover;
+  width: 1680px;
+  height: 2550px;
+  color: white;
+} 
+
+@keyframes fall {  
+    from{} /* 눈송이가 있는 곳에서 애니메이션이 시작할 것이기 때문에 비워둚 */
+    to{
+    transform: translateY(100vh);  
+    opacity: 0.4;
+    }
+}
+
+  .text {
+    font-family: 'SUITE-Regular';
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-120%, 600%); 
+    font-size: 48px;
+  
+  }

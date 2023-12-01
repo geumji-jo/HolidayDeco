@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+.detailPage {
+  display: flex;
+  justify-content: center; /* 부모를 가운데 정렬하고 싶은 경우에 추가 */
+}
+
+.itemImg {
+  display: flex;
+  margin-top: 100px;
+}
+
+.main-image {
+  width: 550px;
+  height: 350px;
+  border-radius: 10px; margin-right : 50px;
+  margin-bottom: 60px;
+  margin-right: 80px;
+  margin-left: 170px;
+}
+
+.itemInfo {
+  font-family: 'SUITE-Regular';
+  display: flex;
+  flex-direction: column; /* 정보를 세로로 배치하려면 추가 */
+}
+
+#itemTitle {
+  font-size: 25px;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+#itemPrice {
+  color: #EB5858;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.count-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+  width: 400px;
+}
+
+.count-text {
+  margin-right: 250px;
+}
+
+.count {
+  margin-right: 100px;
+}
+
+#countUp {
+  width: 90px;
+  height: 50px;
+  text-align: center;
+  border: none;
+  background-color: #FAF2E4;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-group input {
+  color: #CBCBCB;
+  font-size: 20px;
+  margin-bottom: -4px;
+}
+
+.button-group > input {
+  font-family: 'SUITE-Regular';
+}
+
+.btnBuyCount {
+  border: none;
+  background-color: transparent;
+}
+
+#btnAddToCart, #btnBuy {
+  width: 180px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 20px;
+  font-size: 18px;
+  text-align: center;
+  margin-right: 20px;
+}
+
+#btnAddToCart {
+  background-color: #EB5858;
+}
+
+#btnBuy {
+  background-color: #004427;
+  color: white;
+}
+
+#detailImg {
+  justify-content: center;
+  display: flex;
+}
+
+#detailImg > img {
+  
+  width : 1050px;
+}
+
+.price-group {
+  display: flex;
+  margin-right: 210px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}

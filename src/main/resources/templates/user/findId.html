@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:inline=javascript>
+
+  function fnFindId() {
+    $('#btnFindId').on('click', function(){
+      $.ajax({
+        type: 'post',
+        url: '/user/findId.do',
+        //contentType: 'application/json',  // 보내는 데이터가 JSON이라는 의미입니다. 
+        data: {            // 보내는 데이터의 파라미터 이름이 없기 때문에 컨트롤러에서 parameter를 받는 request.getParameter(), @RequestParam, 커맨드 객체 모두 사용할 수 없습니다.          
+          name: $('#name').val(),         // 컨트롤러에서는 @RequestBody와 객체 또는 Map을 통해서 받아야 합니다.
+          email: $('#email').val()
+        },
+        dataType: 'json',
+        success: function(resData) {
+          if(resData.findUser != null) {
+            var id = resData.findUser.id;
+            
+            moment.locale('ko-KR');
+            alert('회원님의 아이디는 ' + id + '입니다.\n(가입일 : ' + moment(resData.findUser.joinedAt).format("YYYY년 MM월 DD일 a h:mm:ss") + ')');
+          } else {
+            alert('일치하는 회원이 없습니다. 입력 정보를 확인하세요.');
+          }
+        }
+      });
+    });
+  }
+
+  $(function(){
+    fnFindId();
+  });
+
+</script>
+<body>
+     <div id="container">
+      <div id="container-title">
+        <h3>find id</h3>
+      </div>
+      <div id="onlyContent">
+        <div class="card">
+           <div>
+          <label for="name"></label>
+          <input class="input-long-Box" type="text" name="name" id="name" placeholder="가입 시 등록한 이름을 입력해주세요">
+        </div>
+        <div>
+          <label for="email"></label>
+          <input class="input-long-Box" type="text" name="email" id="email" placeholder="가입 시 등록한 이메일을 입력해주세요">
+        </div>
+        <div>
+          <input class="red-long-Btn" type="button" value="아이디찾기" id="btnFindId">
+        </div>
+        <span>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/login.html}">로그인</a>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/findPw.html}">비밀번호 찾기</a>
+        </span>
+        <div class="menu sidebar_effect">
+          <a th:href="@{/user/agree.html}" style="display:inline-block;width: 150px;"><span>회원가입</span></a>
+        </div>
+        <div id="findResult"></div>
+        </div> 
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
+</body>
+</html>

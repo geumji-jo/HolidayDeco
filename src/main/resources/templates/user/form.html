@@ -4,14 +4,14 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
-<script th:src="@{/js/user/join.js}"></script>
-<style>
-  
-</style>
+<!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
+<script th:inline=javascript>
+
+</script>
 <body>
      <div id="container">
       <div id="container-title">
-        <h3>join</h3>
+        <h3>login</h3>
       </div>
       <div id="onlyContent">
         <div class="card">
@@ -27,64 +27,57 @@
             <label for="seller">판매자</label>
           </div> -->
           <div>
-            <label for="id">아이디</label><br>
-            <input class="input-long-Box" type="text" name="id" id="id" required="required" placeholder="아이디">
+            <label for="id">*</label>
+            <input class="inputBox" type="text" name="id" id="id" required="required" placeholder="아이디">
             <div id="msgId"></div>
           </div>
           <div>
-            <label for="pw">비밀번호</label><br>
-            <input class="input-long-Box" type="password" name="pw" id="pw"  required="required" placeholder="비밀번호">
+            <label for="pw">*</label>
+            <input class="inputBox" type="password" name="pw" id="pw"  required="required" placeholder="비밀번호">
             <br>
             <span id="msgPw"></span>
           </div>
           <div>
-            <label for="rePw"></label>
-            <input class="input-long-Box" type="password" id="rePw"  required="required" placeholder="비밀번호확인">
+            <label for="rePw">*</label>
+            <input class="inputBox" type="password" id="rePw"  required="required" placeholder="비밀번호확인">
             <br>
             <span id="msgRePw"></span>
           </div>
           <div>
-            <label for="name">이름</label><br>
-            <input class="input-long-Box" type="text" name="name" id="name"  required="required" placeholder="이름">
+            <label for="name">*</label>
+            <input class="inputBox" type="text" name="name" id="name"  required="required" placeholder="이름">
             <br>
             <span id="msgName"></span>
           </div>
           <div>
-            <div>성별</div>
-            <div class="form_radio_btn">
-              <input type="radio" name="gender" id="none" value="NO" checked="checked">
-              <label for="none">선택 안함</label>
-            </div>
-            <div class="form_radio_btn_male">
-              <input type="radio" name="gender" id="male" value="M">
-              <label for="male">남자</label>
-            </div>
-            <div class="form_radio_btn_female">
-              <input type="radio" name="gender" id="female" value="F">
-              <label for="female">여자</label>
-            </div>
+            <span>성별*</span>
+            <input type="radio" name="gender" id="none" value="NO" checked="checked">
+            <label for="none">선택 안함</label>
+            <input type="radio" name="gender" id="male" value="M">
+            <label for="male">남자</label>
+            <input type="radio" name="gender" id="female" value="F">
+            <label for="female">여자</label>
           </div>
           <div>
-            <label for="mobile">핸드폰번호</label><br>
-            <input class="input-long-Box" type="text" name="mobile" id="mobile"  required="required" placeholder="핸드폰 번호는 ‘-’를 제외하고 입력해 주세요.">
+            <label for="mobile">*</label>
+            <input class="inputBox" type="text" name="mobile" id="mobile"  required="required" placeholder="핸드폰 번호는 ‘-’를 제외하고 입력해 주세요.">
             <br>
             <span id="msgMobile"></span>
           </div>
           <div>
-            <label for="birthyear">생일</label><br>
-            <select class="input-small-Box" name="birthyear" id="birthyear"></select>
-            <select class="input-small-Box" name="birthmonth" id="birthmonth"></select>
-            <select class="input-small-Box" name="birthdate" id="birthdate"></select>
+            <label for="birthyear">생년월일*</label>
+            <select name="birthyear" id="birthyear"></select>
+            <select name="birthmonth" id="birthmonth"></select>
+            <select name="birthdate" id="birthdate"></select>
           </div>
           <div>
-            <div>주소</div>
-            <input class="input-middlehalf-Box" type="text" onclick="execDaumPostcode()" name="postcode" id="postcode" placeholder="우편번호" readonly="readonly">
-            <input class="gray-small-Btn" type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-            <input class="input-middle-Box" type="text" name="roadAddress" id="roadAddress" placeholder="도로명주소">
-            <input class="input-middle-Box" type="text" name="jibunAddress" id="jibunAddress" placeholder="지번주소"><br>
+            <input type="text" onclick="execDaumPostcode()" name="postcode" id="postcode" placeholder="우편번호" readonly="readonly">
+            <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+            <input type="text" name="roadAddress" id="roadAddress" placeholder="도로명주소">
+            <input type="text" name="jibunAddress" id="jibunAddress" placeholder="지번주소"><br>
             <span id="guide" style="color:#999;display:none"></span>
-            <input class="input-middle-Box" type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
-            <input class="input-middle-Box" type="text" name="extraAddress" id="extraAddress" placeholder="참고항목">
+            <input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
+            <input type="text" name="extraAddress" id="extraAddress" placeholder="참고항목">
             <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
             <script>
               // 본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
@@ -145,18 +138,18 @@
             </script>
           </div>
           <div>
-            <label for="email">이메일</label><br>
+            <label for="email">*</label>
             <span>
-            <input class="input-middlehalf-Box" type="text" name="email" id="email" placeholder="이메일">
-            <input class="gray-small-Btn" type="button" value="인증번호받기" id="btnGetCode">
+            <input type="text" name="email" id="email" placeholder="이메일">
+            <input type="button" value="인증번호받기" id="btnGetCode">
             </span>
             <span id="msgEmail"></span><br>
-            <input class="input-middlehalf-Box" type="text" id="authCode" placeholder="인증코드 입력">
-            <input class="gray-small-Btn" type="button" value="인증하기" id="btnVerifyCode">
+            <input type="text" id="authCode" placeholder="인증코드 입력">
+            <input type="button" value="인증하기" id="btnVerifyCode">
           </div>
           <div class="joinBtn">
-            <input class="red-middle-Btn" type="button" value="취소하기" onclick="fnCancelBtn()">
-            <button class="deepGreen-middle-Btn">가입하기</button>
+            <button class="joinButton">가입하기</button>
+            <input class="cancelButton" type="button" value="취소하기" onclick="fnCancelBtn()">
           </div>
         </form>
         </div> 

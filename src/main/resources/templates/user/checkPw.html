@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<script>
+  
+  function fnCheckPwCancel(){
+    $('#btnCancel').on('click', function(){
+    	location.href = '/user/myPageHome.html';
+    })
+  }
+  
+  function fnCheckPw(){
+    $('#btnCheckPw').on('click', function(){
+      $.ajax({
+        type: 'post',
+        url: '/user/checkPw.do',
+        data: 'pw=' + $('#pw').val(),
+        dataType: 'json',
+        success: function(resData){
+          if(resData.isCorrect){
+            location.href = '/user/modifyInfo.html';
+          } else {
+            alert('비밀번호를 확인하세요.');
+          }
+        }
+      })
+    })
+  }
+  
+  $(function(){
+    fnCheckPwCancel();
+    fnCheckPw();
+  });
+  
+</script>
+<body>
+     <div id="container">
+      <div id="container-title">
+        <h3>modifyInfo</h3>
+      </div>
+      <div id="sidebar-left">
+        <div id="sidebar-left-inner">
+          <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
+        </div>
+      </div>
+      <div id="content">
+        <div class="card">
+          <div>
+  
+    <div>개인정보보호를 위해서 비밀번호를 다시 한 번 입력하세요</div>
+    
+    <div>
+      <label for="pw">비밀번호</label>
+      <input type="password" id="pw">
+    </div>
+    
+    <div>
+      <input type="button" value="취소" id="btnCancel">
+      <input type="button" value="확인" id="btnCheckPw">
+    </div>
+    
+  </div>
+          
+        </div> 
+      </div>
+      <div id="sidebar-right">
+        <h2>rightSidebar</h2>
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
+</body>
+</html>

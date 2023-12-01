@@ -30,10 +30,10 @@ public interface UserMapper {
 	  public int deleteUserForSleep();
 	  public int insertRestoreUser(String id);
 	  public int deleteSleepUser(String id);
-	  public int modifyUserInfo(UserDTO userDTO);
+	  public int updateUserPassword(UserDTO userDTO);
+	  public int updateUserEmail(UserDTO userDTO);
+	  public int updateUserInfo(UserDTO userDTO);
 	  public UserDTO selectFindUserId(UserDTO userDTO);
 	  public String selectUserPwByUserDTO(UserDTO userDTO);
-	  public int updateUserTempPw(UserDTO userDTO);
 	  public String selectUserPwCheck(UserDTO userDTO);
-	  public int updateUserPw(UserDTO userDTO);
 }

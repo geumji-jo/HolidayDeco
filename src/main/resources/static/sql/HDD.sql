@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS USER_T;
 
 -- 회원 테이블
 CREATE TABLE USER_T (	
-USER_NO        INT AUTO_INCREMENT,	          -- PK회원 번호
+USER_NO        INT AUTO_INCREMENT,            -- PK회원 번호
 ID             VARCHAR(40) NOT NULL UNIQUE,	  -- 회원 아이디
 PW             VARCHAR(64),	                  -- 회원 비밀번호
 NAME           VARCHAR(40),	                  -- 회원 이름
@@ -33,7 +33,7 @@ ROAD_ADDRESS   VARCHAR(100),	              -- 도로명주소
 JIBUN_ADDRESS  VARCHAR(100),	              -- 지번주소
 DETAIL_ADDRESS VARCHAR(100),	              -- 상세주소
 EXTRA_ADDRESS  VARCHAR(100),	              -- 참고항목
-AGREECODE      INT NOT NULL,	              -- 약관동의여부
+AGREECODE      INT NOT NULL,	              -- 약관동의여부(0:필수, 1:위치, 2:이벤트, 3:위치+이벤트)
 JOINED_AT      DATETIME,	                  -- 가입일
 PW_MODIFIED_AT DATETIME,	                  -- 비밀번호 수정일
 AUTOLOGIN_ID   VARCHAR(32),	                  -- 자동로그인사용아이디
@@ -46,21 +46,18 @@ CONSTRAINT PK_USER_T PRIMARY KEY(USER_NO)
 -- 회원 접속 기록(회원마다 마지막 로그인 날짜 1개만 기록)	
 CREATE TABLE USER_ACCESS_T (	
 ID VARCHAR(40)  NOT NULL UNIQUE, -- 회원 아이디(회원테이블)
-LAST_LOGIN_AT DATETIME,           -- 마지막로그인날짜
-CONSTRAINT FK_USER_ACCESS FOREIGN KEY(ID) REFERENCES USER_T(ID) ON DELETE CASCADE
+LAST_LOGIN_AT   DATETIME         -- 마지막로그인날짜
 );	
 	
 -- 탈퇴 (탈퇴한 아이디로 재가입이 불가능)	
 CREATE TABLE OUT_USER_T (	
-OUT_USER_NO  INT NOT NULL AUTO_INCREMENT,   -- PK 탈퇴 회원번호
-USER_NO   INT,	                    -- FK 회원번호(회원테이블)
-ID        VARCHAR(40)  NOT NULL UNIQUE,	    -- 회원 아이디(회원테이블)
-EMAIL     VARCHAR(100) NOT NULL UNIQUE,	    -- 회원 이메일(회원테이블)
-JOINED_AT DATETIME,	                        -- 가입일(회원테이블)
-OUT_AT DATETIME,                            -- 탈퇴일
-CONSTRAINT PK_OUT_USER_T PRIMARY KEY(OUT_USER_NO),
-CONSTRAINT FK_OUT_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
-
+OUT_USER_NO INT AUTO_INCREMENT,             -- PK 회원번호
+USER_NO     INT,							-- 회원 번호	
+ID        	VARCHAR(40)  NOT NULL UNIQUE,	-- 회원 아이디
+EMAIL    	VARCHAR(100) NOT NULL UNIQUE,	-- 회원 이메일
+JOINED_AT 	DATETIME,	                    -- 가입일
+OUT_AT    	DATETIME,                       -- 탈퇴일
+CONSTRAINT FK_OUT_USER_T PRIMARY KEY(OUT_USER_NO)
 );	
 	
 -- 휴면 (1년 이상 로그인을 안하면 휴면 처리)	
@@ -85,8 +82,7 @@ JOINED_AT      DATETIME,	                  -- 가입일(회원테이블)
 PW_MODIFIED_AT DATETIME,	                  -- 비밀번호 수정일(회원테이블)
 SLEPT_AT       DATETIME,	                  -- 휴면일
 ADMIN_CHECK    INT,	                          -- 사용자, 관리자 구분(회원테이블)
-CONSTRAINT PK_SLEEP_USER_T PRIMARY KEY(SLEEP_USER_NO),
-CONSTRAINT FK_SLEEP_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE	
+CONSTRAINT PK_SLEEP_USER_T PRIMARY KEY(SLEEP_USER_NO)
 );	
 
 
@@ -189,11 +185,20 @@ CONSTRAINT PK_AID PRIMARY KEY(AID)
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
 VALUES ('admin', 'admin1!', '관리자', 'F', 'admin@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-05-01 13:01:01', 1);
 
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user01', 'user01!', '유저원', 'F', 'user01@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-01 13:01:01', 0);
 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
-VALUES ('user1', 'user1!', '사용자', 'F', 'user1@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-05-01 13:01:01', 0);
+VALUES ('user02', 'user02@', '유저투', 'M', 'user02@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-02 13:01:02', 0);
 
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user03', 'user03#', '유저쓰리', 'M', 'user03@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-03 13:01:03', 0);
 
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user04', 'user04$', '유저포', 'M', 'user04@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-04 13:01:04', 0);
+
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user05', 'user05%', '유저파이브', 'M', 'user05@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-05 13:01:05', 0);
 -- -- -- -- -- -- -- -- -- --<item Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
 VALUES ('tree paper bag','5700','/storage/itemImg/상품(1).jpg','/storage/itemImg/상품(1).jpg',100,NOW());

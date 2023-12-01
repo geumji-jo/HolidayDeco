@@ -181,5 +181,64 @@
       FROM USER_T
      WHERE ID = #{id}
   </select>
+  
+  <!-- 탈퇴한 회원 정보 OUT_USER_T에 등록 -->
+  <insert id="insertOutUser" parameterType="OutUserDTO">
+    INSERT INTO OUT_USER_T (
+        USER_NO
+      , ID
+      , EMAIL
+      , JOINED_AT
+      , OUT_AT
+    ) VALUES (
+        #{userNo} 
+      , #{id}
+      , #{email}
+      , #{joinedAt}
+      , NOW()
+    )
+  </insert>
+  
+  <!-- 탈퇴한 회원 정보 user테이블에서 삭제 -->
+  <delete id="deleteUser" parameterType="String">
+    DELETE
+      FROM USER_T
+     WHERE ID = #{id}
+  </delete>
+  
+  <!-- 아이디 찾기 -->
+  <select id="selectFindUserId" parameterType="UserDTO" resultType="UserDTO">
+  SELECT ID
+       , JOINED_AT
+    FROM USER_T
+    WHERE NAME = #{name}
+      AND EMAIL = #{email}
+  </select>
+  
+  <!-- 비밀번호 변경 -->
+  <update id="updateUserPassword" parameterType="UserDTO">
+    UPDATE USER_T
+       SET PW = #{pw}
+         , PW_MODIFIED_AT = NOW()
+     WHERE ID = #{id}
+  </update>
+  
+  <!-- 개인정보 변경 -->
+  <update id="updateUserInfo" parameterType="UserDTO">
+    UPDATE USER_T
+       SET NAME = #{name}
+         , GENDER = #{gender}
+         , MOBILE = #{mobile}
+         , BIRTHYEAR = #{birthyear}
+         , BIRTHDATE = #{birthdate}
+         , POSTCODE = #{postcode}
+         , ROAD_ADDRESS = #{roadAddress}
+         , JIBUN_ADDRESS = #{jibunAddress}
+         , DETAIL_ADDRESS = #{detailAddress}
+         , EXTRA_ADDRESS = #{extraAddress}
+         , AGREECODE = #{agreecode}
+     WHERE ID = #{id}
+  </update>
+  
  
 </mapper>
