@@ -1,7 +1,6 @@
 package com.hdd.hdeco.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/item")
 @Controller
 public class ItemController {
+	
 	private final ItemService itemService;
 
 	@GetMapping("/list.do")
@@ -43,19 +42,25 @@ public class ItemController {
 	}
 
 	@GetMapping("/detail.do")
-	public String Detail(@RequestParam(value = "itemNo", required = false, defaultValue = "0") int itemNo, Model model) {
+	public String Detail(@RequestParam(value = "itemNo") int itemNo, Model model) {
 		itemService.getItemByNo(itemNo, model);
 		return "item/detail";
 	}
 
-	@GetMapping("/search.do")
-	public String searchItem(@RequestParam("searchBar") String searchBar, Model model) {
-	    if (searchBar.isEmpty()) {
-	        return "redirect:/item/search.do";
-	    }
+	
+	@GetMapping("/search.do") public String searchItem(@RequestParam("query") String query, Model model) { 
+		// 검색 로직 구현 및 결과를 모델에 추가 
+		List<ItemDTO>searchResult = itemService.searchItem(query); 
+	  model.addAttribute("itemList",searchResult);
+	  
+	 return "item/search"; }
+	 
+	
+	/*
+	 * @GetMapping("/search.do")
+	 * 
+	 * @ResponseBody public List<ItemDTO> searchProduct(@RequestParam("query")
+	 * String query) { return itemService.searchItem(query); }
+	 */
 
-	    List<ItemDTO> itemList = itemService.searchItem(searchBar);
-	    model.addAttribute("itemList", itemList);
-	    return "item/search"; // 렌더링할 템플릿의 이름
-	}
-	}
+}

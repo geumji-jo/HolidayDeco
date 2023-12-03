@@ -2,7 +2,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
 <link rel="stylesheet" th:href="@{/css/list.css}">
 <link rel="stylesheet" th:href="@{/css/font.css}">
 <link rel="stylesheet"
@@ -10,44 +9,41 @@
   integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
   crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<div th:replace="~{/layout/header::gnbFrag}"></div>
 
 <body>
-
   <div id="itemList">
-    <form id="searchForm" th:action="@{/item/search.do}" method="GET">
+  <form id="searchForm" method="GET">
       <select name="sort" id="sort" class="sort">
         <option value="title" id="title">Title</option>
-      </select> 
-      <input  type="search" name="searchBar" id="searchBar" class="searchBar" placeholder="Search">
-      <button type="submit">
+      </select>
+      <input type="search" id="query" placeholder="Search">
+      <button type="button" id="searchButton">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </form>
-    <div id="itemList">
-      <div class="itemList">
-        <th:block th:each="item, vs:${itemList}">
-          <div class="item">
-            <div class="MainImg">
-              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
-                <img th:src="@{/item/display.do(itemNo=${item.itemNo})}"
-                class="photo_image">
-              </a>
-            </div>
-            <div class="itemInfo">
-              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}"
-                th:text="${item.itemTitle}"></a>
-            </div>
-            <div class="itemInfo">
-              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}"
-                th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
-            </div>
+        <div class="itemMainList" >
+      <th:block th:each="item, vs:${itemList}">
+        <div class="item">
+          <div class="MainImg">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+              <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+            </a>
           </div>
-        </th:block>
-      </div>
-      <div id="pagination" th:utext="${pagination}"></div>
+          <!-- itemTitle 클릭 시 이동 -->
+          <div class="itemInfo">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+          </div>
+          <!-- itemPrice 클릭 시 이동 -->
+          <div class="itemInfo">
+            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+          </div>
+        </div>
+      </th:block>
     </div>
+    <div id="pagination" th:utext="${pagination}"></div>
   </div>
 </body>
+
+
 
 </html>

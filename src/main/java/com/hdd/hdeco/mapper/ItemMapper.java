@@ -4,13 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.ui.Model;
 
-import com.hdd.hdeco.domain.CartDTO;
-import com.hdd.hdeco.domain.CartDetailDTO;
 import com.hdd.hdeco.domain.ItemDTO;
-import com.hdd.hdeco.domain.ItemOrderDTO;
-import com.hdd.hdeco.domain.UserDTO;
 
 @Mapper
 public interface ItemMapper {
@@ -22,7 +17,6 @@ public interface ItemMapper {
 
 	// itemNo를 이용하여 아이템 정보 읽어오기
 	public ItemDTO getItemByNo(int itemNo);
-
 	
-	List<ItemDTO> searchItem(String searchBar);
+	List<ItemDTO> searchItem(String query);
 }

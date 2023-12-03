@@ -11,16 +11,16 @@
 
 <body>
   <div id="itemList">
-    <form id="searchForm" th:action="@{/item/search.do}"  method="GET">
+<form id="searchForm" method="GET">
       <select name="sort" id="sort" class="sort">
         <option value="title" id="title">Title</option>
       </select>
-      <input type="search" name="searchBar" id="searchBar" class="searchBar" placeholder="Search">
-      <button type="submit">
+      <input type="search" id="query" placeholder="Search">
+      <button type="button" id="searchButton">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </form>
-    <div class="itemList" >
+    <div class="itemMainList" >
       <th:block th:each="item, vs:${itemList}">
         <div class="item">
           <div class="MainImg">
@@ -45,48 +45,47 @@
 <script>
 
 
-function fnSearch() {
-	  var searchBar = $('#searchBar').val();
+/* function fnSearch() {
+    var query = $('#query').val();
 
-	  // 검색어를 입력하지 않았을 때 경고창 띄우기
-	  if (searchBar === '') {
-	    alert('검색어를 입력해주세요.');
-	    return;
-	  }
+    // 검색어를 입력하지 않았을 때 경고창 띄우기
+    if (query === '') {
+        alert('검색어를 입력해주세요.');
+        return;
+    }
 
-	  $.ajax({
-		    type: 'GET',
-		    url: '/item/search.do',
-		    dataType: 'json',
-		    data: {
-		      query: searchBar
-		    },
-		    success:  
-		    	location.href="/item/search.do"
-		  });
-		}
+    // Ajax 호출
+    $.ajax({
+        url: '/item/search.do',  // 검색 결과를 보여줄 URL로 변경
+        type: 'GET',
+        dataType: 'html',     // 받아올 데이터 타입 변경
+        data: {
+            query: query
+        },
+        success: function(data) {
+            // 검색 결과를 itemList 영역에 업데이트
+            $('#itemList').html(data);
+        },
+        error: function(error) {
+            console.error('Ajax 요청 에러:', error);
+        }
+    });
+}
 
-
-
-
-// 폼 서브밋 이벤트 리스너 추가
-$('#itemSearch').on('submit', function (event) {
-  event.preventDefault(); // 기본 동작 방지
-  fnSearch();
-}); 
-
-//돋보기 이미지 클릭 시 검색 결과 보여주는 함수
-$('.fa-magnifying-glass').click(function (event) {
+//itemList의 자식 중에서 클래스가 .fa-magnifying-glass인 요소에서만 발생
+$('#itemList').on('click', '.fa-magnifying-glass', function(event) {
     event.preventDefault();
     fnSearch();
 });
-//엔터 키 입력 시 폼 서브밋 방지
-$('#searchBar').on('keydown', function (event) {
+
+//#query는 itemList의 자식 중에서 id가 query인 요소에서만 발생
+$('#itemList').on('keydown', '#query', function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         fnSearch();
     }
-});
+}); */
+
 </script>
 
 
