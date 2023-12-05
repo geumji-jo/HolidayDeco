@@ -31,7 +31,6 @@ public class AutologinIntercepter implements HandlerInterceptor {
     if(session != null && session.getAttribute("loginId") == null) {  // 로그인이 되어 있는가?
       
       Cookie cookie = WebUtils.getCookie(request, "autologinId");
-      System.out.println("--------------loginCookie------------------------------------------:" + cookie);
       
       if(cookie != null) {  // 쿠키 autologinId가 존재하는가?
         
@@ -39,6 +38,7 @@ public class AutologinIntercepter implements HandlerInterceptor {
         UserDTO loginUserDTO = userMapper.selectAutologin(autologinId);
         if(loginUserDTO != null) {
           session.setAttribute("loginId", loginUserDTO.getId());
+          session.setAttribute("adminChk", loginUserDTO.getAdminCheck());
           System.out.println("자동로그인 합니다." +loginUserDTO);
         }
         

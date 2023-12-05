@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/modal.css}"> <!-- user페이지전용 css모음 -->
+ <style>
+ 
+    </style>
+<body>
+     <div id="container">
+      <div id="container-title">
+        <h3>myPageHome</h3>
+      </div>
+      <div id="sidebar-left">
+        <div id="sidebar-left-inner">
+          <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
+        </div>
+      </div>
+      <div id="content">
+        <div class="card">
+        <h2>Content</h2>
+        <button id="btn-modal">모달 창 열기 버튼</button>
+        <div id="modal" class="modal-overlay">
+          <div class="modal-window">
+            <div class="title">
+              <h2>모달</h2>
+            </div>
+            <div class="close-area">X</div>
+            <div class="modal-content">
+            
+            </div>
+          </div>
+        </div>
+
+      </div> 
+      </div>
+      <div id="sidebar-right">
+        <h2>rightSidebar</h2>
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
+</body>
+<script th:src="@{/js/user/modal.js}"></script>
+</html>

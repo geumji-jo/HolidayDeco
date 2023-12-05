@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:inline=javascript>
+
+$(function(){
+  fnFindPw();
+});
+
+function fnFindPw(){
+  $('#btnFindPw').on('click', function(){
+    new Promise(function(resolve, reject){
+      if($('#id').val() == ''){
+        reject('아이디를 입력하세요.');
+        return;
+      }
+      $.ajax({
+        type: 'post',
+        url: '/user/findPw.do',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          'id': $('#id').val()
+        }),
+        dataType: 'json',
+        success: function(resData){
+          if(resData.findUser != null){
+            resolve(resData.findUser);
+          } else {
+            reject('일치하는 회원 정보가 없습니다.');
+          }
+        }
+      });    
+    }).then(function(findUser){
+      $.ajax({
+        type: 'post',
+        url: '/user/sendTempPw.do',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          'id': $('#id').val(),
+          'email': findUser.email
+        }),
+        dataType: 'json',
+        success: function(resData){
+          if(resData.pwUpdateResult == 1){
+            alert('등록된 이메일로 임시비밀번호가 발송되었습니다.');
+            location.href = '/index.do';
+          } else {
+            alert('임시비밀번호 발급이 실패했습니다.');
+          }
+        }
+      });
+    }).catch(function(msg){
+      alert(msg);
+    });
+  });
+}
+
+</script>
+<body>
+     <div id="container">
+      <div id="container-title">
+        <h3>find pw</h3>
+      </div>
+      <div id="onlyContent">
+        <div class="card">
+        <div>
+          <label for="id"></label>
+          <input class="input-long-Box" type="text" id="id" placeholder="가입 시 등록한 아이디를 입력해주세요">
+        </div>
+        <div>
+          <input class="red-long-Btn" type="button" value="임시비밀번호 발급" id="btnFindPw">
+        </div>
+        <span>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/login.html}">로그인</a>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/findId.html}">아이디 찾기</a>
+        </span>
+        <div class="menu sidebar_effect">
+          <a th:href="@{/user/agree.html}" style="display:inline-block;width: 150px;"><span>회원가입</span></a>
+        </div>
+        </div> 
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
+</body>
+</html>

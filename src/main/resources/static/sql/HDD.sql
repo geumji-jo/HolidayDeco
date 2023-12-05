@@ -1,17 +1,18 @@
 USE hdeco;	
 
--- 테이블 드랍
-DROP TABLE IF EXISTS AMOUNT_T;
+-- 테이블 드랍				
 DROP TABLE IF EXISTS KAKAO_APPROVE_RESPONSE_T;
-DROP TABLE IF EXISTS ITEM_ORDER_LIST_T;
-DROP TABLE IF EXISTS CART_DETAIL_T;
 DROP TABLE IF EXISTS ITEM_ORDER_T;
-DROP TABLE IF EXISTS CART_T;
+DROP TABLE IF EXISTS CART_DETAIL_T;	
 DROP TABLE IF EXISTS ITEM_T;
-DROP TABLE IF EXISTS SLEEP_USER_T;
-DROP TABLE IF EXISTS OUT_USER_T;
-DROP TABLE IF EXISTS USER_ACCESS_T;
-DROP TABLE IF EXISTS USER_T;
+DROP TABLE IF EXISTS CART_T;
+DROP TABLE IF EXISTS SLEEP_USER_T;	
+DROP TABLE IF EXISTS OUT_USER_T;	
+DROP TABLE IF EXISTS USER_ACCESS_T;	
+DROP TABLE IF EXISTS USER_T;	
+
+
+
 
 
 -- -- -- -- -- -- -- -- -- --<회원> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -82,6 +83,7 @@ PW_MODIFIED_AT DATETIME,	                  -- 비밀번호 수정일(회원테�
 SLEPT_AT       DATETIME,	                  -- 휴면일
 ADMIN_CHECK    INT,	                          -- 사용자, 관리자 구분(회원테이블)
 CONSTRAINT PK_SLEEP_USER_T PRIMARY KEY(SLEEP_USER_NO)
+
 );	
 
 
@@ -104,87 +106,93 @@ CREATE TABLE ITEM_T(
 
 -- 장바구니 테이블
 CREATE TABLE CART_T (
-    CART_NO INT NOT NULL AUTO_INCREMENT,  -- PK
-    USER_NO INT,                          -- FK 유저번호
-    ITEM_NO INT,                          -- FK 아이템번호
-    QUANTITY INT,                        -- 주문수량
-    ITEM_TITLE VARCHAR(40),               -- 상품명
-    ITEM_PRICE VARCHAR(40),               -- 상품 가격
-    ITEM_MAIN_IMG VARCHAR(100),           -- 상품 이미지
-    CONSTRAINT PK_CART_T PRIMARY KEY(CART_NO),
-    CONSTRAINT FK_CART_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
-    CONSTRAINT FK_CART_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
-);
-
--- 주문 테이블
-CREATE TABLE ITEM_ORDER_T (
-	ITEM_ORDER_NO               INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
-	USER_NO                INT,                                   -- FK 유저번호
-	NAME                   VARCHAR(40),	                      -- 회원 이름
-	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
-	POSTCODE                VARCHAR(5),	                      -- 우편번호
-	ROAD_ADDRESS            VARCHAR(100),			      -- 도로명 주소 
-	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
-	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
-	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
-	ITEM_MAIN_IMG           VARCHAR(100),	                      -- 아이템 메인 이미지
-	PAY_NO                  VARCHAR(50),                    -- 결제 번호(merchan uid)    
-	CART_DETAIL_COUNT INT , 
-	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
+CART_NO INT NOT NULL, -- PK
+USER_NO INT, -- FK 유저번호
+ID VARCHAR(40) NOT NULL UNIQUE, -- USER_NO통해서 가져온 ID
+MADE_AT DATETIME,
+CONSTRAINT PK_CART_T PRIMARY KEY(CART_NO),
+CONSTRAINT FK_CART_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
 );
 
 
--- 주문 상세 테이블 (장바구니 목록)
+
+-- -- -- -- -- -- -- -- -- --<아이템> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+-- 아이템 테이블
+CREATE TABLE ITEM_T(	
+ITEM_NO INT NOT NULL AUTO_INCREMENT,	-- PK 아이템번호
+ITEM_TITLE VARCHAR(40) ,	            -- 아이템이름
+ITEM_PRICE VARCHAR(40) ,                -- 아이템가격
+ITEM_MAIN_IMG VARCHAR(100) ,	        -- 아이템메인이미지
+ITEM_DETAIL_IMG VARCHAR(100),           -- 아이템상세이미지
+ITEM_STOCK INT,                         -- 아이템수량
+ITEM_WRITED_AT DATETIME,                -- 아이템등록날짜
+CONSTRAINT PK_ITEM_T PRIMARY KEY(ITEM_NO)
+);	
+
+
+
+-- -- -- -- -- -- -- -- -- --<장바구니디테일> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+-- 장바구니 디테일 테이블
 CREATE TABLE CART_DETAIL_T (
-    CART_DETAIL_NO INT NOT NULL AUTO_INCREMENT,     -- 주문 상세 번호
-    ITEM_ORDER_NO INT,                    -- 주문 번호
-    QUANTITY INT,                    -- 주문 수량
-    ORDER_TOTAL INT,                 -- 주문 금액
-    ITEM_NO INT,                     -- FK 아이템번호
-    CONSTRAINT PK_CART_DETAIL_T PRIMARY KEY(CART_DETAIL_NO),
-    CONSTRAINT FK_CART_DETAIL_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
-    CONSTRAINT FK_CART_DETAIL_T_ORDER_T FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
-);
+CART_DETAIL_NO INT NOT NULL,
+CART_DETAIL_COUNT INT,
+CART_DETAIL_CHECK INT,
+ITEM_TITLE VARCHAR(40) ,	
+ITEM_PRICE VARCHAR(40) ,
+CART_NO INT, -- FK 카트번호
+ITEM_NO INT, -- FK 아이템번호
+USER_NO INT, -- FK 유저번호
+CONSTRAINT PK_CART_DETAIL_T PRIMARY KEY(CART_DETAIL_NO),
+CONSTRAINT FK_CART_DETAIL_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+CONSTRAINT FK_CART_DETAIL_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
+CONSTRAINT FK_CART_DETAIL_T_CART_T FOREIGN KEY(CART_NO) REFERENCES CART_T(CART_NO) ON DELETE CASCADE
 
--- 주문 내역 테이블
-CREATE TABLE ITEM_ORDER_LIST_T (
-	ORDER_LIST_NO          INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
-	USER_NO                INT,                                   -- FK 유저번호
-	NAME                   VARCHAR(40),	                          -- 회원 이름
-	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
-	POSTCODE                VARCHAR(5),	                          -- 우편번호
-	ROAD_ADDRESS            VARCHAR(100),			              -- 도로명 주소 
-	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
-	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
-	ORDER_TOTAL             INT,                                  -- 전체 주문 금액   
-	CART_DETAIL_COUNT INT , 
-	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ORDER_LIST_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
 );
 
 
+-- -- -- -- -- -- -- -- -- --<아이템주문내역> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 
+-- 아이템주문내역
+CREATE TABLE ITEM_ORDER_T (
+ORDER_NO INT NOT NULL,                 -- PK 주문번호
+ORDER_TOTAL INT,                       -- 전체주문금액
+ID VARCHAR(40)  NOT NULL UNIQUE,       -- 회원 아이디(회원테이블)
+MOBILE         VARCHAR(15),	           -- 회원 전화번호
+POSTCODE       VARCHAR(5),	           -- 우편번호
+JIBUN_ADDRESS  VARCHAR(100),	       -- 지번주소
+DETAIL_ADDRESS VARCHAR(100),	       -- 상세주소
+NAME           VARCHAR(40),	           -- 회원 이름
+ITEM_MAIN_IMG VARCHAR(100) ,	       -- 아이템메인이미지
+CART_DETAIL_COUNT INT , 
+CART_NO INT, -- FK 카트번호
+ITEM_NO INT, -- FK 아이템번호
+USER_NO INT, -- FK 유저번호
+CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ORDER_NO),
+CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+CONSTRAINT FK_ITEM_ORDER_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
+CONSTRAINT FK_ITEM_ORDER_T_CART_T FOREIGN KEY(CART_NO) REFERENCES CART_T(CART_NO) ON DELETE CASCADE
+
+);
 
 
 -- -- -- -- -- -- -- -- -- --<카카오페이> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 -- 카카오페이테이블
 CREATE TABLE KAKAO_APPROVE_RESPONSE_T (
-	AID VARCHAR(100)   NOT NULL UNIQUE,
-	TID LONGTEXT,
-	CID LONGTEXT,
-	SID LONGTEXT,
-	PARTNER_ORDER_ID LONGTEXT,
-	PARTNER_USER_ID LONGTEXT,
-	PAYMENT_METHOD_TYPE LONGTEXT,
-	ITEM_NAME LONGTEXT,
-	ITEM_CODE LONGTEXT,
-	QUANTITY INT,
-	CREATED_AT DATETIME,
-	APPROVED_AT DATETIME,
-	CONSTRAINT PK_AID PRIMARY KEY(AID)
+AID VARCHAR(100)   NOT NULL UNIQUE,
+TID LONGTEXT,
+CID LONGTEXT,
+SID LONGTEXT,
+PARTNER_ORDER_ID LONGTEXT,
+PARTNER_USER_ID LONGTEXT,
+PAYMENT_METHOD_TYPE LONGTEXT,
+ITEM_NAME LONGTEXT,
+ITEM_CODE LONGTEXT,
+QUANTITY INT,
+CREATED_AT DATETIME,
+APPROVED_AT DATETIME,
+CONSTRAINT PK_AID PRIMARY KEY(AID)
 );
 
 
@@ -196,6 +204,7 @@ CREATE TABLE AMOUNT_T (
     DISCOUNT   INT      NULL,
     CONSTRAINT PK_TOTAL PRIMARY KEY (TOTAL)
 );
+
 
 -- -- -- -- -- -- -- -- -- --<user Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
@@ -209,13 +218,21 @@ VALUES ('user02', 'user02@', '유저투', 'M', 'user02@naver.com', '01000000000'
 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
 VALUES ('user03', 'user03#', '유저쓰리', 'M', 'user03@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-03 13:01:03', 0);
+<<<<<<< HEAD
 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
 VALUES ('user04', 'user04$', '유저포', 'M', 'user04@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-04 13:01:04', 0);
 
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
 VALUES ('user05', 'user05%', '유저파이브', 'M', 'user05@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-05 13:01:05', 0);
+=======
+>>>>>>> 441b5bf4c22d129b1d28c498320b78e7a9fd986c
 
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user04', 'user04$', '유저포', 'M', 'user04@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-04 13:01:04', 0);
+
+INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)
+VALUES ('user05', 'user05%', '유저파이브', 'M', 'user05@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2023-11-05 13:01:05', 0);
 -- -- -- -- -- -- -- -- -- --<item Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
 VALUES ('tree paper bag','5700','/storage/itemImg/상품(1).jpg','/storage/itemImg/상품(1).jpg',100,NOW());

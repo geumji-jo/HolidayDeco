@@ -277,7 +277,7 @@ public class UserServiceImpl implements UserService {
       // autologinId 쿠키 삭제하기
       Cookie cookie = new Cookie("autologinId", "");
       cookie.setMaxAge(0);                       // 쿠키 유지시간을 0초로 설정
-      cookie.setPath(request.getContextPath());  // autologinId 쿠키의 path와 동일하게 설정
+      cookie.setPath("/");  // autologinId 쿠키의 path와 동일하게 설정
       response.addCookie(cookie);
       
     }
@@ -297,13 +297,228 @@ public class UserServiceImpl implements UserService {
 		// autoLoginId 쿠키 삭제하기
 		Cookie cookie = new Cookie("autologinId", "");
 		cookie.setMaxAge(0); // 쿠키 유지시간을 0초로 설정
-		cookie.setPath(request.getContextPath()); // autologinId 쿠키의 path와 동일하게 설정
+		cookie.setPath("/"); // autologinId 쿠키의 path와 동일하게 설정
 		response.addCookie(cookie);
 
 		// 2. session에 저장된 모든 정보를 지운다.
 		session.invalidate();
 
 	}
+	
+	@Override
+	public void out(HttpServletRequest request, HttpServletResponse response) {
+	// 탈퇴할 회원의 ID는 session에 loginId 속성으로 저장되어 있다.
+				HttpSession session = request.getSession();
+				String id = (String) session.getAttribute("loginId");
 
+				// 탈퇴할 회원의 정보(USER_NO, ID, EMAIL, JOINED_AT) 가져오기
+				UserDTO userDTO = userMapper.selectUserById(id);
 
+				// OutUserDTO 만들기()
+				OutUserDTO outUserDTO = new OutUserDTO();
+				// outUSerDTO에 userNo,id,email,joinedAt 정보담기
+				outUserDTO.setUserNo(userDTO.getUserNo());
+				outUserDTO.setId(id);
+				outUserDTO.setEmail(userDTO.getEmail());
+				outUserDTO.setJoinedAt(userDTO.getJoinedAt());
+
+				// 회원 탈퇴하기
+				int insertResult = userMapper.insertOutUser(outUserDTO);
+				int deleteResult = userMapper.deleteUser(id);
+
+				// 응답
+				try {
+
+					response.setContentType("text/html; charset=UTF-8");
+					PrintWriter out = response.getWriter();
+					out.println("<script>");
+					if (insertResult == 1 && deleteResult == 1) {
+
+						// session 초기화
+						session.invalidate();
+
+						out.println("alert('회원 탈퇴되었습니다.');");
+						out.println("location.href='" + request.getContextPath() + "/index.do';");
+
+					} else {
+						out.println("alert('회원 탈퇴에 실패했습니다.');");
+						out.println("history.back();");
+					}
+					out.println("</script>");
+					out.flush();
+					out.close();
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	
+	}
+	
+	@Override
+	public UserDTO getUserById(String id) {
+		return userMapper.selectUserById(id);
+	}
+	
+	@Override
+	public boolean checkPw(HttpServletRequest request) {
+		// 로그인한 사용자의 ID
+    HttpSession session = request.getSession();
+    String id = (String) session.getAttribute("loginId");
+
+    // 로그인한 사용자의 정보를 가져옴(비밀번호를 확인하기 위해서)
+    UserDTO userDTO = userMapper.selectUserById(id);
+    
+    // 사용자가 입력한 PW
+    String pw = securityUtil.getSha256(request.getParameter("pw"));
+    
+    // PW 비교 결과 반환
+    return pw.equals(userDTO.getPw());
+	}
+	
+	@Override
+	public Map<String, Object> findId(String name, String email) {
+		Map<String,Object> map = new HashMap<String, Object>(); 
+		 UserDTO userDTO = new UserDTO();
+		 userDTO.setName(name);
+		 userDTO.setEmail(email);
+		 map.put("findUser",userMapper.selectFindUserId(userDTO)); 
+		 return map; 
+	}
+	
+	@Override
+	public Map<String, Object> findPw(UserDTO userDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("findUser", userMapper.selectUserById(userDTO.getId()));  // 비밀번호 찾기 : 입력한 아이디로 조회
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> sendTempPw(UserDTO userDTO) {
+		 // 8자리 임시비밀번호 생성
+    String tempPw = securityUtil.getRandomString(8, true, true);
+    
+    // DB로 보낼 UserDTO (아이디가 일치하는 회원의 비밀번호 업데이트)
+    userDTO.setPw(securityUtil.getSha256(tempPw));
+
+    // 임시비밀번호로 User의 DB 정보 수정
+    int pwUpdateResult = userMapper.updateUserPassword(userDTO);
+    
+    // 임시비밀번호로 User의 DB 정보가 수정되면 이메일로 알림
+    if(pwUpdateResult == 1) {
+      
+      // 메일 내용
+      String text = "";
+      text += "<div>비밀번호가 초기화되었습니다.</div>";
+      text += "<div>임시비밀번호 : <strong>" + tempPw + "</strong></div>";
+      text += "<div>임시비밀번호로 로그인 후에 반드시 비밀번호를 변경해 주세요.</div>";
+      
+      // 메일 전송
+      javaMailUtil.sendJavaMail(userDTO.getEmail(), "[HolidayDeco]임시비밀번호발급안내", text);
+      
+    }
+    
+    // 결과 반환
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("pwUpdateResult", pwUpdateResult);
+    return map;
+	}
+	
+	
+	@Override
+	public Map<String, Object> modifyPw(HttpServletRequest request) {
+		// 로그인한 사용자의 ID
+    HttpSession session = request.getSession();
+    String id = (String) session.getAttribute("loginId");
+    
+    // 사용자가 입력한 PW (이 PW로 비밀번호를 변경해야 한다.)
+    String pw = securityUtil.getSha256(request.getParameter("pw"));
+    
+    // ID와 PW를 가진 UserDTO를 생성
+    UserDTO userDTO = new UserDTO();
+    userDTO.setId(id);
+    userDTO.setPw(pw);
+    
+    // PW 수정 결과 반환
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("updateUserPasswordResult", userMapper.updateUserPassword(userDTO));
+    return map;
+	}
+	
+	@Override
+	public Map<String, Object> modifyEmail(HttpServletRequest request) {
+		// 로그인한 사용자의 ID
+    HttpSession session = request.getSession();
+    String id = (String) session.getAttribute("loginId");
+    
+    // 사용자가 입력한 Email (이 Email로 이메일을 변경해야 한다.)
+    String email = request.getParameter("email");
+    
+    // ID와 Email를 가진 UserDTO를 생성
+    UserDTO userDTO = new UserDTO();
+    userDTO.setId(id);
+    userDTO.setEmail(email);
+    
+    // Email 수정 결과 반환
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("updateUserEmailResult", userMapper.updateUserEmail(userDTO));
+    return map;
+    
+	}
+	
+	@Override
+	public Map<String, Object> modifyInfo(HttpServletRequest request) {
+	// 요청 파라미터
+    String id = request.getParameter("id");
+    String name = request.getParameter("name");
+    String gender = request.getParameter("gender");
+    String mobile = request.getParameter("mobile");
+    String birthyear = request.getParameter("birthyear");
+    String birthmonth = request.getParameter("birthmonth");
+    String birthdate = request.getParameter("birthdate");
+    String postcode = request.getParameter("postcode");
+    String roadAddress = request.getParameter("roadAddress");
+    String jibunAddress = request.getParameter("jibunAddress");
+    String detailAddress = request.getParameter("detailAddress");
+    String extraAddress = request.getParameter("extraAddress");
+    String location = request.getParameter("location");  // on 또는 off
+    String event = request.getParameter("event");        // on 또는 off
+    
+    // 이름 XSS 처리
+    name = securityUtil.preventXSS(name);
+    
+    // 출생월일
+    birthdate = birthmonth + birthdate;
+    
+    // 상세주소 XSS 처리
+    detailAddress = securityUtil.preventXSS(detailAddress);
+    
+    // 참고항목 XSS 처리
+    extraAddress = securityUtil.preventXSS(extraAddress);
+    
+    // agreecode
+    int agreecode = 0;
+    if(location.equals("on")) { agreecode += 1; }
+    if(event.equals("on"))    { agreecode += 2; }
+    
+    // UserDTO 만들기
+    UserDTO userDTO = new UserDTO();
+    userDTO.setId(id);
+    userDTO.setName(name);
+    userDTO.setGender(gender);
+    userDTO.setMobile(mobile);
+    userDTO.setBirthyear(birthyear);
+    userDTO.setBirthdate(birthdate);
+    userDTO.setPostcode(postcode);
+    userDTO.setRoadAddress(roadAddress);
+    userDTO.setJibunAddress(jibunAddress);
+    userDTO.setDetailAddress(detailAddress);
+    userDTO.setExtraAddress(extraAddress);
+    userDTO.setAgreecode(agreecode);
+    
+    // Info 수정 결과 반환
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("updateUserInfoResult", userMapper.updateUserInfo(userDTO));
+    return map;
+    
+	}
 }

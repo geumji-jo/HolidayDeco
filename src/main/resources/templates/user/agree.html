@@ -3,100 +3,84 @@
 
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script th:inline="javascript">
-	// 취소하면 이전 페이지로 돌아간다.
-	function fnCancel() {
-		$('#btnCancel').on('click', function() {
-			history.back();
-		})
-	}
+  // 취소하면 이전 페이지로 돌아간다.
+  function fnCancel() {
+    $('#btnCancel').on('click', function() {
+      history.back();
+    })
+  }
 
-	// 전체 선택 체크박스 클릭 시
-	$(document).ready(function() {
-		// 전체 선택 체크박스 클릭 시
-		$("#checkAll").click(function() {
-			$(".checkOne").prop("checked", $(this).prop("checked"));
-		});
+  // 전체 선택 체크박스 클릭 시
+  $(document).ready(function() {
+    // 전체 선택 체크박스 클릭 시
+    $("#checkAll").click(function() {
+      $(".checkOne").prop("checked", $(this).prop("checked"));
+    });
 
-		// 개별 체크박스 클릭 시
-		$(".checkOne").change(function() {
-			if ($(".checkOne:checked").length === $(".checkOne").length) {
-				$("#checkAll").prop("checked", true);
-			} else {
-				$("#checkAll").prop("checked", false);
-			}
-		});
-	});
+    // 개별 체크박스 클릭 시
+    $(".checkOne").change(function() {
+      if ($(".checkOne:checked").length === $(".checkOne").length) {
+        $("#checkAll").prop("checked", true);
+      } else {
+        $("#checkAll").prop("checked", false);
+      }
+    });
+  });
 
-	// 가입 페이지로 이동하기(frmAgree의 submit)
-	function fnFrmAgreeSubmit() {
-		$('#frmAgree').on(
-				'submit',
-				function(event) {
-					if (!$('#service').is(':checked')
-							|| !$('#privacy').is(':checked')) {
-						alert('필수 약관에 동의해야만 가입할 수 있습니다.');
-						event.preventDefault();
-						return;
-					}
-				})
-	}
+  // 가입 페이지로 이동하기(frmAgree의 submit)
+  function fnFrmAgreeSubmit() {
+    $('#frmAgree').on(
+        'submit',
+        function(event) {
+          if (!$('#service').is(':checked')
+              || !$('#privacy').is(':checked')) {
+            alert('필수 약관에 동의해야만 가입할 수 있습니다.');
+            event.preventDefault();
+            return;
+          }
+        })
+  }
 
-	// 함수 호출
-	$(function() {
-		fnCancel();
-		fnFrmAgreeSubmit();
-	})
+  // 함수 호출
+  $(function() {
+    fnCancel();
+    fnFrmAgreeSubmit();
+  })
 </script>
 <style>
-@charset "UTF-8";
-
-* {
-  margin: 0 auto;
-  padding: 0;
-}
-
-.main {
-  margin-top: 50px;
-}
-
 .box1, .box2, .box3, .box4 {
-  width: 600px;
-  height: 200px;
+  width: 500px;
+  height: 300px;
   overflow: scroll;
   border: 1px solid black;
   padding: 0 0.5em;
+  margin: 0 auto;
 }
 
-.checkBoxTextCenter {
-  margin-left: 545px;
+.checkBoxAgree {
   margin-bottom: 30px;
-  user-select: none;
-}
-
-#loginBox_input {
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  text-align: center;
-  /*모두 대문자로 변경 */
-  text-transform: uppercase;
-  padding: 5px;
   user-select: none;
 }
 
 .joinButton {
   text-align: center;
-  margin-bottom: 50px;
 }
 </style>
 <body>
-  <div class="main">
-    <div id="loginBox_input">이용 약관</div>
-    <form id="frmAgree" th:action="@{/user/join.html}">
+     <div id="container">
+      <div id="container-title">
+        <h3>agreeCheck</h3>
+      </div>
+      <div id="onlyContent">
+        <div class="card">
+          <form id="frmAgree" th:action="@{/user/join.html}">
       <div class="checkbox_group">
         <!-- 체크시 전체 체크동의 -->
-        <div class="checkBoxTextCenter">
+        <div class="checkBoxAgree">
           <input type="checkbox" id="checkAll" autocomplete="off"> <label for="checkAll">모두 동의</label> <span class="glyphicon glyphicon-ok"></span>
         </div>
         
@@ -116,7 +100,7 @@
           <br>
           <p>출처 : https://blog.naver.com/momo7749/222500272868 이 약관은 이용 약관을 출처 블로그기반으로 제작되었습니다.</p>
         </div>
-        <div class=checkBoxTextCenter>
+        <div class=checkBoxAgree>
           <input type="checkbox" id="service" name="check" class="checkOne"> <label for="service"><span>(필수)</span>이용약관 동의</label>
         </div>
         <div class="box2">
@@ -124,7 +108,7 @@
           <h3>제1장 총칙</h3>
           <p>제 1조 수집하는 개인정보 항목 및 수집 방법 회사는 다음의 개인정보 항목을 처리하고 있습니다. 홈페이지 회원 가입 및 관리 필수항목 : 아이디, 비밀번호, 성명, 생년월일, 이메일, 휴대폰 번호 선택항목 : 성별, 주소 인터넷 서비스 이용과정에서 아래의 개인정보 항목이 자동으로 생성되어 수집될 수 있습니다. IP 주소 계약에 필요한 사항 카드번호, 생년월일, 핸드폰번호 회사는 다음과 같은 방법으로 개인정보를 수집하고 있습니다. 이용자로부터의 제공 1.본인인증 시스템으로부터의 제공 (생년월일, 이름, 중복가입 확인정보[DI]) 2.이용자의 인터넷 이용 시 자동으로 생성되는 정보의 수집 3.예약 진행 및 예약 취소시 수집되는 카드정보 내역</p>
         </div>
-        <div class=checkBoxTextCenter>
+        <div class=checkBoxAgree>
           <input type="checkbox" id="privacy" name="check" class="checkOne"> <label for="privacy"><span>(필수)</span>개인정보 수집 및 이용 동의</label>
         </div>
         <div class="box3">
@@ -173,7 +157,7 @@
             ① 고객은 서비스 이용계약에 따라 요금을 지정된 날짜까지 내야 하며, 회사에 알린 요금청구 주소와 연락처가 변경되었다면 해당 내용을 회사에 알려야 합니다. ② 고객이 서비스 이용에 필요한 제반 정보를 제공·등록할 때에는 현재의 사실과 일치하는 완전한 정보를 제공·등록해야 하며, 변경사항이 있으면 즉시 갱신해야 합니다. ③ 고객은 단말기가 정상 동작을 유지하도록 관리해야 하며, 단말기가 정상적으로 작동하지 않아 서비스 제공에 지장이 있을 때에는 해당 단말기의 보수, 교환 등을 신속히 처리하여 원활한 서비스가 이루어지도록 합니다. ④ 고객은 서비스를 이용할 때 다음 각 호의 1에 해당하는 행위를 해서는 안 됩니다. 1. 가입신청 또는 변경 때 허위 사실을 기재하는 행위 2. 타인의 명예를 손상하거나 타인에게 불이익을 주는 행위 3. 공공질서와 미풍양속을 거스르는 내용의 정보·문장·도형·음성 등을 타인에게 유포하는 행위 4. 서비스와 관련된 설비의 오동작이나 정보 등의 파괴·혼란을 유발하는 컴퓨터 바이러스 감염 자료를 등록 또는 유포하는 행위 5. 타인으로 가장하는 행위 및 타인과의 관계를 허위로 명시하는 행위 6. 자기 또는 타인에게 재산상의 이익을 주거나 타인에게 손해를 끼칠 목적으로 거짓된 정보를 유통하는 행위 7. 서비스의 이용과 관련하여 취득한 타인의 개인위치정보를 무단으로 유용하거나 유출하는 행위 8. 기타 불법적이거나 부당한 행위 ⑤ 고객은 관계 법령, 이 약관의 규정, 이용안내 및 서비스상에 공지한 주의사항, 회사가 통지하는 사항 등을 지켜야 하며, 기타 회사의 업무에 방해되는 행위를 해서는 안 됩니다. <br> 출처 : https://www.skplanet.com/etc/legal02 이 약관은 SK플래닛 주식회사의 위치기반 서비스 이용 약관을 기반으로 제작되었습니다.
           <p>
         </div>
-        <div class=checkBoxTextCenter>
+        <div class=checkBoxAgree>
           <input type="checkbox" id="location" name="check" class="checkOne"> <label for="location"><span>(선택)</span>위치기반서비스 이용약관 동의</label>
         </div>
 
@@ -190,15 +174,20 @@
           <br>
           <p>출처 : https://www.productlabs.kr 이 약관은 Product Lab 이벤트 및 마케팅 활용동의 이용 약관을 기반으로 제작되었습니다.</p>
         </div>
-        <div class=checkBoxTextCenter>
+        <div class=checkBoxAgree>
           <input type="checkbox" id="event" name="check" class="checkOne"> <label for="event"><span>(선택)</span>이벤트 및 마케팅 활용 동의</label>
         </div>
       </div>
       <div class="joinButton" >
-        <input class="joinButton" type="button" value="취소" id="btnCancel">
-        <button class="joinButton">다음</button>
+        <input class="red-middle-Btn" type="button" value="취소" id="btnCancel">
+        <button class="deepGreen-middle-Btn">다음</button>
       </div>
     </form>
-  </div>
+        </div> 
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
 </body>
 </html>

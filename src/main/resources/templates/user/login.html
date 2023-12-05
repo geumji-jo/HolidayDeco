@@ -3,23 +3,23 @@
 
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:inline="javascript">
-
 //$.cookie() : jquery-cookie 라이브러리가 필요함
 
   // 로그인하기
   function fnLogin(){
     
-	  $('#frmLogin').on('submit', function(event){
-	      
-	      // 아이디, 비밀번호 공백 검사
-	      if($('#id').val() == '' || $('#pw').val() == ''){
-	        alert('아이디와 비밀번호를 모두 입력하세요.');
-	        event.preventDefault();
-	        return;
-	      }
+    $('#frmLogin').on('submit', function(event){
+        
+        // 아이디, 비밀번호 공백 검사
+        if($('#id').val() == '' || $('#pw').val() == ''){
+          alert('아이디와 비밀번호를 모두 입력하세요.');
+          event.preventDefault();
+          return;
+        }
       
       // 아이디 기억을 체크하면 rememberId 쿠키에 입력된 아이디를 저장
       if($('#chkRememberId').is(':checked')){
@@ -69,119 +69,21 @@
         }); // 등록한 리다이렉트uri 입력
     }
 </script>
-<style>
-.main {
-   margin: 0 auto;
-}
-
-.box-link {
-     background-color: #004427;
-     color: white;
-     padding: 10px 25px;
-     text-align: center;
-     text-decoration: none;
-     display: inline-block;
-     border-radius: 10px;
-     width: 170px;
-     margin:10px 0 10px 0;
-}
-.box-link:hover, .box-link:active {
-     background-color: #008956;
-}
-
-.kakaologinButton {
-  background-color: #F6F05D;
-  color: black;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 10px;
-  border: 1px solid #F6F05D;
-  width: 170px;
-  margin:10px 0 10px 0;
-}
-
-.kakaologinButton:hover, .kakaologinButton:active {
-     background-color: #FCE61D;
-}
-
-.naverloginButton {
-  background-color: #36C176;
-  color: black;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 10px;
-  border: 1px solid #36C176;
-  width: 170px;
-  margin:10px 0 10px 0;
-}
-
-.naverloginButton:hover, .naverloginButton:active {
-     background-color: #10A354;
-}
-
-.loginButton {
-  background-color: #EB5858;
-  color: black;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 10px;
-  border: 1px solid #EB5858;
-  width: 345px;
-  margin:10px 0 5px 0;
-}
-
-.loginButton:hover, .loginButton:active {
-     background-color: #CF4E4E;
-}
-
-.card {
-border: 1.5px solid black;
-box-sizing: content-box;
-padding: 30px;
-width: 400px;
-border-radius: 30px;
-margin: 0 auto;
-text-align: center;
-}
-
-#loginTitle {
-  font-family: 'Domine', serif;
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  text-align: center;
-  padding: 5px;
-  user-select: none;
-}
-
-#id, #pw {
-  border: 1.5px solid black; /* border 스타일 지정 */
-  border-radius: 10px; /* border-radius를 통해 모서리를 둥글게 만듭니다. */
-  padding: 10px 20px; /* padding을 추가하여 내용과 border 사이에 공간을 만듭니다. */
-  width: 345px;
-  margin: 0 0 10px 0;
-}
-
-</style>
 <body>
-  <div class="main">
-    <section class="section">
-      <h4 id="loginTitle">Login</h4>
-      <div class="card">
+     <div id="container">
+      <div id="container-title">
+        <h3>login</h3>
+      </div>
+      <div id="onlyContent">
+        <div class="card">
         <form id="frmLogin" method="post" th:action="@{/user/login.do}">
           <!-- 로그인 이후에 이동할 주소 -->
           <input type="hidden" name="url" th:value="${url}">
           <div>
-            <input type="text" name="id" id="id" placeholder="아이디" autocomplete="off">
+            <input class="input-long-Box" type="text" name="id" id="id" placeholder="아이디" autocomplete="off">
           </div>
           <div>
-            <input type="password" name="pw" id="pw" placeholder="비밀번호" autocomplete="off">
+            <input class="input-long-Box" type="password" name="pw" id="pw" placeholder="비밀번호" autocomplete="off">
           </div>
           <div>
             <input type="checkbox" id="chkRememberId">
@@ -189,19 +91,24 @@ text-align: center;
             <input type="checkbox" name="chkAutologin" id="chkAutologin">
             <label for="chkAutologin">자동 로그인</label>
           </div>
-          <button class="loginButton">로그인</button>
+          <button class="red-long-Btn">로그인</button>
           <br>
         </form>
         <button class="kakaologinButton">카카오 로그인</button>
         <button class="naverloginButton">네이버 로그인</button>
         <div>아이디 또는 비밀번호를 잊으셨나요?</div>
-        <span> <a class="box-link" th:href="@{/user/findId.html}">아이디 찾기</a> <a class="box-link" th:href="@{/user/findPw.html}">비밀번호 찾기</a>
+        <span>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/findId.html}">아이디 찾기</a>
+          <a class="deepGreen-middle-Btn" th:href="@{/user/findPw.html}">비밀번호 찾기</a>
         </span>
-        <div>
-          <a th:href="@{/user/agree.html}">회원가입</a>
-        </div>
+          <div class="menu sidebar_effect">
+            <a th:href="@{/user/agree.html}" style="display:inline-block;width: 150px;"><span>회원가입</span></a>
+          </div>
+        </div> 
       </div>
-    </section>
-  </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
 </body>
 </html>

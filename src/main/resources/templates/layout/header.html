@@ -27,13 +27,13 @@
       <div th:unless="${#strings.isEmpty(session.loginId)}">
         <span>
           <span th:text="|${session.loginId} 님 반갑습니다|"></span>
-          <a class="nav-link" th:href="@{/user/logout.do}">logout</a>
           <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
-            <a class="nav-link" th:href="@{/user/mypage.html}">mypage</a>
+            <a class="nav-link" th:href="@{/user/myPageHome.html}">mypage</a>
           </th:block>
           <th:block th:if="${session.loginId != null and session.adminChk == 1}">
-            <a class="nav-link" th:href="@{/admin/adminMain.html}">adminpage</a>
+            <a class="nav-link" th:href="@{/admin/adminMainHome.html}">adminpage</a>
           </th:block>
+          <a class="nav-link" th:href="@{/user/logout.do}">logout</a>
         </span>
       </div>
     </div>
@@ -45,9 +45,14 @@
         <span id="logoHolidayDeco" >HolidayDeco</span>
       </a>
     </div>
-    <div class="item-link"><a th:href="@{/item/list.do}">ChristmasItem</a></div>
-    <hr class="separator separator--line--green" />
-    <hr class="separator separator--line--red" />
+    <nav>
+      <div class="item-link"><a th:href="@{/item/list.do}">ChristmasItem</a></div>
+    </nav>
+    <div>
+      <hr class="separator separator--line--green" />
+      <hr class="separator separator--line--red" />
+    </div>
+    
   </div>
   
 </body>

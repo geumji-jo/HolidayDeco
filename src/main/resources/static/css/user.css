@@ -1,0 +1,485 @@
+@charset "UTF-8";
+/*
+---------------------------------------
+레이아웃 css
+---------------------------------------
+*/
+
+#container {
+  width: 1240px;
+  margin: 0px auto;
+  padding: 20px;
+  user-select:none;
+}
+#container-title {
+  margin-top: 20px;
+  padding: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+}
+#sidebar-left {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 20px;
+  width: 200px;
+  margin-bottom: 20px;
+  float: left;
+  border-bottom: 2px solid #004427;
+  border-top: 2px solid #004427;
+  text-align: center;
+  padding:10px 0px 10px 0px;
+}
+#sidebar-left-inner {
+  width: 200px;
+  top:100%;
+  border-bottom: 2px solid #EB5858;
+  border-top: 2px solid #EB5858;
+  padding: 20px;
+}
+
+#sidebar-left-inner ul li {
+  padding:10px 0px;
+}
+
+#content {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  width: 740px;
+  float: left;
+  margin: 0 29px 20px 29px;
+  text-align: center;
+}
+#onlyContent {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  width: 740px;
+  margin: auto auto 20px;
+  text-align: center;
+}
+#sidebar-right {
+  width: 200px;
+  padding: 20px;
+  margin-bottom: 20px;
+  float: right;
+  border: 1px solid #bcbcbc;
+  visibility:hidden
+
+}
+#footer {
+  clear: both;
+  padding: 20px;
+  border: 1px solid #bcbcbc;
+  visibility:hidden
+}
+
+/* <------------ 레이아웃 css 끝 ------------> */
+
+.card {
+border: 1.5px solid black;
+padding: 40px;
+width: 600px;
+border-radius: 30px;
+margin: 0 auto;
+text-align: center;
+}
+
+#pageTitle {
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+  padding: 5px;
+  user-select: none;
+  margin-top: 50px;
+}
+
+.red-long-Btn {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #ff7b7b;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #ff7b7b;
+  width: 400px;
+  margin:10px 0 5px 0;
+  cursor: pointer;
+}
+
+.red-middle-Btn {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #ff7b7b;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #ff7b7b;
+  width: 198px;
+  margin:10px 0 5px 0;
+  cursor: pointer;
+}
+
+.red-small-Btn {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #ff7b7b;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #ff7b7b;
+  width: 131px;
+  margin:5px 0 5px 0;
+  cursor: pointer;
+}
+
+.red-long-Btn:hover, .red-middle-Btn:hover, .red-small-Btn:hover {
+     background-color: #d66767;
+}
+
+.gray-small-Btn {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #c0c0c0;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid gray;
+  width: 131px;
+  margin:5px 0 5px 0;
+  cursor: pointer;
+}
+
+.gray-small-Btn:hover {
+  background-color: #6e6e6e;
+}
+
+.deepGreen-middle-Btn {
+     font-family: 'Pretendard-Regular', serif;
+     font-size: 18px;
+     background-color: #004427;
+     color: white;
+     padding: 10px 25px;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+     border: 1px solid #004427;
+     border-radius: 10px;
+     width: 198px;
+     margin:10px 0 10px 0;
+     cursor: pointer;
+}
+.deepGreen-middle-Btn:hover, .deepGreen-middle-Btn:active {
+     background-color: #008956;
+}
+
+.kakaologinButton {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #F6F05D;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #F6F05D;
+  width: 198px;
+  margin:10px 0 10px 0;
+  cursor: pointer;
+}
+
+.kakaologinButton:hover, .kakaologinButton:active {
+     background-color: #FCE61D;
+}
+
+.naverloginButton {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #36C176;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #36C176;
+  width: 198px;
+  margin:10px 0 10px 0;
+  cursor: pointer;
+}
+
+.naverloginButton:hover, .naverloginButton:active {
+     background-color: #10A354;
+}
+
+/*
+---------------------------------------
+input-box
+---------------------------------------
+*/
+.input-long-Box {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 10px; 
+  padding: 10px 20px;
+  width: 400px;
+  margin: 5px 0 10px 0;
+}
+
+.input-middle-Box {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 10px; 
+  padding: 10px 20px;
+  width: 199px;
+  margin:5px 0 10px 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.input-middlehalf-Box {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 10px; 
+  padding: 10px 20px;
+  width: 267px;
+  margin:5px 0 10px 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.input-small-Box {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 10px; 
+  padding: 10px 20px;
+  width: 131px;
+  margin:5px 0 10px 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+
+/*
+---------------------------------------
+라디오버튼(join.html)
+---------------------------------------
+*/
+
+.form_radio_btn {
+        width: 131px;
+        border: 1px solid #EAE7E7;
+        border-radius: 10px;
+        display:inline-block;
+        margin:5px 0 5px 0;
+        cursor: pointer;
+    }
+    
+  .form_radio_btn_male {
+      width: 131px;
+        border: 1px solid #EAE7E7;
+        border-radius: 10px;
+        display:inline-block;
+        margin:5px 0 5px 0;
+        cursor: pointer;   
+    }
+    
+  .form_radio_btn_female {
+      width: 131px;
+        border: 1px solid #EAE7E7;
+        border-radius: 10px;
+        display:inline-block;
+        margin:5px 0 5px 0;
+        cursor: pointer;
+        
+    }
+    .form_radio_btn input[type=radio], .form_radio_btn_male input[type=radio], .form_radio_btn_female input[type=radio]{
+      display: none;
+    }
+    .form_radio_btn label, .form_radio_btn_male label, .form_radio_btn_female label {
+      display: block;
+        border-radius: 10px;
+        margin: 0 auto;
+        text-align: center;
+        height: -webkit-fill-available;
+        line-height: 40px;
+    }
+     
+    /* Checked */
+    .form_radio_btn input[type=radio]:checked + label {
+      background: #184DA0;
+      border: 1px solid #184DA0;
+      color: #fff;
+      
+    }
+    /* Checked */
+    .form_radio_btn_male input[type=radio]:checked + label {
+      background: green;
+      border: 1px solid green;
+      color: #fff;
+      
+    }
+    /* Checked */
+    .form_radio_btn_female input[type=radio]:checked + label {
+      background: red;
+      border: 1px solid red;
+      color: #fff;
+      
+    }
+     
+    /* Hover */
+    .form_radio_btn:hover + label{
+      color: aqua;
+      cursor: pointer;
+    }
+     /* Hover */
+    .form_radio_btn_male label:hover + label {
+      color: aqua;
+      cursor: pointer;
+    }
+     /* Hover */
+    .form_radio_btn_female label:hover + label {
+      color: aqua;
+      cursor: pointer;
+    }
+     
+    /* Disabled */
+    .form_radio_btn input[type=radio] + label {
+      background: #F9FAFC;
+      color: #666;
+    }
+    /* Disabled */
+    .form_radio_btn_male input[type=radio] + label {
+      background: #F9FAFC;
+      color: #666;
+    }
+    /* Disabled */
+    .form_radio_btn_female input[type=radio] + label {
+      background: #F9FAFC;
+      color: #666;
+    }
+
+/*
+---------------------------------------
+sidebar hover effect
+---------------------------------------
+*/
+
+.sidebar_effect a:after, .sidebar_effect a:before .sidebar_effect a span:before .sidebar_effect a span:after{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/*
+-----------------
+common style
+-----------------
+*/
+
+.menu a {
+  color: black;
+  /**/
+  position: relative;
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.5s ease;
+}
+
+.menu a:hover {
+  color: #EB5858;
+}
+
+
+
+.sidebar_effect{
+  list-style: none;
+  
+}
+
+.sidebar_effect a:before, .sidebar_effect a span:before, .sidebar_effect a:after, .sidebar_effect a span:after {
+  content: "";
+  position: absolute;
+}
+
+.sidebar_effect a:before, .sidebar_effect a span:before {
+  top: -webkit-calc(50% - .3em);
+  top: calc(50% - .3em);
+  left: -.25em;
+  width: .5em;
+  height: .5em;
+  opacity: 0;
+  -webkit-transform: translate3d(-.6em, 0, 0) rotate(45deg);
+  transform: translate3d(-.6em, 0, 0) rotate(45deg)
+}
+
+.sidebar_effect a:after, .sidebar_effect a span:after {
+  bottom: -webkit-calc(50% - .35em);
+  bottom: calc(50% - .35em);
+  right: -.25em;
+  width: .5em;
+  height: .5em;
+  opacity: 0;
+  -webkit-transform: translate3d(.6em, 0, 0) rotate(45deg);
+  transform: translate3d(.6em, 0, 0) rotate(45deg)
+}
+
+.sidebar_effect a:before, .sidebar_effect a:after {
+  -webkit-transition: -webkit-transform .3s ease-out, opacity .3s;
+  transition: transform .3s ease-out, opacity .3s
+}
+
+.sidebar_effect a span:before, .sidebar_effect a span:after {
+  -webkit-transition: -webkit-transform .3s ease-out .15s, opacity 0s .05s;
+  transition: transform .3s ease-out .15s, opacity 0s .05s
+}
+
+.sidebar_effect a:hover {
+  overflow: visible
+}
+
+.sidebar_effect a:hover:before, .sidebar_effect a:hover span:before {
+  -webkit-transform: translate3d(0, 0, 0) rotate(45deg);
+  transform: translate3d(0, 0, 0) rotate(45deg);
+  opacity: 1
+}
+
+.sidebar_effect a:hover:after, .sidebar_effect a:hover span:after {
+  -webkit-transform: translate3d(0, 0, 0) rotate(45deg);
+  transform: translate3d(0, 0, 0) rotate(45deg);
+  opacity: 1
+}
+
+.sidebar_effect a:before, .sidebar_effect a span:before {
+  border-right: .15em solid rgba(235, 88, 88, 0.4);
+  border-top: .15em solid rgba(235, 88, 88, 0.4);
+}
+
+.sidebar_effect a:after, .sidebar_effect a span:after {
+  border-left: .15em solid rgba(235, 88, 88, 0.4);
+  border-bottom: .15em solid rgba(235, 88, 88, 0.4);
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+</head>
+
+<body>
+  <div th:fragment="sidebarFrag">
+    <aside>
+      <ul class="menu sidebar_effect">
+        <li>
+          <a th:href="@{/user/checkPw.html}"><span>내 정보 수정하기</span></a>
+        </li>
+        <li>
+          <a th:href="@{/user/out.html}"><span>탈퇴하기</span></a>
+        </li>
+        <li>
+          <a th:href="@{/user/myPageHome2.html}"><span>실험</span></a>
+        </li>
+      </ul>
+    </aside>
+  </div>
+</body>
+</html>
