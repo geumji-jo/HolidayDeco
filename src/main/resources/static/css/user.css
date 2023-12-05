@@ -109,7 +109,7 @@ text-align: center;
   border-radius: 10px;
   border: 1px solid #ff7b7b;
   width: 400px;
-  margin:10px 0 5px 0;
+  margin:5px 0 5px 0;
   cursor: pointer;
 }
 
@@ -125,7 +125,7 @@ text-align: center;
   border-radius: 10px;
   border: 1px solid #ff7b7b;
   width: 198px;
-  margin:10px 0 5px 0;
+  margin:5px 0 5px 0;
   cursor: pointer;
 }
 
@@ -169,22 +169,38 @@ text-align: center;
   background-color: #6e6e6e;
 }
 
+.deepGreen-small-Btn {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  background-color: #004427;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  border: 1px solid #004427;
+  width: 131px;
+  margin:5px 0 5px 0;
+  cursor: pointer;
+}
+
 .deepGreen-middle-Btn {
      font-family: 'Pretendard-Regular', serif;
      font-size: 18px;
      background-color: #004427;
      color: white;
-     padding: 10px 25px;
+     padding: 10px 20px;
      text-align: center;
      text-decoration: none;
      display: inline-block;
      border: 1px solid #004427;
      border-radius: 10px;
      width: 198px;
-     margin:10px 0 10px 0;
+     margin:5px 0 5px 0;
      cursor: pointer;
 }
-.deepGreen-middle-Btn:hover, .deepGreen-middle-Btn:active {
+.deepGreen-middle-Btn:hover, .deepGreen-middle-Btn:active, .deepGreen-small-Btn:hover {
      background-color: #008956;
 }
 
@@ -275,7 +291,20 @@ input-box
   border: 1.5px solid black;
   border-radius: 10px; 
   padding: 10px 20px;
-  width: 131px;
+  width: 115px;
+  margin:5px 0 10px 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.input-100px-Box {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 10px; 
+  padding: 10px 20px;
+  width: 100px;
   margin:5px 0 10px 0;
   cursor: pointer;
   text-decoration: none;
@@ -290,7 +319,7 @@ input-box
 */
 
 .form_radio_btn {
-        width: 131px;
+        width: 105px;
         border: 1px solid #EAE7E7;
         border-radius: 10px;
         display:inline-block;
@@ -299,7 +328,7 @@ input-box
     }
     
   .form_radio_btn_male {
-      width: 131px;
+        width: 105px;
         border: 1px solid #EAE7E7;
         border-radius: 10px;
         display:inline-block;
@@ -308,7 +337,7 @@ input-box
     }
     
   .form_radio_btn_female {
-      width: 131px;
+        width: 105px;
         border: 1px solid #EAE7E7;
         border-radius: 10px;
         display:inline-block;

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:inline=javascript>
+
+$(function() {
+	// 휴면해제버튼
+	$('#btnWakeup').on('click', function() {
+		location.href='/user/restore.do';
+	})
+	// 취소버튼
+	$('#btnCancel').on('click', function() {
+		location.href='/';
+	})
+	
+	
+})
+
+</script>
+<body>
+     <div id="container">
+      <div id="container-title">
+        <h3>sleep User wakeUP</h3>
+      </div>
+      <div id="onlyContent">
+        <div class="card">
+          <div th:text="|안녕하세요.${session.sleepUserId}님은 1년이상 로그인 하지 않아 관련 법령에 의해 휴면회원으로 전환되었습니다.|"></div>
+          <div th:text="|휴면해제를 위해서 휴면해제 버튼을 클릭하세요|"></div>
+        <div>
+          <input class="red-middle-Btn" type="button" value="취소" id="btnCancel">
+          <input class="deepGreen-middle-Btn" type="button" value="휴면해제" id="btnWakeup">
+        </div>
+        </div> 
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
+    </div>
+</body>
+</html>

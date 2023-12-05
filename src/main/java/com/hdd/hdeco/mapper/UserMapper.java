@@ -26,7 +26,7 @@ public interface UserMapper {
 	  public int insertOutUser(OutUserDTO outUserDTO);
 	  public int deleteUser(String id);
 
-		/* public int insertSleepUser(); */
+		public int insertSleepUser();
 	  public int deleteUserForSleep();
 	  public int insertRestoreUser(String id);
 	  public int deleteSleepUser(String id);

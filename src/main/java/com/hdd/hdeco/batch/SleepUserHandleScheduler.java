@@ -15,11 +15,12 @@ public class SleepUserHandleScheduler {
 
 	private final UserService userService;
 
-	// 매일 저녁 9시
-
-	@Scheduled(cron = "0 0 21 1/1 * ?")
+	//(cronMaker.com)(크론메이커에서 만들어준 크론은 마지막 *(에스터리스크)는 빼고 적기)
+	// 매일밤 12시에 sleepUserHandler작동
+	//@Scheduled(cron = "0 0 12 1/1 * ?")
+	@Scheduled(cron = "0 0/1 * 1/1 * ?")
 	public void execute() {
-		//userService.sleepUserHandle();
+		userService.sleepUserHandle();
 	}
 
 }

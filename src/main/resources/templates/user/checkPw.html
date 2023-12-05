@@ -5,6 +5,13 @@
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <script>
+
+//Enter 키를 눌렀을 때 확인 버튼 클릭
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    document.getElementById("btnCheckPw").click();
+  }
+});
   
   function fnCheckPwCancel(){
     $('#btnCancel').on('click', function(){
@@ -53,13 +60,13 @@
     <div>개인정보보호를 위해서 비밀번호를 다시 한 번 입력하세요</div>
     
     <div>
-      <label for="pw">비밀번호</label>
-      <input type="password" id="pw">
+      <label for="pw"></label>
+      <input class="input-middle-Box" type="password" id="pw" placeholder="비밀번호를 입력하세요" style="margin-top: 15px;">
     </div>
     
     <div>
-      <input type="button" value="취소" id="btnCancel">
-      <input type="button" value="확인" id="btnCheckPw">
+      <input class="red-small-Btn" type="button" value="취소" id="btnCancel">
+      <input class="deepGreen-small-Btn" type="button" value="확인" id="btnCheckPw">
     </div>
     
   </div>

@@ -221,6 +221,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
 
 	@Override
   public void autologin(HttpServletRequest request, HttpServletResponse response) {
@@ -353,6 +354,52 @@ public class UserServiceImpl implements UserService {
 				}
 	
 	}
+	
+	@Override
+	public void sleepUserHandle() {
+		 int insertResult = userMapper.insertSleepUser();
+	    if(insertResult > 0) {
+	      userMapper.deleteUserForSleep();
+	    }
+		
+	}
+	
+	@Override
+  public void restore(HttpServletRequest request, HttpServletResponse response) {
+    
+    // 복원할 아이디는 session에 sleepUserId로 저장되어 있다.
+    HttpSession session = request.getSession();
+    String id = (String) session.getAttribute("sleepUserId");
+    
+    // 복원
+    int insertResult = userMapper.insertRestoreUser(id);
+    int deleteResult = userMapper.deleteSleepUser(id);
+    
+    // 응답
+    try {
+
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      
+      out.println("<script>");
+      if(insertResult == 1 && deleteResult == 1) {
+        session.removeAttribute("sleepUserId");  // session에 저장된 sleepUserId 제거
+        out.println("alert('휴면 계정이 복구되었습니다. 휴면 계정 활성화를 위해서 곧바로 로그인 해 주세요.');");
+        out.println("location.href='/';");  // 로그인이 필요하지만 로그인 페이지로 보내지 말자!(여기서 로그인 페이지로 이동하게 되면 로그인 후 referer에 의해서 다시 restore 과정으로 돌아온다.) 
+      } else {
+        out.println("alert('휴면 계정이 복구되지 않았습니다. 다시 시도하세요.');");
+        out.println("history.back();");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+  }
+  
 	
 	@Override
 	public UserDTO getUserById(String id) {

@@ -8,7 +8,7 @@
   // JavaScript 코드 작성
   function confirmOut() {
     // 사용자에게 확인 대화 상자 표시
-    var result = confirm('정말 탈퇴하시겠습니까?');
+    var result = confirm('동일한 아이디로 재가입이 불가능합니다. 회원 탈퇴하시겠습니까?');
     
     // 확인 버튼을 클릭한 경우
     if (result === true) {
@@ -32,7 +32,7 @@
         <div>
           <p>탈퇴를 원하시면 탈퇴버튼을 클릭해주세요.</p>
         </div>
-        <button id="outBtn" onclick="confirmOut()">탈퇴</button>
+        <button class="red-small-Btn" id="outBtn" onclick="confirmOut()" style="margin-top: 20px;">탈퇴</button>
         </div> 
       </div>
       <div id="sidebar-right">

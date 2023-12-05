@@ -19,7 +19,7 @@
     $('#msgRePw').val('');
   }
   
-  function fnToggleEditPwArea(){
+  /* function fnToggleEditPwArea(){
     $('#editPwArea').hide();
     $('#btnOpenEditPwArea').on('click', function(){
       fnInitEditPwArea();
@@ -32,7 +32,22 @@
       $('#editPwArea').hide();
     });
   }
-  
+   */
+   
+   $(document).ready(function () {
+	   $('.btn-pw-modal').on('click', function(){
+		   fnCheckPw();
+		   fnCheckPwAgain();
+		   fnModifyPw();
+	   });
+	   
+   })
+    $(document).ready(function () {
+	   $('.btn-email-modal').on('click', function(){
+		   fnCheckEmail();
+		   fnModifyEmail();
+	     });
+    })
   function fnCheckPw(){
     $('#pw').on('keyup', function(){
       let pw = $(this).val();
@@ -76,7 +91,7 @@
       }
       $.ajax({
         type: 'post',
-        url: '${contextPath}/user/modifyPw.do',
+        url: '/user/modifyPw.do',
         data: 'pw=' + $('#pw').val(),
         dataType: 'json',
         success: function(resData){  // resData = {"updateUserPasswordResult": 1}
@@ -93,14 +108,14 @@
     })
   }
   
-  function fnInitEditEmailArea(){
+  /* function fnInitEditEmailArea(){
     $('#btnVerifyCode').addClass("blind");
     $('#btnModifyEmail').addClass("blind");
     $('#msgEmail').val('');
     $('#authCode').val('');
-  }
+  } */
   
-  function fnToggleEditEmailArea(){
+  /* function fnToggleEditEmailArea(){
     $('#editEmailArea').hide();
     $('#btnOpenEditEmailArea').on('click', function(){
       fnInitEditEmailArea();
@@ -113,7 +128,7 @@
       $('#editEmailArea').hide();
       
     });
-  }
+  } */
   
   function fnCheckEmail(){
     $('#btnGetCode').on('click', function(){
@@ -127,7 +142,7 @@
         }
         $.ajax({
           type: 'get',
-          url: '${contextPath}/user/verifyEmail.do',
+          url: '/user/verifyEmail.do',
           data: 'email=' + email,
           dataType: 'json',
           success: function(resData){  // resData = {"enableEmail": true} 또는 {"enableEmail": false}
@@ -142,7 +157,7 @@
       }).then(function(){
         $.ajax({
           type: 'get',
-          url: '${contextPath}/user/sendAuthCode.do',
+          url: '/user/sendAuthCode.do',
           data: 'email=' + email,
           dataType: 'json',
           success: function(resData){
@@ -187,7 +202,7 @@
       }
       $.ajax({
         type: 'post',
-        url: '${contextPath}/user/modifyEmail.do',
+        url: '/user/modifyEmail.do',
         data: 'email=' + $('#email').val(),
         dataType: 'json',
         success: function(resData){  // resData = {"updateUserEmailResult": 1}
@@ -201,8 +216,9 @@
       })
     })
   }
-  
+  /*<![CDATA[*/
   function fnDisplayBirthday(){
+
     // 년도(100년 전 ~ 1년 후)
     let year = new Date().getFullYear();
     let strYear = '<option value="">년도</option>';
@@ -210,7 +226,7 @@
       strYear += '<option value="' + y + '">' + y + '</option>';
     }
     $('#birthyear').append(strYear);
-    $('#birthyear').val('${loginUser.birthyear}').prop('selected', true);
+    $('#birthyear').val(/*[[${loginUser.birthyear}]]*/).prop('selected', true);
     // 월(1 ~ 12월)
     let strMonth = '<option value="">월</option>';
     for(let m = 1; m <= 12; m++){
@@ -221,7 +237,7 @@
       }
     }
     $('#birthmonth').append(strMonth);
-    $('#birthmonth').val('${loginUser.birthdate.substring(0,2)}').prop('selected', true);
+    $('#birthmonth').val(/*[[${loginUser.birthdate.substring(0,2)}]]*/).prop('selected', true);
     // 일
     $('#birthdate').empty();
     $('#birthdate').append('<option value="">일</option>');
@@ -243,9 +259,9 @@
       }
     }
     $('#birthdate').append(strDay);
-    $('#birthdate').val('${loginUser.birthdate.substring(2)}').prop('selected', true);
+    $('#birthdate').val(/*[[${loginUser.birthdate.substring(2)}]]*/).prop('selected', true);
   }
-  
+  /*]]>*/
   function fnModifyInfo(){
     
     $('#btnModifyInfo').on('click', function(){
@@ -263,7 +279,7 @@
       
       $.ajax({
         type: 'post',
-        url: '${contextPath}/user/modifyInfo.do',
+        url: '/user/modifyInfo.do',
         data: $('#frmEdit').serialize(),
         dataType: 'json',
         success: function(resData){  // resData = {"updateUserInfoResult": 1}
@@ -279,13 +295,6 @@
     
   }
   
-  function fnLeave(){
-    $('#btnLeave').on('click', function(){
-      if(confirm('동일한 아이디로 재가입이 불가능합니다. 회원 탈퇴하시겠습니까?')){
-        location.href = '${contextPath}/user/leave.do';
-      }
-    })
-  }
   
   // 함수 호출
   $(function(){
@@ -301,10 +310,7 @@
     fnModifyEmail();
     
     fnDisplayBirthday();
-    fnModifyInfo();
-    
-    fnLeave();
-    
+    fnModifyInfo();  
   })
 
 </script>
@@ -323,18 +329,18 @@
         <div>
       <input class="deepGreen-middle-Btn" type="button" value="비밀번호편집화면열기" id="btnOpenEditPwArea">
     </div>
-    <div id="editPwArea">
+<!--     <div id="editPwArea">
       <div>
         <input class="deepGreen-middle-Btn" type="button" value="비밀번호편집화면닫기" id="btnCloseEditPwArea">
       </div>
 
-      <!-- 비밀번호 -->
+      비밀번호
       <div>
         <label for="pw">새 비밀번호</label>
         <input type="password" name="pw" id="pw">
         <span id="msgPw"></span>
       </div>
-      <!-- 비밀번호 재확인 -->
+      비밀번호 재확인
       <div>
         <label for="rePw">비밀번호 확인</label>
         <input type="password" id="rePw">
@@ -343,11 +349,37 @@
       <div>
         <input type="button" value="비밀번호수정" id="btnModifyPw">
       </div>
-    </div>
+    </div> -->
+
+        <button id="btn-modal" class="btn-pw-modal">모달 창 열기 버튼</button>
+        <div id="passwordModal">
+          <div id="modal" class="modal-overlay">
+            <div class="modal-window">
+              <div class="title">
+                <h2>비밀번호 변경</h2>
+              </div>
+              <div class="close-area">X</div>
+              <div class="modal-content">
+                <div>
+                  <label for="pw">새 비밀번호</label>
+                  <input type="password" name="pw" id="pw"> <span id="msgPw"></span>
+                </div>
+                <div>
+                  <label for="rePw">비밀번호 확인</label>
+                  <input type="password" id="rePw"> <span id="msgRePw"></span>
+                </div>
+                <div>
+                  <input type="button" value="비밀번호수정" id="btnModifyPw">
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr>
     
-    <hr>
-    
-    <div>
+    <!-- <div>
       <input class="deepGreen-middle-Btn" type="button" value="이메일편집화면열기" id="btnOpenEditEmailArea">
     </div>
     <div id="editEmailArea">
@@ -363,7 +395,32 @@
         <input type="button" value="인증하기" id="btnVerifyCode" class="blind">
         <input type="button" value="이메일수정" id="btnModifyEmail" class="blind">
       </div>
-    </div>
+    </div> -->
+    
+    
+    <button id="btn-modal" class="btn-email-modal">모달 창 열기 버튼</button>
+        <div id="emailModal">
+        <div id="modal" class="modal-overlay">
+          <div class="modal-window">
+            <div class="title">
+              <h2>이메일 변경</h2>
+            </div>
+            <div class="close-area">X</div>
+            <div class="modal-content">
+              <div>
+        <label for="email">이메일*</label>
+        <input type="text" name="email" id="email" th:value="${loginUser.email}">
+        <input type="button" value="인증번호받기" id="btnGetCode">
+        <span id="msgEmail"></span><br>
+        <input type="text" id="authCode" placeholder="인증코드 입력">
+        <input type="button" value="인증하기" id="btnVerifyCode" class="blind">
+        <input type="button" value="이메일수정" id="btnModifyEmail" class="blind">
+      </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    
 
     <hr>
 
@@ -475,7 +532,7 @@
       </div>
       
       <div>
-        <div>위치정보 동의여부</div>
+        <!-- <div>위치정보 동의여부</div>
         <input type="radio" name="location" id="locationOn" value="on"><label for="locationOn">동의함</label>
         <input type="radio" name="location" id="locationOff" value="off"><label for="locationOff">동의 안함</label>
         <div>프로모션 동의여부</div>
@@ -492,8 +549,20 @@
           } else {
             $(':radio[name="event"][value="off"]').prop('checked', true);
           }
-        </script>
-      </div>
+        </script>-->
+      
+        <div>위치정보 동의여부</div>
+        
+        <input type="radio" name="location" id="locationOn" value="on" th:checked="${loginUser.agreecode == 1 || loginUser.agreecode == 3}">
+        <label for="locationOn">동의함</label>
+        <input type="radio" name="location" id="locationOff" value="off" th:checked="${loginUser.agreecode != 1 && loginUser.agreecode != 3}">
+        <label for="locationOff">동의 안함</label>
+        <div>프로모션 동의여부</div>
+        <input type="radio" name="event" id="eventOn" value="on" th:checked="${loginUser.agreecode == 2 || loginUser.agreecode == 3}">
+        <label for="eventOn">동의함</label>
+        <input type="radio" name="event" id="eventOff" value="off" th:checked="${loginUser.agreecode != 2 && loginUser.agreecode != 3}">
+        <label for="eventOff">동의 안함</label>
+      </div> 
       
       <hr>
       

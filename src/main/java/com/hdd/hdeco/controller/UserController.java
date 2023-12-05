@@ -96,6 +96,18 @@ public class UserController {
     return "redirect:/";
   }
   
+  // 휴면회원화면
+  @GetMapping("/wakeup.html")
+  public String wakeupForm() {
+  	return "user/wakeup";
+  }
+  
+  //휴면회원 - 일반회원으로 전환 구현
+  @GetMapping("/restore.do")
+  public void restore(HttpServletRequest request, HttpServletResponse response) {
+  	userService.restore(request, response);
+  }
+  
   //아이디 찾기
   @GetMapping("/findId.html")
   public String findIdForm() {
