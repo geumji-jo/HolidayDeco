@@ -95,7 +95,7 @@
           <br>
         </form>
         <button class="kakaologinButton">카카오 로그인</button>
-        <button class="naverloginButton">네이버 로그인</button>
+        <a th:href="${apiURL}"><button class="naverloginButton">네이버 로그인</button></a>
         <div>아이디 또는 비밀번호를 잊으셨나요?</div>
         <span>
           <a class="deepGreen-middle-Btn" th:href="@{/user/findId.html}">아이디 찾기</a>

@@ -36,4 +36,5 @@ public interface UserMapper {
 	  public UserDTO selectFindUserId(UserDTO userDTO);
 	  public String selectUserPwByUserDTO(UserDTO userDTO);
 	  public String selectUserPwCheck(UserDTO userDTO);
+	  public int insertNaverUser(UserDTO userDTO);
 }

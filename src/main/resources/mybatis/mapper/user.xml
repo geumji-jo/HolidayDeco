@@ -349,5 +349,40 @@
      WHERE ID = #{id}
   </delete>
   
+  
+<!-- 네이버 회원 가입 -->
+  <insert id="insertNaverUser" parameterType="UserDTO">
+    INSERT INTO USER_T (
+        ID
+      , PW
+      , NAME
+      , GENDER
+      , EMAIL
+      , MOBILE
+      , BIRTHYEAR
+      , BIRTHDATE
+      , AGREECODE
+      , JOINED_AT
+      , PW_MODIFIED_AT
+      , AUTOLOGIN_ID
+      , AUTOLOGIN_EXPIRED_AT
+      , ADMIN_CHECK
+    ) VALUES (
+        #{id}
+      , #{pw}
+      , #{name}
+      , #{gender}
+      , #{email}
+      , #{mobile}
+      , #{birthyear}
+      , #{birthdate}
+      , #{agreecode}
+      , NOW()
+      , NOW()
+      , NULL
+      , NULL
+      , #{adminCheck}
+    )
+  </insert>
  
 </mapper>

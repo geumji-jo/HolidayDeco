@@ -406,6 +406,7 @@ function fnJoin(){
 function fnCancelBtn() {
     location.href = '/';
   }
+  
 
 // 함수 호출
 $(function(){

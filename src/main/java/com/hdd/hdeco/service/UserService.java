@@ -32,6 +32,13 @@ public interface UserService {
   public Map<String, Object> modifyEmail(HttpServletRequest request);
   public Map<String, Object> modifyInfo(HttpServletRequest request);
  // public UserDTO verifyTemporaryPassword(String id, String temporaryPassword);  
+  
+  
+  public String getNaverLoginApiURL(HttpServletRequest request);
+  public String getNaverLoginToken(HttpServletRequest request);
+  public UserDTO getNaverLoginProfile(String access_token);
+  public void naverLogin(HttpServletRequest request, HttpServletResponse response, UserDTO naverUser);
+  public void naverJoin(HttpServletRequest request, HttpServletResponse response);
 
 
   
