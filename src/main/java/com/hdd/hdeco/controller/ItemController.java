@@ -42,25 +42,16 @@ public class ItemController {
 	}
 
 	@GetMapping("/detail.do")
-	public String Detail(@RequestParam(value = "itemNo") int itemNo, Model model) {
+	public String Detail(@RequestParam(value="itemNo") int itemNo, Model model) {
 		itemService.getItemByNo(itemNo, model);
 		return "item/detail";
 	}
 
 	
-	@GetMapping("/search.do") public String searchItem(@RequestParam("query") String query, Model model) { 
+	@GetMapping("/search.do") public String searchItem(@RequestParam(value="query") String query, Model model) { 
 		// 검색 로직 구현 및 결과를 모델에 추가 
 		List<ItemDTO>searchResult = itemService.searchItem(query); 
 	  model.addAttribute("itemList",searchResult);
-	  
-	 return "item/search"; }
-	 
-	
-	/*
-	 * @GetMapping("/search.do")
-	 * 
-	 * @ResponseBody public List<ItemDTO> searchProduct(@RequestParam("query")
-	 * String query) { return itemService.searchItem(query); }
-	 */
-
+	  return "item/list"; 
+	 }
 }

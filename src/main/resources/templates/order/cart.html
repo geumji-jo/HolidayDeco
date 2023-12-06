@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+    <div th:replace="~{/layout/header::gnbFrag}"></div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+<script>
+$(document).ready(function() {
+
+    // 개별 체크박스 클릭 시
+    $(".checkOne").change(function() {
+        if ($(".checkOne:checked").length === $(".checkOne").length) {
+            $("#checkAll").prop("checked", true);
+        } else {
+            $("#checkAll").prop("checked", false);
+        }
+        totalAmount();
+    });
+
+    // 전체 선택 체크박스 클릭 시
+    $("#checkAll").change(function() {
+        $(".checkOne").prop("checked", $("#checkAll").prop("checked"));
+        totalAmount();
+    });
+
+    // 총 결제금액 구하기 (체크된 상품만)
+    function totalAmount() {
+        var totalAmount = 0;
+
+        $(".checkOne:checked").each(function() {
+            var item = $(this).closest('.item');
+            var quantity = parseInt(item.find('.quantity').val());
+            var price = parseFloat(item.find('.itemInfo').eq(1).text().replace('원', '').replace(',', '')); // Assuming price is the second itemInfo
+
+            totalAmount += quantity * price;
+        });
+
+        $('.totalAmount').text(totalAmount.toLocaleString() + "원");
+    }
+
+    /* 수량 변경 시 DB 업데이트 */
+    function fnUpdateCart(quantity, itemNo) {
+      $.ajax({
+        type: 'get',
+        url: '/cart/updateCartQuantity.do',
+        data: 'quantity=' + quantity + '&itemNo=' + itemNo,
+      })
+    }
+
+    // 수량 증가
+    function fnBtnPlus(item) {
+        var inputQuantity = item.find('.quantity');
+        var currentQuantity = parseInt(inputQuantity.val());
+        inputQuantity.val(currentQuantity + 1);
+        totalAmount();
+        var itemNo = item.find('.checkOne').val();
+        fnUpdateCart(currentQuantity + 1, itemNo);
+    }
+
+    // 수량 감소
+    function fnBtnMinus(item) {
+        var inputQuantity = item.find('.quantity');
+        var currentQuantity = parseInt(inputQuantity.val());
+        if (currentQuantity > 1) {
+            inputQuantity.val(currentQuantity - 1);
+            totalAmount();
+            var itemNo = item.find('.checkOne').val();
+            fnUpdateCart(currentQuantity - 1, itemNo);
+        } else {
+            alert('최소 주문 수량은 1개입니다.');
+        }
+    }
+
+    // 이벤트 바인딩
+    $(document).on('click', '.btnBuyCount.plus', function () {
+        var item = $(this).closest('.item');
+        fnBtnPlus(item);
+    });
+
+    $(document).on('click', '.btnBuyCount.minus', function () {
+        var item = $(this).closest('.item');
+        fnBtnMinus(item);
+    });
+
+    /* 상품 번호를 저장할 배열 */
+    var itemNoArr = [];
+
+    /* 선택된 상품의 식별자를 배열에 저장하는 함수 */
+    function getCheckedItem() {
+        itemNoArr = [];
+        var length = $('.checkOne:checked').length;
+
+        for(let i=0; i<length; i++) {
+            var itemNo = $('.checkOne:checked')[i];
+            itemNoArr.push($(itemNo).val());
+        }
+    }
+
+    /* 선택된 상품 삭제 */
+    $('#delete').on('click', function() {
+        if(confirm('선택한 상품을 삭제하시겠습니까?')) {
+            getCheckedItem(); 
+            location.href='/cart/deleteCart.do?itemNoArr='+itemNoArr;
+        }
+    });
+});
+</script>
+
+<div class="cartList">
+    <h4 id="cartTitle">Cart Item</h4>
+    <div class="cartBox">
+        <div class="cartItem">
+            <div th:if="${cartList==null}">
+                <p>장바구니가 비었습니다.</p>
+            </div>
+            <div class="cartForm" th:unless="${#lists.isEmpty(cartList)}">
+                <input type="checkbox" id="checkAll" value="checkAll" /> <label for="checkAll">전체선택</label>
+                <th:block th:each="item, vs:${cartList}">
+                    <div class="item">
+                        <input type="checkbox" th:id="${item.itemNo}" class="checkOne"  th:value="${item.itemNo}"  />
+                        <div class="MainImg">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+                                <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                            </a>
+                        </div>
+                        <div class="itemInfo">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+                        </div>
+                        <div class="itemInfo">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+                        </div>
+                        <div class="itemInfo">
+                            <input type="text" name="quantity" class="quantity" th:value="${item.quantity}">
+                            <div class="btn-group">
+                                <input type="button" class="btnBuyCount plus" value="▲">
+                                <input type="button" class="btnBuyCount minus" value="▼">
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <hr>
+            <div class="totalPrice">
+                <span>총 결제금액 &nbsp; </span> <span class="totalAmount"></span>
+            </div>
+            <div class=btn-forward-group>
+                <div class="goBack">
+                    <input type="button" value="돌아가기" id="goBack" onclick="history.back()"/>
+                </div>
+               <!--  <form id="frmOrderAll" method='post' th:action="/order/orderAll.do"> -->
+                <div class="purchase">
+                    <input type="button" value="구매하기" id="purchase" />
+                </div>
+                <!-- </form> -->
+                <div class="selectDelete">
+                    <input type="button" value="삭제" id="delete" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

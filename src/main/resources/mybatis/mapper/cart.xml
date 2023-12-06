@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.hdd.hdeco.mapper.CartMapper">
+
+  <select id="selectUserNobyId" parameterType="String" resultType="int">
+    SELECT USER_NO
+    FROM USER_T
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="selectItembyNo" parameterType="int" resultType="cartDTO">
+    SELECT ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+    FROM ITEM_T
+    WHERE ITEM_NO = #{itemNo}
+  </select>
+    
+  <!-- 이미 장바구니에 담긴 상품인지 확인 -->
+  <select id="selectAlreadyInCart" parameterType="CartDTO" resultType="CartDTO">
+    SELECT CART_NO, USER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+      FROM CART_T
+     WHERE USER_NO = #{userNo} AND ITEM_NO = #{itemNo}
+  </select>
+  
+  <insert id="insertCart" parameterType="CartDTO">
+    INSERT INTO CART_T (USER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG)
+        VALUES (#{userNo}, #{itemNo}, #{quantity}, #{itemTitle}, #{itemPrice}, #{itemMainImg})
+  </insert>  
+ 
+  <select id="selectCartList" parameterType="int" resultType="CartDTO">
+    SELECT CART_NO, USER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+      FROM CART_T
+     WHERE USER_NO = #{userNo} 
+  </select>
+ 
+  <delete id="deleteByItemNo" parameterType="Map">
+    DELETE FROM CART_T
+     WHERE USER_NO = #{userNo} AND ITEM_NO = #{itemNo}
+     
+  </delete>
+  
+  <update id="updateCartQuantity" parameterType="Map">
+    UPDATE CART_T
+       SET QUANTITY = #{quantity}
+     WHERE ITEM_NO = #{itemNo}
+  </update>
+</mapper>

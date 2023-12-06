@@ -1,0 +1,160 @@
+@charset "UTF-8";
+
+.cartBox {
+  width: 830px;
+  margin: auto;
+
+}
+
+#cartTitle {
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+  padding: 5px;
+  user-select: none;
+}
+
+.cartForm {
+  margin: auto;
+  height: 420px;
+  overflow-y:scroll;
+  overflow-x: hidden;
+}
+
+#checkAll {
+  margin-left: 35px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.cartForm::-webkit-scrollbar { 
+  width: 10px; /* 세로축 스크롤바 두께 */ 
+} 
+
+.cartForm::-webkit-scrollbar-track { 
+  background-color: #CBCBCB; /*스크롤 바 배경 색상*/ 
+} 
+
+.cartForm::-webkit-scrollbar-thumb { 
+  border-radius: 8px; 
+  background-color: #EB5858; /*스크롤 바 색상*/ 
+}
+
+.item {
+  width: 800px;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom:10px;
+}
+
+img {
+  width: 200px;
+  height: 130px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.checkOne {
+  margin-right: 35px;
+  margin-left: 35px;
+}
+
+.itemInfo {
+  font-family: 'SUITE-Regular';
+  margin: auto;
+  display: inline-block;
+  width: 800px; 
+  justify-content:center;
+  min-height: 30px; 
+  display: flex;
+  align-items: center;
+}
+
+a {
+  color: black;
+}
+
+.quantity {
+  font-size: 16px;
+}
+
+
+input.btnBuyCount {
+
+  border: none;
+  background-color: white;
+  color: #CBCBCB;
+  font-size: 20px;
+  width: 20px;
+  
+  
+}
+
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.totalPrice {
+  float: right;
+  font-family: 'SUITE-Regular';
+  font-size: 18px;
+  font-weight: 600;
+  color: #EB5858;
+}
+
+.btn-group input {
+  color: #CBCBCB;
+  font-size: 20px;
+  margin-bottom:-4px;
+  cursor: pointer;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-forward-group {
+  display: flex;
+  margin-top:100px;
+  justify-content: center;
+}
+
+
+#goBack, #purchase, #delete {
+  width: 180px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 20px;
+  font-size: 18px;
+  text-align: center;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+#goBack {
+  background-color: #EB5858;
+}
+
+#purchase {
+  background-color: #004427;
+  color: white;
+}
+
+#delete {
+  background-color: #CBCBCB; 
+}
+
+.quantity {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  text-align: center;
+  border: none;
+}

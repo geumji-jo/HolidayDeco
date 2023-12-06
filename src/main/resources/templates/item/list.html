@@ -63,8 +63,11 @@ function fnSearch() {
             query: query
         },
         success: function(data) {
-            // 검색 결과를 itemList 영역에 업데이트
-            $('#itemList').html(data);
+            // 검색 결과에서 itemMainList 영역만 추출
+            var itemListHtml = $(data).find('.itemMainList').html();
+            
+            // itemList 영역에 업데이트
+            $('#itemList .itemMainList').html(itemListHtml);
         },
         error: function(error) {
             console.error('Ajax 요청 에러:', error);
@@ -72,7 +75,20 @@ function fnSearch() {
     });
 }
 
-//itemList의 자식 중에서 클래스가 .fa-magnifying-glass인 요소에서만 발생
+$('.fa-magnifying-glass').click(function (event) {
+    event.preventDefault();
+    fnSearch();
+});
+
+$('#query').on('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        fnSearch();
+    }
+});
+
+ 
+/* //itemList의 자식 중에서 클래스가 .fa-magnifying-glass인 요소에서만 발생
 $('#itemList').on('click', '.fa-magnifying-glass', function(event) {
     event.preventDefault();
     fnSearch();
@@ -85,7 +101,48 @@ $('#itemList').on('keydown', '#query', function(event) {
         fnSearch();
     }
 }); 
+ */
+/* function fnSearch() {
+    var query = $('#query').val();
 
+    // 검색어를 입력하지 않았을 때 경고창 띄우기
+    if (query === '') {
+        alert('검색어를 입력해주세요.');
+        return;
+    }
+
+    // Ajax 호출
+    $.ajax({
+    	   url: '/item/search.do',
+           type: 'GET',
+           dataType: 'json', // 받아올 데이터 타입을 HTML로 변경
+           data: {
+               sort: sort,  // 'sort='와 'query=' 문자열을 제거하고 파라미터로 전달
+               query: query
+           },
+           success: function(resData){
+               if(confirm(resData.msg)) {
+                 location.href = '/item/search.do';
+               }
+        },
+        error: function(error) {
+            console.error('Ajax 요청 에러:', error);
+        }
+    });
+}
+
+$('.fa-magnifying-glass').click(function (event) {
+    event.preventDefault();
+    fnSearch();
+});
+
+$('#query').on('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        fnSearch();
+    }
+}); 
+ */
 </script>
 
 

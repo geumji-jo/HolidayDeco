@@ -12,16 +12,18 @@
 
   <div th:replace="~{/layout/header::gnbFrag}"></div>
   <div class="detailPage">
+
     <div class="itemImg">
       <img class="main-image" th:src="@{/item/display.do(itemNo=${item.itemNo})}">
       <div class="itemInfo">
         <div class="itemTitle" id="itemTitle" th:text="${item.itemTitle}"></div>
-        <div class = "price-group">
-          <span class="price"  style ="font-size:18px;">가격</span>
-          <div class="itemPrice" id="itemPrice" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
+        <div class="price-group">
+          <span class="price" style="font-size:18px;">가격</span>
+          <div class="itemPrice" id="itemPrice"
+            th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
         </div>
         <div class="count-group">
-          <span class="count-text" style ="font-size:18px;">수량</span>
+          <span class="count-text" style="font-size:18px;">수량</span>
           <input type="text" name="count" id="count" value="1">
           <div class="btn-group">
             <input type="button" class="btnBuyCount" onclick="fnBtnPlus()" value="▲">
@@ -30,95 +32,96 @@
         </div>
         <hr style="width:380px; margin-bottom : 50px;">
         <div class="total-group" style="display: flex;">
-        <span class="total-quantity" style ="width: 300px; font-size:18px;">총 수량&nbsp;&nbsp;&nbsp;<span class="total-quantity-value" id="totalQuantity">1</span></span> 
+          <span class="total-quantity" style="width: 300px; font-size:18px;">총 수량&nbsp;&nbsp;&nbsp;<span
+              class="total-quantity-value" id="totalQuantity">1</span></span>
           <span class="total" style="margin-bottom: 20px; width: 280px; font-size:18px; font-weight:600; color:#EB5858">
-          <div class="price" id="price"></div>
-        </span>
+            <div class="price" id="price"></div>
+          </span>
         </div>
         <div class="button-group">
-          <input type="button" id="btnAddToCart" class="btn" value="장바구니" onclick="fnAddToCart()"/>          
-          <input type="button" id="btnBuy" class="btnBuy" value="구매하기" onclick="fnBuy()" />
+          <input type="hidden" id="itemNo" name="itemNo" value="${item.itemNo}">
+          <input type="button" id="btnAddToCart" value="장바구니" onclick="addToCart()" />
+          <input type="hidden" id="getQuantity" name="quantity">
+          <input type="button" id="btnBuy" class="btnBuy" value="구매하기" />
         </div>
       </div>
     </div>
   </div>
 
-   <div id="detailImg">
+  <div id="detailImg">
     <img th:src="@{/item/display.do(itemNo=${item.itemNo})}">
-  </div> 
-  
-<script th:inline="javascript">
-var count = 1;
-$('#countUp').val(count);
+  </div>
 
-var stock = /*[[${item.itemStock}]]*/ null;
-var price = /*[[${item.itemPrice}]]*/ null;
+  <script th:inline="javascript">
+    var count = 1;
+    $('#countUp').val(count);
 
-function formatPrice(price) {
-  return price.toLocaleString('ko-KR');
-}
+    var stock = /*[[${item.itemStock}]]*/ null;
+    var price = /*[[${item.itemPrice}]]*/ null;
 
-function updateTotalPrice() {
-  var totalQuantity = count; // 개별 상품 수량
-  var totalPrice = count * price; // 개별 상품 가격
+    function formatPrice(price) {
+      return price.toLocaleString('ko-KR');
+    }
 
-  // 총 수량 업데이트
-  $('#totalQuantity').text(totalQuantity + ' 개');
+    function updateTotalPrice() {
+      var totalQuantity = count; // 개별 상품 수량
+      var totalPrice = count * price; // 개별 상품 가격
 
-  // 총합계금액 업데이트
-  $('#price').text(formatPrice(totalPrice) + ' 원');
-}
+      // 총 수량 업데이트
+      $('#totalQuantity').text(totalQuantity + ' 개');
 
-function fnBtnPlus() {
-  count++;
-  count = (count <= stock) ? count : stock;
-  $('#count').val(count);
-  updateTotalPrice();
-}
+      // 총합계금액 업데이트
+      $('#price').text(formatPrice(totalPrice) + ' 원');
+    }
 
-function fnBtnMinus() {
-  if (count == 1) {
-    alert('최소 주문 수량은 1개입니다.');
-    return;
-  }
-  count--;
-  $('#countUp').val(count);
-  updateTotalPrice();
-}
+    function fnBtnPlus() {
+      count++;
+      count = (count <= stock) ? count : stock;
+      $('#count').val(count);
+      updateTotalPrice();
+    }
 
-// 페이지 로드시 초기 총합계금액 설정
-updateTotalPrice();
+    function fnBtnMinus() {
+      if (count == 1) {
+        alert('최소 주문 수량은 1개입니다.');
+        return;
+      }
+      count--;
+      $('#countUp').val(count);
+      updateTotalPrice();
+    }
 
-/***************장바구니 담기***********/
+    // 페이지 로드시 초기 총합계금액 설정
+    updateTotalPrice();
 
-function fnAddToCart() {
-    $('#btnAddToCart').on('click', function() {
-        var loginId = /*[[${session.loginId}]]*/ null;
-        var userNo = /*[[${session.loginUserNo}]]*/ null;
-        if (userNo == null) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            location.href = '/user/login.html';
+    function addToCart() {
+      // 수량 값 가져오기
+      const quantity = parseInt($('#totalQuantity').text());
+      // 상품 번호 가져오기
+      var itemNo = /*[[${item.itemNo}]]*/ null;
+
+      // 값 사용하여 데이터 전송
+      const data = {
+        itemNo: itemNo,
+        quantity: quantity
+      };
+
+      $.ajax({
+        type: 'post',
+        url: '/cart/addCart.do',
+        data: data,
+        dataType: 'json',
+        success: function (resData) {
+          if (confirm(resData.msg)) {
+            location.href = '/cart/getCartList.do';
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('AJAX Error:', error);
         }
-        $.ajax({
-            type: 'post',
-            url: '/item/addCartDetail.do',
-            data: 'userNo=[[${session.loginUserNo}]]&itemNo=[[${item.itemNo}]]&count=' + $('#count').val(),
-            dataType: 'json',
-            success: function(resData) {
-                console.log(resData);
-                if (resData.addCartDetailResult == 1) {
-                    $('#cartNo').val(resData.cartNo);
-                } else {
-                    alert('장바구니에 추가되지 않았습니다.');
-                }
-            },
-            error: function(jqXHR) {
-                alert('오류입니다.');
-            }
-        });
-    })
-}
-</script>
+      });
+    }
+  </script>
 
 </body>
 
