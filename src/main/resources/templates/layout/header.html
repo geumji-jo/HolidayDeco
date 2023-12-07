@@ -19,8 +19,9 @@
       <!-- 로그인 안했을때 네비바  -->
       <div th:if="${#strings.isEmpty(session.loginId)}">
         <span>
-          <a th:href="@{/user/login.html}" style="color: black;">login</a>
-          <a th:href="@{/user/agree.html}" style="color: black;">join</a>
+          <a class="nav-link" th:href="@{/user/login.html}">login</a>
+          <a class="nav-link" th:href="@{/user/agree.html}">join</a>
+          <a class="nav-link" th:href="@{/cart/getCartList.do}" >cart</a>
         </span>
       </div>
       <!-- 로그인 했을때 네비바  -->
