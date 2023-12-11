@@ -1,5 +1,7 @@
 package com.hdd.hdeco.domain;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +12,21 @@ import lombok.NoArgsConstructor;
 public class ItemOrderDTO {
 	
 	private int ItemOrderNo;
-	private int orderTotal;
-	private String id;
+	private Date orderDate;
+	private String name;
 	private String mobile;
 	private String postcode;
+	private String roadAddress;
 	private String jibunAddress;
 	private String detailAddress;
-	private String name;
+	private int orderTotal;
 	private String itemMainImg;
+	private int payNo;
+	private int payMethod;
+	private int paySuccess;
 	private int cartDetailCount;
-	private CartDTO cartNo;
-	private ItemDTO itemNo;
-	private UserDTO userNo;
+	private int cartNo;
+	private int itemNo;
+	private int userNo;
 
 }

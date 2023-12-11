@@ -1,6 +1,7 @@
 USE hdeco;	
 
 -- 테이블 드랍
+DROP TABLE IF EXISTS LIKE_T;
 DROP TABLE IF EXISTS AMOUNT_T;
 DROP TABLE IF EXISTS KAKAO_APPROVE_RESPONSE_T;
 DROP TABLE IF EXISTS ITEM_ORDER_LIST_T;
@@ -121,6 +122,7 @@ CREATE TABLE CART_T (
 CREATE TABLE ITEM_ORDER_T (
 	ITEM_ORDER_NO               INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
 	USER_NO                INT,                                   -- FK 유저번호
+	ORDER_DATE             DATETIME,
 	NAME                   VARCHAR(40),	                      -- 회원 이름
 	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
 	POSTCODE                VARCHAR(5),	                      -- 우편번호
@@ -129,7 +131,9 @@ CREATE TABLE ITEM_ORDER_T (
 	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
 	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
 	ITEM_MAIN_IMG           VARCHAR(100),	                      -- 아이템 메인 이미지
-	PAY_NO                  VARCHAR(50),                    -- 결제 번호(merchan uid)    
+	PAY_NO                  VARCHAR(50),                   	      -- 결제 번호(merchan uid) 
+	PAY_METHOD              INT, 				      -- 결제 방식 
+	PAY_SUCCESS		INT, 				      -- 결제 여부   
 	CART_DETAIL_COUNT INT , 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
 	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
@@ -147,24 +151,6 @@ CREATE TABLE CART_DETAIL_T (
     CONSTRAINT FK_CART_DETAIL_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
     CONSTRAINT FK_CART_DETAIL_T_ORDER_T FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
 );
-
--- 주문 내역 테이블
-CREATE TABLE ITEM_ORDER_LIST_T (
-	ORDER_LIST_NO          INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
-	USER_NO                INT,                                   -- FK 유저번호
-	NAME                   VARCHAR(40),	                          -- 회원 이름
-	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
-	POSTCODE                VARCHAR(5),	                          -- 우편번호
-	ROAD_ADDRESS            VARCHAR(100),			              -- 도로명 주소 
-	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
-	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
-	ORDER_TOTAL             INT,                                  -- 전체 주문 금액   
-	CART_DETAIL_COUNT INT , 
-	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ORDER_LIST_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
-);
-
-
 
 
 
@@ -197,6 +183,17 @@ CREATE TABLE AMOUNT_T (
     DISCOUNT   INT      NULL,
     CONSTRAINT PK_TOTAL PRIMARY KEY (TOTAL)
 );
+
+
+-- -- -- -- -- -- -- -- -- --<찜하기> -- -- -- -- -- -- -- -- -- -- -- -- -- 
+-- 찜하기 테이블
+CREATE TABLE LIKE_T(	
+	USER_NO INT NOT NULL,	                -- 회원 번호 
+	ITEM_NO INT NOT NULL,	            -- 상품명 
+    CONSTRAINT FK_LIKE_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+    CONSTRAINT FK_LIKE_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
+);	
+
 
 
 

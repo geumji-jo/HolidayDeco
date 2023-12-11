@@ -93,36 +93,37 @@
 
     // 페이지 로드시 초기 총합계금액 설정
     updateTotalPrice();
-
+    
     function addToCart() {
-      // 수량 값 가져오기
-      const quantity = parseInt($('#totalQuantity').text());
-      // 상품 번호 가져오기
-      var itemNo = /*[[${item.itemNo}]]*/ null;
+    	  // 수량 값 가져오기
+    	  const quantity = parseInt($('#totalQuantity').text());
+    	  // 상품 번호 가져오기
+    	  var itemNo = /*[[${item.itemNo}]]*/ null;
 
-      // 값 사용하여 데이터 전송
-      const data = {
-        itemNo: itemNo,
-        quantity: quantity
-      };
+    	  // 값 사용하여 데이터 전송
+    	  const data = {
+    	    itemNo: itemNo,
+    	    quantity: quantity
+    	  };
 
-      $.ajax({
-        type: 'post',
-        url: '/cart/addCart.do',
-        data: data,
-        dataType: 'json',
-        success: function (resData) {
-          if (confirm(resData.msg)) {
-            location.href = '/cart/getCartList.do';
-          }
-        },
-        error: function (xhr, status, error) {
-          console.error('AJAX Error:', error);
-        }
-      });
-    }
+    	  $.ajax({
+    	    type: 'post',
+    	    url: '/cart/addCart.do',
+    	    data: data,
+    	    dataType: 'json',
+    	    success: function (resData) {
+    	      if (confirm(resData.msg)) {
+    	        location.href = '/cart/getCartList.do';
+    	      }
+    	    },
+    	    error: function () {
+    	      // 로그인이 필요한 서비스 경고 메시지
+    	      alert('로그인이 필요한 서비스입니다.');
+    	      // 로그인 페이지로 이동
+    	      location.href = '/user/login.html';
+    	    }
+    	  });
+    	}
   </script>
-
 </body>
-
 </html>

@@ -13,7 +13,8 @@
 .main-image {
   width: 550px;
   height: 350px;
-  border-radius: 10px; margin-right : 50px;
+  border-radius: 10px; 
+  margin-right : 50px;
   margin-bottom: 60px;
   margin-right: 80px;
   margin-left: 170px;
@@ -62,6 +63,7 @@
 #count {
   width: 90px;
   height: 50px;
+  font-size: 15px;
   text-align: center;
   border: none;
   background-color: #FAF2E4;
@@ -117,3 +119,4 @@
   
   width : 1050px;
 }
+

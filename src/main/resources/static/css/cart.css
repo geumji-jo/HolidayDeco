@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+
+.emptyCart {
+ font-family: 'SUITE-Regular';
+ text-align: center;
+ margin-top: 100px;
+ margin-bottom: 70px;
+}
+
 .cartBox {
   width: 830px;
   margin: auto;
@@ -23,6 +31,10 @@
   overflow-x: hidden;
 }
 
+ input[type=checkbox] {
+  accent-color:#EB5858; 
+}
+
 #checkAll {
   margin-left: 35px;
   margin-top: 20px;
@@ -40,6 +52,20 @@
 .cartForm::-webkit-scrollbar-thumb { 
   border-radius: 8px; 
   background-color: #EB5858; /*스크롤 바 색상*/ 
+}
+
+#continueShopping {
+  width: 180px;
+  height: 50px;
+  border: 1px solid #D8D8D8;
+  background-color:transparent;
+  font-family: 'SUITE-Regular';
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+  
 }
 
 .item {
@@ -101,8 +127,8 @@ hr {
 }
 
 .totalPrice {
+  font-family: 'SUITE-R egular';
   float: right;
-  font-family: 'SUITE-Regular';
   font-size: 18px;
   font-weight: 600;
   color: #EB5858;
@@ -125,7 +151,6 @@ hr {
   margin-top:100px;
   justify-content: center;
 }
-
 
 #goBack, #purchase, #delete {
   width: 180px;

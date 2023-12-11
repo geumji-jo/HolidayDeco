@@ -42,9 +42,19 @@
      
   </delete>
   
+    
+<!-- 장바구니 수정 -->
   <update id="updateCartQuantity" parameterType="Map">
     UPDATE CART_T
-       SET QUANTITY = #{quantity}
+       SET QUANTITY =  #{quantity}
      WHERE ITEM_NO = #{itemNo}
+  </update>
+
+  
+<!--  장바구니에 동일한 상품이 존재하면 수량 합산  -->
+  <update id="updateCart" parameterType="Map">
+    UPDATE CART_T
+    SET QUANTITY= QUANTITY + #{quantity}
+    WHERE ITEM_NO = #{itemNo}
   </update>
 </mapper>

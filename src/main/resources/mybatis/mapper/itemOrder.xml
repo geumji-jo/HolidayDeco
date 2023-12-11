@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.hdd.hdeco.mapper.ItemOrderMapper">
+  <insert id="insertOrder" parameterType="ItemOrderDTO">
+    INSERT INTO
+    ITEM_ORDER_T
+    VALUES
+         #{userNo}
+         , NOW()
+         , #{name}
+         , #{mobile}
+         , #{postCode}
+         , #{roadAddress}
+         , #{jibunAddress}
+         , #{detailAddress}
+         , #{orderTotal}
+         , NULL
+         , NULL
+         , NULL
+         , NULL
+      )
+  </insert>
+  
+  <select id="selectUserOrder" parameterType="int" resultType="ItemOrderDTO">
+    SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL
+      FROM (SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL
+              FROM ITEM_ORDER_T
+             WHERE USER_NO = #{userNo} 
+            ORDER BY ORDER_NO DESC
+              LIMIT 1)
+  </select>
+  
+  <select id="getUserByUserNo" parameterType="int" resultType="UserDTO">
+    SELECT USER_NO, NAME, EMAIL, MOBILE
+    FROM USER_T
+    WHERE USER_NO = #{userNo}
+  </select>
+  
+  <select id="getItemByNo" parameterType="int" resultType="CartDTO">
+    SELECT CART_NO, ITEM_NO, USER_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+      FROM CART_T
+     WHERE ITEM_NO = #{itemNo}
+  </select>
+  
+  <select id="getFromItem" parameterType="int" resultType="ItemDTO">
+    SELECT *
+      FROM ITEM_T
+     WHERE ITEM_NO = #{itemNo}
+  </select>
+</mapper>

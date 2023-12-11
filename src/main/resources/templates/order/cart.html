@@ -11,10 +11,82 @@
 </head>
 <body>
 
-<script>
-$(document).ready(function() {
+<script th:inline="javascript">
 
-    // 개별 체크박스 클릭 시
+function fnGoItemList() {
+	location.href="/item/list.do";
+}
+  
+	function submitForm(actionType) {
+	    // 선택된 상품 처리
+	    var selectedItems = [];
+	    $(".checkOne:checked").each(function() {
+	        selectedItems.push($(this).val());
+	    });
+
+	    // 전체 상품 처리
+	    var allItems = [];
+	    $(".checkOne").each(function() {
+	        allItems.push($(this).val());
+	    });
+
+	    if (selectedItems.length === 0) {
+	        alert('주문할 상품을 선택해주세요.');
+	        return;
+	    }
+
+	    // 폼 동적 생성
+	    var form = document.createElement('form');
+	    form.method = 'post';
+
+	    // actionType에 따라 다른 action 설정
+	    form.action = '/order/' + (actionType === 'orderSelect' ? 'orderSelect.do' : 'orderAll.do');
+
+	    document.body.appendChild(form);
+
+	    // 선택된 상품 input 동적 추가
+	    if (actionType === 'orderSelect') {
+	        var selectedItemsInput = document.createElement('input');
+	        selectedItemsInput.type = 'hidden';
+	        selectedItemsInput.name = 'selectedItems';
+	        selectedItemsInput.value = selectedItems.join(',');
+	        form.appendChild(selectedItemsInput);
+	    }
+
+	    // 전체 상품 input 동적 추가
+	    if (actionType === 'orderAll') {
+	        var allItemsInput = document.createElement('input');
+	        allItemsInput.type = 'hidden';
+	        allItemsInput.name = 'allItems';
+	        allItemsInput.value = allItems.join(',');
+	        form.appendChild(allItemsInput);
+	    }
+
+	    // 폼 제출
+	    form.submit();
+	}
+  
+
+// 선택된 상품의 식별자를 배열에 저장하는 함수
+function getCheckedItem() {
+    var itemNoArr = [];
+    $(".checkOne:checked").each(function() {
+        itemNoArr.push($(this).val());
+    });
+    return itemNoArr.join(',');
+}
+
+// 전체 상품의 식별자를 배열에 저장하는 함수
+function getAllItems() {
+    var itemNoArr = [];
+    $(".checkOne").each(function() {
+        itemNoArr.push($(this).val());
+    });
+    return itemNoArr.join(',');
+}
+
+$(document).ready(function() {
+	 // 개별 체크박스 클릭 시
     $(".checkOne").change(function() {
         if ($(".checkOne:checked").length === $(".checkOne").length) {
             $("#checkAll").prop("checked", true);
@@ -37,7 +109,7 @@ $(document).ready(function() {
         $(".checkOne:checked").each(function() {
             var item = $(this).closest('.item');
             var quantity = parseInt(item.find('.quantity').val());
-            var price = parseFloat(item.find('.itemInfo').eq(1).text().replace('원', '').replace(',', '')); // Assuming price is the second itemInfo
+            var price = parseFloat(item.find('.itemInfo').eq(1).text().replace('원', '').replace(',', ''));
 
             totalAmount += quantity * price;
         });
@@ -47,11 +119,11 @@ $(document).ready(function() {
 
     /* 수량 변경 시 DB 업데이트 */
     function fnUpdateCart(quantity, itemNo) {
-      $.ajax({
-        type: 'get',
-        url: '/cart/updateCartQuantity.do',
-        data: 'quantity=' + quantity + '&itemNo=' + itemNo,
-      })
+        $.ajax({
+            type: 'get',
+            url: '/cart/updateCartQuantity.do',
+            data: 'quantity=' + quantity + '&itemNo=' + itemNo,
+        })
     }
 
     // 수량 증가
@@ -88,40 +160,57 @@ $(document).ready(function() {
         var item = $(this).closest('.item');
         fnBtnMinus(item);
     });
-
+    
     /* 상품 번호를 저장할 배열 */
     var itemNoArr = [];
 
-    /* 선택된 상품의 식별자를 배열에 저장하는 함수 */
-    function getCheckedItem() {
-        itemNoArr = [];
-        var length = $('.checkOne:checked').length;
+  /* 선택된 상품의 식별자를 배열에 저장하는 함수 */
+  function getCheckedItem() {
+      itemNoArr = [];
+      $(".checkOne:checked").each(function () {
+          itemNoArr.push($(this).val());
+      });
+  }
 
-        for(let i=0; i<length; i++) {
-            var itemNo = $('.checkOne:checked')[i];
-            itemNoArr.push($(itemNo).val());
-        }
-    }
 
-    /* 선택된 상품 삭제 */
-    $('#delete').on('click', function() {
-        if(confirm('선택한 상품을 삭제하시겠습니까?')) {
-            getCheckedItem(); 
-            location.href='/cart/deleteCart.do?itemNoArr='+itemNoArr;
+  /* 선택된 상품 삭제 */
+  $('#delete').on('click', function () {
+      getCheckedItem(); // 선택된 상품의 번호 업데이트
+  
+      if (itemNoArr.length > 0 && confirm('선택한 상품을 삭제하시겠습니까?')) {
+          var itemNoStr = itemNoArr.join(',');
+          location.href = '/cart/deleteCart.do?itemNoArr=' + itemNoStr;
+      } else {
+          alert('삭제할 상품을 선택해주세요.');
+      }
+  });
+
+    
+    
+
+    /* 장바구니가 비었을 때 주문페이지 이동 막기*/
+    $('#frmOrderAll').on('submit',function(event) {
+        var cartLength = /*[[${cartList.size()}]]*/ null;
+        if(cartLength == '0') {
+            alert('장바구니가 비어있어 주문페이지 이동이 불가합니다.');
+            event.preventDefault();
         }
-    });
+    })
 });
 </script>
-
 <div class="cartList">
-    <h4 id="cartTitle">Cart Item</h4>
+    <h4 id="cartTitle">Cart</h4>
     <div class="cartBox">
         <div class="cartItem">
-            <div th:if="${cartList==null}">
-                <p>장바구니가 비었습니다.</p>
-            </div>
+          <div class="emptyCart" th:if="${cartList == null or #lists.isEmpty(cartList)}">
+             <h3>장바구니에 담긴 상품이 없습니다.</h3>
+             <p style="color:#0B6138;">원하는 상품을 장바구니에 담아보세요!</p>
+                <div class="selectDelete">
+                  <input type="button" value="쇼핑 계속하기" id="continueShopping" onclick="fnGoItemList()"/>
+                </div>
+          </div>
             <div class="cartForm" th:unless="${#lists.isEmpty(cartList)}">
-                <input type="checkbox" id="checkAll" value="checkAll" /> <label for="checkAll">전체선택</label>
+                <input type="checkbox" id="checkAll" value="checkAll" /> <label for="checkAll" style="font-family: 'SUITE-Regular';">전체선택</label>
                 <th:block th:each="item, vs:${cartList}">
                     <div class="item">
                         <input type="checkbox" th:id="${item.itemNo}" class="checkOne"  th:value="${item.itemNo}"  />
@@ -147,19 +236,22 @@ $(document).ready(function() {
                 </th:block>
             </div>
             <hr>
-            <div class="totalPrice">
+            <div class="totalPrice" th:unless="${#lists.isEmpty(cartList)}">
                 <span>총 결제금액 &nbsp; </span> <span class="totalAmount"></span>
             </div>
-            <div class=btn-forward-group>
+            <div class=btn-forward-group th:unless="${#lists.isEmpty(cartList)}">
                 <div class="goBack">
                     <input type="button" value="돌아가기" id="goBack" onclick="history.back()"/>
                 </div>
-               <!--  <form id="frmOrderAll" method='post' th:action="/order/orderAll.do"> -->
-                <div class="purchase">
-                    <input type="button" value="구매하기" id="purchase" />
-                </div>
-                <!-- </form> -->
-                <div class="selectDelete">
+                 <form id="frmOrder" method='post'>
+                    <div class="purchase">
+                        <input type="hidden" name="userNo" value="${userNo}">
+                        <input type="hidden" id="selectedItems" name="selectedItems">
+                        <input type="button" value="구매하기" id="purchase" onclick="submitForm('orderSelect')" />
+                    </div>
+                </form>
+                  <div class="selectDelete">
+                    <input type="hidden" name="userNo" value="${userNo}">
                     <input type="button" value="삭제" id="delete" />
                 </div>
             </div>

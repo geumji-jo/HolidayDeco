@@ -44,15 +44,13 @@ public class CartController {
 	}
 
 	@GetMapping("/deleteCart.do")
-	public String deleteCart(@RequestParam("itemNoArr") List<String> itemNoArr, RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+	public String deleteCart(@RequestParam("itemNoArr") List<String> itemNoArr, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		int deleteResult = cartService.deleteCart(itemNoArr, request);
 		redirectAttributes.addFlashAttribute("deleteResult", deleteResult);
 		return "redirect:/cart/getCartList.do";
 	}
 
 	@ResponseBody
-
 	@GetMapping("/updateCartQuantity.do")
 	public void updateCartQuantity(@RequestParam("quantity") int quantity, @RequestParam("itemNo") int itemNo) {
 		cartService.updateCartQuantity(quantity, itemNo);

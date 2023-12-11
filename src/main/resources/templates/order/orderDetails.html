@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+    <div th:replace="~{/layout/header::gnbFrag}"></div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+</head>
+<body>
+<style>
+#orderTitle {
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+  padding: 5px;
+  user-select: none;
+}
+
+img {
+  width: 200px;
+  height: 130px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+</style>
+
+<script th:inline="javascript">
+</script>
+
+<div class="orderList">
+    <h4 id="orderTitle">Order Details</h4>
+    <div class="orderBox">
+        <div class="orderItem">
+            <div class="orderForm">
+                <th:block th:each="item, vs:${cartList}">
+                    <div class="item">
+                        <div class="MainImg">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+                                <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                            </a>
+                        </div>
+                        <div class="itemInfo">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+                        </div>
+                        <div class="itemInfo">
+                            <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+                        </div>
+                        <div class="itemInfo">
+                            <input type="text" name="quantity" class="quantity" th:value="${item.quantity}">
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <hr>
+            <div class="totalPrice">
+                <span>총 결제금액 &nbsp; </span> <span class="totalAmount"></span>
+            </div>
+            <div class=btn-forward-group>
+                <div class="goBack">
+                    <input type="button" value="돌아가기" id="goBack" onclick="history.back()"/>
+                </div>
+                <div class="purchase">
+                    <input type="button" value="주문하기" id="payment" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
