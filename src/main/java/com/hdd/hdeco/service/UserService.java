@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.hdd.hdeco.domain.UserDTO;
 
@@ -36,12 +37,17 @@ public interface UserService {
   
   public String getNaverLoginApiURL(HttpServletRequest request);
   public String getNaverLoginToken(HttpServletRequest request);
-  public UserDTO getNaverLoginProfile(String access_token);
-  public void naverLogin(HttpServletRequest request, HttpServletResponse response, UserDTO naverUser);
+  public UserDTO getNaverLoginProfile(String accessToken);
+  public void naverLogin(HttpServletRequest request, HttpServletResponse response,  UserDTO naverUserDTO);
   public void naverJoin(HttpServletRequest request, HttpServletResponse response);
 
-
-  
+  public String getKakaoLoginApiURL(HttpServletRequest request);
+  public void getKakaoLogoutApiURL(HttpServletRequest request);
+  public String getKakaoLoginToken(HttpServletRequest request);
+  public UserDTO getKakaoLoginProfile(String accessToken);
+  public void kakaoLogin(HttpServletRequest request, HttpServletResponse response,  UserDTO kakaoUserDTO);
+  public void kakaoJoin(HttpServletRequest request, HttpServletResponse response);
+  //public void kakaoLogout(HttpServletRequest request, HttpServletResponse response);
   
   
   

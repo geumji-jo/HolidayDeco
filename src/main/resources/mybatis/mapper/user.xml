@@ -96,6 +96,7 @@
      WHERE EMAIL = #{email}
   </select>
   
+  
   <!-- sleepUserEmail검사 -->
   <select id="selectSleepUserByEmail" parameterType="String" resultType="SleepUserDTO">
     SELECT EMAIL
@@ -115,6 +116,7 @@
   
   <select id="selectUserByUserDTO" parameterType="UserDTO" resultType="UserDTO">
     SELECT ID
+         , NAME
          , ADMIN_CHECK
       FROM USER_T
      WHERE ID = #{id}
@@ -220,6 +222,13 @@
     UPDATE USER_T
        SET PW = #{pw}
          , PW_MODIFIED_AT = NOW()
+     WHERE ID = #{id}
+  </update>
+  
+  <!-- 이메일 변경 -->
+  <update id="updateUserEmail" parameterType="UserDTO">
+    UPDATE USER_T
+       SET EMAIL = #{email}
      WHERE ID = #{id}
   </update>
   

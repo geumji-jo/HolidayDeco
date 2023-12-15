@@ -4,14 +4,355 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
-<link rel="stylesheet" th:href="@{/css/modal.css}"> <!-- user페이지전용 css모음 -->
- <style>
- 
-    </style>
+<link rel="stylesheet" th:href="@{/css/modal.css}"> <!-- modal -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+<style>
+.custom-hr {
+  display: flex;
+  align-items: center;
+  margin:15px 0 15px 0;
+}
+
+.custom-hr i:hover {
+  color: #d66767; /* hover 시 적용될 색상 */
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.custom-hr i {
+  color: gray;
+  margin: 0 15px; /* 아이콘과 선 사이의 간격을 조절 */
+}
+
+.custom-hr::before,
+.custom-hr::after {
+  content: "";
+  flex-grow: 1;
+  height: 2px; /* 일반 직선의 두께를 조절 */
+  background-color: gray; /* 선의 색상 */
+  border-width: 0 0 0 0; /* 하단 테두리만 표시 */
+}
+
+  .blind {
+    display: none;
+  }
+</style>
+<script th:inline=javascript>
+
+
+// 전역 변수 (각종 검사 통과 유무를 저장하는 변수)
+var verifyPw = false;
+var verifyRePw = false;
+var verifyEmail = false;
+
+
+
+function fnInitEditPwArea(){
+  $('#pw').val('');
+  $('#rePw').val('');
+  $('#msgPw').val('');
+  $('#msgRePw').val('');
+}
+
+function fnToggleEditPwArea(){
+  $('#editPwArea').hide();
+  $('#btnOpenEditPwArea').on('click', function(){
+    fnInitEditPwArea();
+    $('#btnOpenEditPwArea').hide();
+    $('#editPwArea').show();
+  });
+  $('#btnCloseEditPwArea').on('click', function(){
+    fnInitEditPwArea();
+    $('#btnOpenEditPwArea').show();
+    $('#editPwArea').hide();
+  });
+}
+
+function fnCheckPw(){
+  $('#pw').on('keyup', function(){
+    let pw = $(this).val();
+    let pwLength = pw.length;
+    
+    // input에 입력한 내용이 없어지면 메시지를 비움
+    if (pw.length === 0) {
+      $('#msgPw').text('');
+      return;
+    }
+    
+    let validCount = /[a-z]/.test(pw)         //   소문자를 가지고 있으면 true(1), 없으면 false(0)
+                   + /[A-Z]/.test(pw)         //   대문자를 가지고 있으면 true(1), 없으면 false(0)
+                   + /[0-9]/.test(pw)         //     숫자를 가지고 있으면 true(1), 없으면 false(0)
+                   + /[^a-zA-Z0-9]/.test(pw); // 특수문자를 가지고 있으면 true(1), 없으면 false(0)
+    verifyPw = (pwLength >= 4) && (pwLength <= 20) && (validCount >= 3);
+    if(verifyPw){
+      $('#msgPw').text('사용 가능한 비밀번호입니다.').css('color', 'CornflowerBlue');
+    } else {
+      $('#msgPw').text('4~20자, 소문자+대문자+숫자+특수문자 사용 가능, 3개 이상 조합').css('color', 'FireBrick');;
+    }
+  })
+}
+
+function fnCheckPwAgain(){
+  $('#rePw').on('keyup', function(){
+    let pw = $('#pw').val();
+    let rePw = $(this).val();
+    
+    // input에 입력한 내용이 없어지면 메시지를 비움
+    if (rePw.length === 0) {
+      $('#msgRePw').text('');
+      return;
+    }
+    
+    verifyRePw = (rePw != '') && (rePw == pw);
+    if(verifyRePw){
+      $('#msgRePw').text('');
+    } else {
+      $('#msgRePw').text('비밀번호 입력을 확인하세요.').css('color', 'FireBrick');;
+    }
+  })
+}
+
+function fnModifyPw(){
+  $('#btnModifyPw').on('click', function(){
+    if(verifyPw == false || verifyRePw == false) {
+      alert('비밀번호를 확인하세요.');
+      return;
+    }
+    $.ajax({
+      type: 'post',
+      url: '/user/modifyPw.do',
+      data: 'pw=' + $('#pw').val(),
+      dataType: 'json',
+      success: function(resData){  // resData = {"updateUserPasswordResult": 1}
+        if(resData.updateUserPasswordResult == 1){
+          alert('비밀번호가 변경되었습니다.');
+          fnInitEditPwArea();
+          $('#btnOpenEditPwArea').show();
+          $('#editPwArea').hide();
+        } else {
+          alert('비밀번호 변경이 실패했습니다.');
+        }
+      }
+    })
+  })
+}
+
+function fnInitEditEmailArea(){
+  $('#btnVerifyCode').addClass("blind");
+  $('#btnModifyEmail').addClass("blind");
+  $('#msgEmail').val('');
+  $('#authCode').val('');
+}
+
+function fnToggleEditEmailArea(){
+  $('#editEmailArea').hide();
+  $('#btnOpenEditEmailArea').on('click', function(){
+    fnInitEditEmailArea();
+    $('#btnOpenEditEmailArea').hide();
+    $('#editEmailArea').show();
+  });
+  $('#btnCloseEditEmailArea').on('click', function(){
+    fnInitEditEmailArea();
+    $('#btnOpenEditEmailArea').show();
+    $('#editEmailArea').hide();
+    
+  });
+}
+
+function fnCheckEmail(){
+    $('#btnGetCode').on('click', function(){
+      let email = $('#email').val();
+      new Promise(function(resolve, reject){
+        let regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9]{2,}(\.[a-zA-Z]{2,6}){1,2}$/;
+        verifyEmail = regEmail.test(email);
+        if(verifyEmail == false){
+          reject(1);
+          return;
+        }
+        $.ajax({
+          type: 'get',
+          url: '/user/verifyEmail.do',
+          data: 'email=' + email,
+          dataType: 'json',
+          success: function(resData){  // resData = {"enableEmail": true} 또는 {"enableEmail": false}
+            if(resData.enableEmail){
+              $('#msgEmail').text('');
+              resolve();  // then 메소드에 정의된 function을 호출한다.
+            } else {
+              reject(2);  // catch 메소드에 정의된 function을 호출한다. 인수로 2을 전달한다.
+            }
+          }
+        })
+      }).then(function(){
+        $.ajax({
+          type: 'get',
+          url: '/user/sendAuthCode.do',
+          data: 'email=' + email,
+          dataType: 'json',
+          success: function(resData){
+            alert(email + "으로 인증코드를 전송했습니다.");
+            $('#btnVerifyCode').removeClass("blind");
+            $('#btnVerifyCode').on('click', function(){
+              verifyEmail = (resData.authCode == $('#authCode').val());
+              if(verifyEmail) {
+                alert('인증되었습니다.');
+                $('#btnModifyEmail').removeClass('blind');
+              } else {
+                alert('인증에 실패했습니다.');
+              }
+            })
+          },
+          error: function(jqXHR){
+            alert('인증번호가 발송되지 않았습니다.');
+            verifyEmail = false;
+          }
+        })
+      }).catch(function(number){
+        let msg = '';
+        let color = '';
+        switch(number){
+        case 1:
+          msg = '<br>이메일 형식이 올바르지 않습니다.<br>';
+          color = 'FireBrick';
+          break;
+        case 2:
+           msg = '<br>이미 사용 중인 이메일입니다.<br>';
+           color = 'MediumSeaGreen';
+          break;
+        }
+        $('#msgEmail').html(msg).css('color', color);
+        verifyEmail = false;
+      })
+    })
+  }
+
+function fnModifyEmail(){
+    $('#btnModifyEmail').on('click', function(){
+      if(verifyEmail == false){
+        alert('이메일을 확인하세요.');
+        return;
+      }
+      $.ajax({
+        type: 'post',
+        url: '/user/modifyEmail.do',
+        data: 'email=' + $('#email').val(),
+        dataType: 'json',
+        success: function(resData){  // resData = {"updateUserEmailResult": 1}
+          if(resData.updateUserEmailResult == 1){
+            alert('이메일이 변경되었습니다.');
+            fnInitEditEmailArea();
+          } else {
+            alert('이메일 변경이 실패했습니다.');
+          }
+        }
+      })
+    })
+  }
+  
+
+/*<![CDATA[*/
+function fnDisplayBirthday(){
+
+  // 년도(100년 전 ~ 1년 후)
+  let year = new Date().getFullYear();
+  let strYear = '<option value="">년도</option>';
+  for(let y = year - 100; y <= year + 1; y++){
+    strYear += '<option value="' + y + '">' + y + '</option>';
+  }
+  $('#birthyear').append(strYear);
+  $('#birthyear').val(/*[[${loginUser.birthyear}]]*/).prop('selected', true);
+  // 월(1 ~ 12월)
+  let strMonth = '<option value="">월</option>';
+  for(let m = 1; m <= 12; m++){
+    if(m < 10){
+      strMonth += '<option value="0' + m + '">' + m + '월</option>';
+    } else {
+      strMonth += '<option value="' + m + '">' + m + '월</option>';
+    }
+  }
+  $('#birthmonth').append(strMonth);
+  $('#birthmonth').val(/*[[${loginUser.birthdate.substring(0,2)}]]*/).prop('selected', true);
+  // 일
+  $('#birthdate').empty();
+  $('#birthdate').append('<option value="">일</option>');
+  let endDay = 0;
+  let strDay = '';
+  switch($('#birthmonth').val()){
+  case '02':
+    endDay = 29; break;
+  case '04': case '06': case '09': case '11':
+    endDay = 30; break;
+  default:
+    endDay = 31; break;
+  }
+  for(let d = 1; d <= endDay; d++){
+    if(d < 10){
+      strDay += '<option value="0' + d + '">' + d + '일</option>';
+    } else {
+      strDay += '<option value="' + d + '">' + d + '일</option>';
+    }
+  }
+  $('#birthdate').append(strDay);
+  $('#birthdate').val(/*[[${loginUser.birthdate.substring(2)}]]*/).prop('selected', true);
+}
+/*]]>*/
+
+function fnModifyInfo(){
+  
+  $('#btnModifyInfo').on('click', function(){
+    
+    if($('#name').val() == ''){
+      alert('이름을 확인하세요.');
+      return;
+    } else if(/^010[0-9]{7,8}$/.test($('#mobile').val()) == false){
+      alert('휴대전화번호를 확인하세요.');
+      return;
+    } else if($('#birthyear').val() == '' || $('#birthmonth').val() == '' || $('#birthdate').val() == ''){
+      alert('생년월일을 확인하세요.');
+      return;
+    }
+    
+    $.ajax({
+      type: 'post',
+      url: '/user/modifyInfo.do',
+      data: $('#frmEdit').serialize(),
+      dataType: 'json',
+      success: function(resData){  // resData = {"updateUserInfoResult": 1}
+        if(resData.updateUserInfoResult == 1){
+          alert('개인정보가 수정되었습니다.');
+        } else {
+          alert('개인정보가 수정되지 않았습니다.');           
+        }
+      }
+    })
+    
+  })
+  
+}
+
+// 함수 호출
+$(function(){
+  
+  fnInitEditPwArea();
+  fnToggleEditPwArea();
+  fnCheckPw();
+  fnCheckPwAgain();
+  fnModifyPw();
+  
+  fnInitEditEmailArea();
+  fnToggleEditEmailArea();
+  fnCheckEmail();
+  fnModifyEmail();
+  
+  fnDisplayBirthday();
+  fnModifyInfo();
+
+})
+
+</script>
 <body>
      <div id="container">
       <div id="container-title">
-        <h3>myPageHome</h3>
+        <h3>modifyInfo</h3>
       </div>
       <div id="sidebar-left">
         <div id="sidebar-left-inner">
@@ -20,33 +361,203 @@
       </div>
       <div id="content">
         <div class="card">
-        <h2>Content</h2>
-        <button id="btn-modal" class="openModal" data-modal="modal1">모달 창 열기 버튼</button>
-        <div id="modal" class="modal-overlay">
-          <div class="modal-window">
-            <div class="title">
-              <h2>모달</h2>
-            </div>
-            <div class="close-area">X</div>
-            <div class="modal-content">
-            
-            </div>
-          </div>
-        </div>
-        <button id="btn-modal" class="openModal" data-modal="modal2">모달 창 열기 버튼</button>
-        <div id="modal2" class="modal-overlay">
-          <div class="modal-window">
-            <div class="title">
-              <h2>모달2222</h2>
-            </div>
-            <div class="close-area">X</div>
-            <div class="modal-content">
-            
-            </div>
-          </div>
-        </div>
+        <div>
+      <input class="deepGreen-middle-Btn" type="button" value="비밀번호편집화면열기" id="btnOpenEditPwArea">
+    </div>
+     <div id="editPwArea">
+      <div>
+        <input class="deepGreen-middle-Btn" type="button" value="비밀번호편집화면닫기" id="btnCloseEditPwArea">
+      </div>
 
+
+      <div>
+        <label for="pw" style="display:inline-block; width:131px; text-align: left;">새 비밀번호</label>
+        <input type="password" name="pw" id="pw" class="input-middlehalf-Box" placeholder="새로운 비밀번호를 입력해주세요.">
+        <br>
+        <span id="msgPw"></span>
+      </div>
+      <div>
+        <label for="rePw" style="display:inline-block; width:131px; text-align: left;">비밀번호 재확인</label>
+        <input type="password" id="rePw" class="input-middlehalf-Box" placeholder="새로운 비밀번호를 재 입력해주세요.">
+        <br>
+        <span id="msgRePw"></span>
+      </div>
+      <div>
+        <input type="button" value="비밀번호수정" id="btnModifyPw" class="red-middle-Btn">
+      </div>
+    </div>
+
+ 
+    
+    <div>
+      <input class="deepGreen-middle-Btn" type="button" value="이메일편집화면열기" id="btnOpenEditEmailArea">
+    </div>
+    <div id="editEmailArea">
+      <div>
+        <input class="deepGreen-middle-Btn" type="button" value="이메일편집화면닫기" id="btnCloseEditEmailArea">
+      </div>
+      <div>
+        <label for="email" style="display:inline-block; width:85px; text-align: left;">*이메일*</label>
+        <input class="input-middle-Box" type="text" name="email" id="email" th:value="${loginUser.email}">
+        <input class="gray-small-Btn" type="button" value="인증번호받기" id="btnGetCode">
+        <span id="msgEmail"></span>
+      </div>
+      <div style="display: flex; align-items: center;margin-left:45px;">
+        <label for="email" style="display:inline-block; width:90px; text-align: left; padding-right: 10px;">*인증코드*</label>
+        <input class="input-middle-Box" type="text" id="authCode" placeholder="인증코드 입력" style="display:inline-block; margin-right: 6px;">
+        <input class="gray-small-Btn blind" type="button" value="인증하기" id="btnVerifyCode">
+      </div>
+        <input class="red-middle-Btn blind" type="button" value="이메일수정" id="btnModifyEmail">
+    </div>
+
+       <div class="custom-hr">
+          <i class="fal fa-deer-rudolph fa-2x"></i>
+        </div>
+        
+
+    <div>* 표시는 필수 입력사항입니다.</div>
+    
+    <form id="frmEdit">
+    
+      <input type="hidden" name="id" th:value="${loginUser.id}">
+      <label for="JoinedAt" style="display:inline-block; width:131px; text-align: left;">가입일</label>
+      <input class="input-middlehalf-Box" id="JoinedAt" th:value="${#dates.format(loginUser.joinedAt, 'yyyy년 MM월 dd일 HH시 mm분')}" disabled>
+      
+      <div>
+        <label for="name" style="display:inline-block; width:131px; text-align: left;">*이름*</label>
+        <input class="input-middlehalf-Box" type="text" name="name" id="name" th:value="${loginUser.name}">
+      </div>
+      <div>
+        <label for="mobile" style="display:inline-block; width:135px; text-align: left;">*핸드폰번호*</label>
+        <input class="input-middlehalf-Box" type="text" name="mobile" id="mobile" th:value="${loginUser.mobile}">
+      </div>
+      <div>
+        <div style="display:inline-block; width:80px; text-align: left;">*성별*</div>
+        <div class="form_radio_btn">
+        <input type="radio" name="gender" id="none" value="NO" th:checked="${loginUser.gender == 'NO'}">
+        <label for="none">선택 안함</label>
+        </div>
+        <div class="form_radio_btn_male">
+        <input type="radio" name="gender" id="male" value="M" th:checked="${loginUser.gender == 'M'}">
+        <label for="male">남자</label>
+        </div>
+        <div class="form_radio_btn_female">
+        <input type="radio" name="gender" id="female" value="F" th:checked="${loginUser.gender == 'F'}">
+        <label for="female">여자</label>
+        </div>
+      </div>
+      
+    
+      <div>
+        <label for="birthyear" style="display:inline-block; width:80px; text-align: left;">*생일*</label>
+        <select class="input-small-Box" name="birthyear" id="birthyear"></select>
+        <select class="input-100px-Box" name="birthmonth" id="birthmonth"></select>
+        <select class="input-100px-Box" name="birthdate" id="birthdate"></select>
+      </div>
+      
+      <div>
+        <div>주소</div>
+        <input class="input-middlehalf-Box" type="text" onclick="execDaumPostcode()" name="postcode" id="postcode" placeholder="우편번호" readonly="readonly" th:value="${loginUser.postcode}">
+        <input class="gray-small-Btn" type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+        <input class="input-middle-Box" type="text" name="roadAddress" id="roadAddress" placeholder="도로명주소" th:value="${loginUser.roadAddress}">
+        <input class="input-middle-Box" type="text" name="jibunAddress" id="jibunAddress" placeholder="지번주소" th:value="${loginUser.jibunAddress}"><br>
+        <span id="guide" style="color:#999;display:none"></span>
+        <input class="input-middle-Box" type="text" name="detailAddress" id="detailAddress" placeholder="상세주소" th:value="${loginUser.detailAddress}">
+        <input class="input-middle-Box" type="text" name="extraAddress" id="extraAddress" placeholder="참고항목" th:value="${loginUser.extraAddress}">
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script>
+            // 본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+            function execDaumPostcode() {
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+        
+                        // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                        var roadAddr = data.roadAddress; // 도로명 주소 변수
+                        var extraRoadAddr = ''; // 참고 항목 변수
+        
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraRoadAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraRoadAddr !== ''){
+                            extraRoadAddr = ' (' + extraRoadAddr + ')';
+                        }
+        
+                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                        document.getElementById('postcode').value = data.zonecode;
+                        document.getElementById("roadAddress").value = roadAddr;
+                        document.getElementById("jibunAddress").value = data.jibunAddress;
+                        
+                        // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                        if(roadAddr !== ''){
+                            document.getElementById("extraAddress").value = extraRoadAddr;
+                        } else {
+                            document.getElementById("extraAddress").value = '';
+                        }
+        
+                        var guideTextBox = document.getElementById("guide");
+                        // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                        if(data.autoRoadAddress) {
+                            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                            guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                            guideTextBox.style.display = 'block';
+        
+                        } else if(data.autoJibunAddress) {
+                            var expJibunAddr = data.autoJibunAddress;
+                            guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                            guideTextBox.style.display = 'block';
+                        } else {
+                            guideTextBox.innerHTML = '';
+                            guideTextBox.style.display = 'none';
+                        }
+                    }
+                }).open();
+            }
+        </script>
+      </div>
+      
+      <div>
+        <div style="display:inline-block; width:130px; text-align: left;">위치정보 동의여부</div>
+        <div class="form_radio_gray_btn">
+          <input type="radio" name="location" id="locationOn" value="on" th:checked="${loginUser.agreecode == 1 || loginUser.agreecode == 3}">
+          <label for="locationOn">동의함</label>
+        </div>
+        <div class="form_radio_gray_btn">
+          <input type="radio" name="location" id="locationOff" value="off" th:checked="${loginUser.agreecode != 1 && loginUser.agreecode != 3}">
+          <label for="locationOff">동의 안함</label>
+        </div>
+        <br>
+        <div style="display:inline-block; width:130px; text-align: left;">프로모션 동의여부</div>
+        <div class="form_radio_gray_btn">
+          <input type="radio" name="event" id="eventOn" value="on" th:checked="${loginUser.agreecode == 2 || loginUser.agreecode == 3}">
+          <label for="eventOn">동의함</label>
+        </div>
+        <div class="form_radio_gray_btn">
+          <input type="radio" name="event" id="eventOff" value="off" th:checked="${loginUser.agreecode != 2 && loginUser.agreecode != 3}">
+          <label for="eventOff">동의 안함</label>
+        </div>
       </div> 
+      
+        <div class="custom-hr">
+          <i class="fal fa-gingerbread-man fa-2x"></i>
+        </div>
+      
+      <div>
+        <input class="red-middle-Btn" type="button" value="개인정보수정완료" id="btnModifyInfo">
+      </div>
+    
+    </form>
+  
+
+        </div> 
       </div>
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
@@ -56,5 +567,4 @@
       </div>
     </div>
 </body>
-<script th:src="@{/js/user/modal.js}"></script>
 </html>
