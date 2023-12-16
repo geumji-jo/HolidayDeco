@@ -5,36 +5,188 @@
     <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
     <div th:replace="~{/layout/header::gnbFrag}"></div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
     <link rel="stylesheet" th:href="@{/css/font.css}">
-</head>
-<body>
-<style>
-#orderTitle {
-  font-family: 'Domine', serif;
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  text-align: center;
-  padding: 5px;
-  user-select: none;
+    <link rel="stylesheet" th:href="@{/css/orderDetail.css}">
+</head><script th:inline="javascript">
+//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+function execDaumPostcode() {
+ new daum.Postcode({
+     oncomplete: function(data) {
+         // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+          var roadAddr = data.roadAddress; // 도로명 주소 변수
+
+         // 우편번호와 주소 정보를 해당 필드에 넣는다.
+         document.getElementById('postcode').value = data.zonecode;
+         document.getElementById("roadAddress").value = roadAddr;
+     }
+ }).open();
 }
+$(function(){
+  /* 결제페이지에 주문한 유저의 정보 삽입 */
+  var userName = $('#userName');
+  var userEmail = $('#userEmail');
+  var userTel = $('#userTel');
+  
+  /* 주문자와 동일을 누르면 유저의 정보가 수령자 정보로 들어감 */
+  $('#sameUserInfo').on('click', function() {
+      var receiverName = $('#receiverName');
+      var receiverTel = $('#receiverTel');
 
-img {
-  width: 200px;
-  height: 130px;
-  border-radius: 10px;
-  margin-right: 20px;
+      // 주문자와 동일 체크 여부 확인
+      if ($(this).is(':checked')) {
+          receiverName.val(userName.val());
+          receiverTel.val(userTel.val());
+      } else {
+          // 체크 해제 시 수령자 정보 초기화
+          receiverName.val('');
+          receiverTel.val('');
+      }
+  });
+});
+
+
+$(document).ready(function() {
+  // 페이지 로드 시 총 결제금액 계산
+  totalAmount();
+
+});
+
+function deliveryFee(totalProductAmount) {
+    // 배송비를 적용할 기준 금액 (예: 40000원)
+         var freeDelivery  = 40000;
+
+         // 배송비가 총 결제금액이 기준 금액 이상이면 0으로 설정
+         var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
+         
+         // 배송비를 화면에 표시
+         $('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
+
+         // 총 결제금액에 배송비를 추가하여 반환
+         return deliveryFee;
+     }
+
+function totalAmount() {
+	  var totalProductAmount = 0;
+
+  $(".item").each(function () {
+      var item = $(this);
+      var quantity = parseInt(item.find('.quantity').val());
+      var price = parseFloat(item.find('#itemPrice').text().replace('원', '').replace(',', ''));
+
+      totalProductAmount  += quantity * price;
+  });
+
+  // 배송비 계산
+  var deliveryFeeAmount = deliveryFee(totalProductAmount);
+
+  // 상품 가격을 화면에 표시
+  $('.totalProductAmount').text(totalProductAmount.toLocaleString() + "원");
+//배송비를 화면에 표시
+  if (deliveryFeeAmount > 0) {
+      $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
+  } else {
+      $('.deliveryFee').text(""); // 배송비가 0원인 경우 아무것도 표시하지 않음
+  }
+
+  // 총 주문금액을 계산하여 화면에 표시
+  var totalOrderAmount = totalProductAmount + deliveryFeeAmount;
+  $('.totalOrderAmount').text(totalOrderAmount.toLocaleString() + "원");
+
+  /* 신용카드 결제 */
+  var IMP = window.IMP;
+  IMP.init("imp31738657"); 
+  
+  function requestPay(bUid, pName, bAmount, email, bName, bTel, bAddr, bPostCode) {
+      IMP.request_pay({
+        pg: "kcp",
+        pay_method: "card",
+        merchant_uid: bUid,   // 주문번호
+        name: pName,
+        amount: bAmount,     // 숫자 타입
+        buyer_email: email,
+        buyer_name: bName,
+        buyer_tel: bTel,
+        buyer_addr: bAddr,
+        buyer_postcode: bPostCode
+      }, function (rsp) { // callback
+        //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+        
+      });
+    }
+  
+  $(function(){
+    
+    /* 결제 버튼 동작 */
+    $('#btnPay').on('click', function(event) {
+      console.log($('#receiverName').val());
+      console.log($('#receiverTel').val());
+      console.log($('#postCode').val());
+      if($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == '') {
+        alert('배송 정보를 입력해주세요.');
+        return;
+      }else {
+        if(confirm('작성하신 정보로 주문하시겠습니까?')) {
+          $.ajax({
+            type: 'post',
+            url: '/order/insertOrder.do',
+            data: $('#frmPay').serialize(),
+            dataType: 'json',
+            success: function(r) {
+              //uid, name, amount, email, bName, bTel, bAddr,bPostCode
+              console.log(r.order.orderDate + r.order.orderNo);
+              console.log('${cartList[0].itemTitle}');
+              console.log(r.order.orderTotal);
+              console.log('${orderUser.email}');
+              console.log(r.order.receiverName);
+              console.log(r.order.receiverTel);
+              console.log(r.order.receiverAddress);
+              console.log(r.order.postCode);
+              requestPay(
+                  r.order.orderDate + r.order.orderNo
+                  , '${cartList[0].itemTitle} 외'
+                  , r.order.orderTotal
+                  , '${orderUser.email}'
+                  , r.order.receiverName
+                  , r.order.receiverTel
+                  , r.order.receiverAddress
+                  , r.order.postCode
+              );
+              
+            },
+            error: function(jqXHR) {
+              alert('결제에 실패했습니다.');
+            }
+          })
+          
+        }else{
+          event.preventDefault();
+          return;
+        }
+      
+      }
+    })
+    
+    
+  })
+    /* 
+      결제 버튼 시나리오
+      1. 주문테이블에 주문번호와 유저번호, 주문일자 insert
+      2. 결제 진행하는지 묻는 confirm 실행
+        확인 : 1번에 insert한 행의 수령자 정보와 결제 정보 update
+        취소 : 1번에 insert한 행 삭제 (함수 종료)
+      3. 확인 후 update된 정보를 DTO로 가져와서 model로 저장
+      4. 저장된 정보를 결제 함수에 삽입
+    */
 }
-
-</style>
-
-<script th:inline="javascript">
 </script>
-
+<body>
 <div class="orderList">
     <h4 id="orderTitle">Order Details</h4>
     <div class="orderBox">
         <div class="orderItem">
+              <h4 class="infoTitle">주문 상품</h4>
             <div class="orderForm">
                 <th:block th:each="item, vs:${cartList}">
                     <div class="item">
@@ -43,10 +195,10 @@ img {
                                 <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
                             </a>
                         </div>
-                        <div class="itemInfo">
+                        <div class="itemInfo" id="itemTitle">
                             <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
                         </div>
-                        <div class="itemInfo">
+                        <div class="itemInfo" id="itemPrice">
                             <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
                         </div>
                         <div class="itemInfo">
@@ -56,20 +208,121 @@ img {
                 </th:block>
             </div>
             <hr>
-            <div class="totalPrice">
-                <span>총 결제금액 &nbsp; </span> <span class="totalAmount"></span>
+         <form id="frmPay" method="post" th:action="@{/order/insertOrder.do}">
+        <div class="orderReceiverInfo">
+        <div class="orderInfoSection" style="width:420px;">
+         <h4 class="infoTitle">주문자</h4>
+          <div class="orderUserInfo">
+            <div>
+              <div>이름</div>
+              <div>
+                <input id="userName" th:value="${orderUser.name}" readonly />
+              </div>
             </div>
-            <div class=btn-forward-group>
-                <div class="goBack">
-                    <input type="button" value="돌아가기" id="goBack" onclick="history.back()"/>
+            <div>
+              <div>이메일</div>
+              <div>
+                <input id="userEmail" th:value="${orderUser.email}" readonly />
+              </div>
+            </div>
+            <div>
+              <div>연락처</div>
+              <div>
+                <input id="userTel" th:value="${orderUser.mobile}" readonly />
+              </div>
+            </div>
+          </div>
+            <div class=title-group style="align-items:center;">
+              <h4 class="infoTitle" style="margin-right:10px;">배송지</h4>
+              <div>
+                <label for="sameUserInfo">
+                  <input type="checkbox" id="sameUserInfo" style="margin:auto;"/>주문자와 동일
+                </label>
+              </div>
+            </div>
+          <div class="deliveryLine">
+            <div class="receiveInfo">
+              <div>수령자</div>
+              <div>
+                <input id="receiverName" name="receiverName" placeholder="이름을 입력해주세요."/>
+              </div>
+              <div>연락처</div>
+              <div>
+                <input id="receiverTel" name="receiverTel" placeholder="하이픈(-)을 제외한 숫자만 입력해주세요."/>
+              </div>
+            </div>
+                <div>주소</div>
+                <div>
+                  <input type="text" onclick="execDaumPostcode()"name="postCode" id="postcode"placeholder="우편번호"readonly="readonly"/>
+                  <input type="button" onclick="execDaumPostcode()"value="우편번호 찾기"/><br />
+                  <input type="text" name="receiverAddress"id="roadAddress"placeholder="도로명주소"/>
+                  <input type="text" name="receiverDetailAddress" id="detailAddress" placeholder="상세주소" />
                 </div>
-                <div class="purchase">
-                    <input type="button" value="주문하기" id="payment" />
+              </div>
+                <div class="payInfoLine" style="margin-top:30px;">
+                <h4 class="infoTitle" style="margin-right: 200px;">총 결제 금액</h4>
+                <div class="payInfoArea">
+                  <div class="payPriceArea">
+                 <div class="totalPrice"  style="font-weight: bold; color:#EB5858;">
+                 <span class="totalOrderAmount"></span>
+                </div>
+                 </div>
+            </div>
+         </div>
+                <hr style="width:380px;">
+            <div class=btn-payMethod-group>결제 수단
+                <div class="payMethod">
+                 <input type="hidden" name="userNo" value="${orderUser.userNo}" />
+                 <input type="button" value="카카오페이" id="kPay"/>
+                </div>
+                <div class="payMethod">
+                 <input type="hidden" name="userNo" value="${orderUser.userNo}" />
+                    <input type="button" value="N페이" id="nPay" />
+                </div>
+                <div class="payMethod">
+                 <input type="hidden" name="userNo" value="${orderUser.userNo}" />
+                    <input type="button" value="일반카드" id="import" />
                 </div>
             </div>
         </div>
+            <div class="mainPayment">
+              <h4 class="infoTitle">결제 상세</h4>
+              <div class="paymentDetailSection" style="width: 420px; height: 480px; border: 1px solid black; border-radius: 10px; margin-top: 10px;">
+                <div class="DetailPrice" style="display: flex; justify-content: space-around; margin-top: 100px; margin-bottom: 100px;">
+                  <div class="payInfoArea">
+                    <div class="payPriceArea"
+                      style="text-align: center; line-height: 30px; margin-top: 60px;">
+                      <div class="priceBox">
+                        <span style="margin-right: 29px; letter-spacing: 4px;">총 주문금액</span> <span class="totalProductAmount"></span>
+                        <br> <span style="margin-right: 10px; letter-spacing: 30px;">배송비</span>
+                        <span class="deliveryFee"></span>
+                      </div>
+                      <div></div>
+                      <hr style="width: 340px;">
+                      <div>
+                        <span style="margin-right: 29px; letter-spacing: 4px;">총 결제금액</span> <span class="totalOrderAmount"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-forward-group">
+                <div class="goBack">
+                  <input type="button" value="돌아가기" id="goBack"
+                    onclick="history.back()" />
+                </div>
+                <div class="purchase">
+                  <input type="hidden" name="userNo"
+                    value="${orderUser.userNo}" /> <input type="button"
+                    value="주문하기" id="payment" />
+                </div>
+              </div>
+            </div>
+          </div>
+            </form>
+        </div>
+        </div>
     </div>
-</div>
-
 </body>
+
 </html>

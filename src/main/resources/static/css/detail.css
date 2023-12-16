@@ -8,7 +8,33 @@
 .itemImg {
   display: flex;
   margin-top: 100px;
+  position: relative;
 }
+
+
+.image-container {
+    position: relative;
+    margin-right: 100px;
+    width: 710px;
+}
+
+.like-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.like-image {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.like-image:hover {
+    width: 22px;
+    height: 22px;
+}
+
 
 .main-image {
   width: 550px;

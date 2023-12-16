@@ -13,8 +13,16 @@
   <div th:replace="~{/layout/header::gnbFrag}"></div>
   <div class="detailPage">
 
-    <div class="itemImg">
-      <img class="main-image" th:src="@{/item/display.do(itemNo=${item.itemNo})}">
+ <div class="itemImg">
+      <div class="image-container">
+        <!-- 이미지와 하트 이미지를 동일한 부모 요소에 넣음 -->
+        <img class="main-image" th:src="@{/item/display.do(itemNo=${item.itemNo})}">
+        <div class="like-container">
+          <input type="hidden" class="itemNo" th:value="${item.itemNo}">
+          <img th:id="${item.itemNo}" th:src="@{/images/heart1.png}" class="like-image">
+          <div class="heart-overlay"></div>
+        </div>
+      </div>
       <div class="itemInfo">
         <div class="itemTitle" id="itemTitle" th:text="${item.itemTitle}"></div>
         <div class="price-group">
@@ -124,6 +132,51 @@
     	    }
     	  });
     	}
+    
+    
+    $(document).ready(function() {
+        var loginStatus = /*[[${session.loginId}]]*/ null;
+        var likeList = /*[[${likeList}]]*/ null;
+        console.log(likeList);
+        function chkLike() {
+           for(let i=0; i < likeList.length; i++) {
+              console.log(likeList[i]);
+              $('#' + likeList[i]).attr('src', '/images/heart2.png');
+           }
+        }
+        chkLike();
+
+        $('.like-image').on('click', function() {
+            if (loginStatus != null) {
+                // 클릭된 이미지에서 itemNo 가져오기
+                var itemNo = $(this).siblings('.itemNo').val();
+
+                if ($(this).attr('src') == '/images/heart1.png') {
+                    $(this).attr('src', '/images/heart2.png');
+                } else {
+                    $(this).attr('src', '/images/heart1.png');
+                } 
+
+                fnLikeAdd(itemNo);
+            }
+        });
+
+        function fnLikeAdd(itemNo) {
+            $.ajax({
+                type: 'get',
+                url: '/like/like.do?itemNo=' + itemNo,
+                dataType: 'json',
+                success: function(resData) {
+                    if (resData.addResult == 1) {
+                        alert('찜 등록이 되었습니다.');
+                    } else if (resData.deleteResult == 1) {
+                        alert('찜 등록이 삭제되었습니다.');
+                    }
+                }
+            });
+        }
+    });
+
   </script>
 </body>
 </html>
