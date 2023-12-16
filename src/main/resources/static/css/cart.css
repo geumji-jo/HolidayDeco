@@ -156,8 +156,8 @@ hr {
   width: 180px;
   height: 50px;
   border: 1px solid black;
-  border-radius: 20px;
-  font-size: 18px;
+  border-radius: 10px;
+  font-size: 14px;
   text-align: center;
   margin-right: 20px;
   cursor: pointer;
