@@ -8,6 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Island+Moments&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
 
 <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
 <script th:src="@{/js/logoTitle.js}"></script>
@@ -28,13 +29,19 @@
         <span>
           <span th:text="|${session.loginName} 님 반갑습니다|"></span>
           <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
-            <a class="nav-link" th:href="@{/user/myPageHome.html}">mypage</a>
-            <a class="nav-link" th:href="@{/cart/getCartList.do}" >cart</a>
+            <a class="nav-link" th:href="@{/user/myPageHome.html}"><i class="far fa-home fa-xs" style="color: #000000;"></i></a>
+            <a class="nav-link" th:href="@{/cart/getCartList.do}" ><i class="far fa-shopping-cart fa-xs" style="color: #000000;"></i></a>
+            <a class="nav-link" th:href="@{/}" ><i class="far fa-heart fa-xs" style="color: #000000;"></i></a>
           </th:block>
           <th:block th:if="${session.loginId != null and session.adminChk == 1}">
             <a class="nav-link" th:href="@{/admin/adminPageHome.html}">adminpage</a>
           </th:block>
+          <th:block th:if="${#strings.isEmpty(session.accessToken)}">
             <a class="nav-link" th:href="@{/user/logout.do}">logout</a>
+          </th:block>
+            <th:block th:unless="${#strings.isEmpty(session.accessToken)}">
+              <a class="nav-link" th:href="@{/user/kakao/logout.do}">kakaologout</a>
+            </th:block>
         </span>
       </div>
     </div>

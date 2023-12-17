@@ -891,6 +891,7 @@ public class UserServiceImpl implements UserService {
 			kakaoApiURL += "&redirect_uri=" + redirectURI;
 			kakaoApiURL += "&state=" + state;
 			kakaoApiURL += "&response_type=code";
+			kakaoApiURL += "&prompt='login`";
 
 			HttpSession session = request.getSession();
 			session.setAttribute("state", state);
@@ -947,15 +948,6 @@ public class UserServiceImpl implements UserService {
 			}
 			br.close();
 			con.disconnect();
-			/*
-			 * res.toString() 출력 예시
-			 * 
-			 * { "access_token":
-			 * "AAAANipjD0VEPFITQ50DR__AgNpF2hTecVHIe9v-_uoyK5eP1mfdYX57bM3VTF_x4cWgz0v2fQlZsOOjl9uS0j8CLI4",
-			 * "refresh_token":
-			 * "2P9T9LTrnjaBf8XwF87a2UNUL4isfvk3QyLF8U1MDmju5ViiSXNSxii80ii8kvZWDiiYSiptFFYsuwqWl6C8n59NwoAEU6MmipfIis2htYMnZUlutzvRexh0PIZzzqqK3HlGYttJ",
-			 * "token_type":"bearer", "expires_in":"3600" }
-			 */
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -969,8 +961,8 @@ public class UserServiceImpl implements UserService {
 		session.setAttribute("accessToken", accessToken);
 		session.setAttribute("refreshToken", refreshToken);
 		
-		System.out.println(refreshToken);
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^"+accessToken);
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^refreshToken"+refreshToken);
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^accessToken"+accessToken);
 
 		return accessToken;
 
@@ -1031,18 +1023,23 @@ public class UserServiceImpl implements UserService {
 			String name = kakao_account.getString("name");
 			String gender = kakao_account.getString("gender");
 			String email = kakao_account.getString("email");
-			// String phone_number = kakao_account.getString("phone_number");
-			// String birthyear = kakao_account.getString("birthyear");
-			// String birthday = kakao_account.getString("birthday").replace("-", "");
+			
+			String birthyear = kakao_account.getString("birthyear");
+			String birthday = kakao_account.getString("birthday");
 
 			userDTO = new UserDTO();
 			userDTO.setId(kakaoId);
 			userDTO.setName(name);
 			userDTO.setGender(gender);
 			userDTO.setEmail(email);
-			// userDTO.setMobile(phone_number);
-			// userDTO.setBirthyear(birthyear);
-			// userDTO.setBirthdate(birthday);
+			userDTO.setBirthyear(birthyear);
+			userDTO.setBirthdate(birthday);
+			
+			Boolean has_phone_number =kakao_account.getBoolean("has_phone_number");
+			if (has_phone_number == true) {
+				String phone_number = kakao_account.getString("phone_number").replaceAll("-", "");
+				userDTO.setMobile(phone_number);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1225,7 +1222,7 @@ public class UserServiceImpl implements UserService {
 	
 	
 	@Override
-	public void getKakaoLogoutApiURL(HttpServletRequest request) {
+	public String getKakaoLogoutApiURL(HttpServletRequest request, HttpServletResponse response) {
 		String kakaoLogoutURL = null;
 		StringBuffer res = new StringBuffer(); // StringBuffer는 StringBuilder와 동일한 역할을 수행한다.
 
@@ -1246,6 +1243,7 @@ public class UserServiceImpl implements UserService {
 			System.out.println("------------------------------responseCode^^ : " + responseCode);
 			if (responseCode == 302) {
 				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				
 			} else {
 				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			}
@@ -1260,7 +1258,67 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("loginId");
+		userMapper.deleteAutologin(id);
+		
+		Cookie cookie1 = new Cookie("autologinId", "");
+		Cookie cookie2 = new Cookie("_kawltea", "");
+		Cookie cookie3 = new Cookie("_kahai", "");
+
+		cookie1.setMaxAge(0); // 쿠키 유지시간을 0초로 설정
+		cookie1.setPath("/"); // autologinId 쿠키의 path와 동일하게 설정
+
+		cookie2.setMaxAge(0); // 쿠키 유지시간을 0초로 설정
+		cookie2.setPath("/"); // _kawltea 쿠키의 path와 동일하게 설정
+
+		cookie3.setMaxAge(0); // 쿠키 유지시간을 0초로 설정
+		cookie3.setPath("/"); // _kahai 쿠키의 path와 동일하게 설정
+
+		response.addCookie(cookie1);
+		response.addCookie(cookie2);
+		response.addCookie(cookie3);
 		session.invalidate();
+		
+		
+		return kakaoLogoutURL;
+	}
+	
+	@Override
+	public void getKakaoOut(String accessToken) {
+		StringBuffer sb = new StringBuffer();
+
+		try {
+			String apiURL = "https://kapi.kakao.com/v1/user/unlink";
+			URL url = new URL(apiURL);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			String header = "Bearer " + accessToken;
+			con.setRequestProperty("Authorization", header);
+			int responseCode = con.getResponseCode();
+			System.out.println("--------------------responseCode : " + responseCode);
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String result = "";
+			String inputLine;
+			while ((inputLine = br.readLine()) != null) {
+			result =sb.append(inputLine).toString();
+			System.out.println("--------------------result : " + result);
+			}
+			br.close();
+			con.disconnect();
+
+			/*
+			 * sb.toString()
+			 * 
+			 * { "resultcode": "00", "message": "success", "response": {
+			 * "id":"asdfghjklqwertyuiopzxcvbnmadfafrgbgfg", "gender":"M",
+			 * "email":"hahaha@naver.com", "mobile":"010-1111-1111",
+			 * "mobile_e164":"+821011111111", "name":"\ubbfc\uacbd\ud0dc",
+			 * "birthday":"10-10", "birthyear":"1990" } }
+			 */
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -5,9 +5,7 @@
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <script th:inline="javascript">
-  // JavaScript 코드 작성
   function confirmOut() {
-    // 사용자에게 확인 대화 상자 표시
     var result = confirm('동일한 아이디로 재가입이 불가능합니다. 회원 탈퇴하시겠습니까?');
     
     // 확인 버튼을 클릭한 경우
@@ -16,6 +14,7 @@
       window.location.href = '/user/out.do';
     }
   }
+  
 </script>
 <body>
      <div id="container">

@@ -11,28 +11,32 @@
 const btnModal1 = document.getElementById("btn-modal1")
 btnModal1.addEventListener("click", () => {
   const modal1 = document.getElementById("modal1")
-  modal1.style.display = "flex"
+  modal1.style.display = "flex";
+   document.body.style.overflow = "hidden";
 })
 
 // 모달 2 열기 버튼에 클릭 이벤트를 부여합니다.
 const btnModal2 = document.getElementById("btn-modal2")
 btnModal2.addEventListener("click", () => {
   const modal2 = document.getElementById("modal2")
-  modal2.style.display = "flex"
+  modal2.style.display = "flex";
+  document.body.style.overflow = "hidden";
 })
 
 // 모달 1의 닫기 버튼에 클릭 이벤트를 부여합니다.
 const closeBtn1 = document.querySelector("#modal1 .modal-close-area")
 closeBtn1.addEventListener("click", () => {
   const modal1 = document.getElementById("modal1")
-  modal1.style.display = "none"
+  modal1.style.display = "none";
+  document.body.style.overflow = "auto";
 })
 
 // 모달 2의 닫기 버튼에 클릭 이벤트를 부여합니다.
 const closeBtn2 = document.querySelector("#modal2 .modal-close-area")
 closeBtn2.addEventListener("click", () => {
   const modal2 = document.getElementById("modal2")
-  modal2.style.display = "none"
+  modal2.style.display = "none";
+  document.body.style.overflow = "auto";
 })
 
 // 모달 1과 모달 2 영역 외의 오버레이를 클릭하면 꺼지는 이벤트를 만듭니다.
@@ -41,7 +45,8 @@ document.addEventListener("click", e => {
   if (evTarget.classList.contains("modal-overlay")) {
     const modal1 = document.getElementById("modal1")
     const modal2 = document.getElementById("modal2")
-    modal1.style.display = "none"
-    modal2.style.display = "none"
+    modal1.style.display = "none";
+    modal2.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 })

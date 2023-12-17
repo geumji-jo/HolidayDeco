@@ -1,4 +1,8 @@
 package com.hdd.hdeco.controller;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -6,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,7 +97,6 @@ public class UserController {
   */
   model.addAttribute("naverApiURL", userService.getNaverLoginApiURL(request));
   model.addAttribute("kakaoApiURL", userService.getKakaoLoginApiURL(request));
-  	
   	return "user/login";
   }
   
@@ -103,12 +108,11 @@ public class UserController {
   
   // 로그아웃
   @GetMapping("/logout.do")
-  public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+  public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session,Model model) {
   	// 로그인이 되어 있는지 확인
-  	userService.logout(request, response);
-  	
-    return "redirect:/";
-  }
+  		userService.logout(request, response);
+  		return "redirect:/";
+  	}
   
   // 휴면회원화면
   @GetMapping("/wakeup.html")
@@ -226,6 +230,12 @@ public class UserController {
   // 회원 탈퇴
   @GetMapping("/out.do")
   public void out(HttpServletRequest request, HttpServletResponse response) {
+  	 HttpSession session = request.getSession();
+  	 String accessToken = (String)session.getAttribute("accessToken");
+  	 if( accessToken != null) {
+  		 userService.getKakaoOut(accessToken);
+  		 userService.out(request, response);
+  	 }
     userService.out(request, response);
   }
   
@@ -342,7 +352,19 @@ public class UserController {
     userService.kakaoJoin(request, response);
     
   }
+ 
+ @Value("${kakao.client_id}")
+ private String kakaoClientId;
+ @Value("${kakao.logout_redirect_uri}")
+ private String kakaoLogoutRedirectURL;
+ @GetMapping("/kakao/logout.do")
+ public String kakaoLogout(HttpServletRequest request,HttpServletResponse response, Model model) {
+	 
+	 return "redirect:https://kauth.kakao.com/oauth/logout?client_id="+ kakaoClientId +"&logout_redirect_uri=" + kakaoLogoutRedirectURL;
+ }
+ 
+
+ }
   
-}
 	  
 	

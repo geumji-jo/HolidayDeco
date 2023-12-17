@@ -54,21 +54,6 @@
   });
   
 </script>
-
-<!-- 카카오 로그인 -->
-<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js" charset="utf-8"></script>
-<script th:inline="javascript">
-    $(document).ready(function(){
-        Kakao.init('script앱키 입력');
-        Kakao.isInitialized();
-    });
-
-    function loginWithKakao() {
-        Kakao.Auth.authorize({ 
-        redirectUri: 'http://localhost:8080/kakao_callback' 
-        }); // 등록한 리다이렉트uri 입력
-    }
-</script>
 <body>
      <div id="container">
       <div id="container-title">

@@ -1,11 +1,9 @@
 package com.hdd.hdeco.service;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.hdd.hdeco.domain.UserDTO;
 
@@ -42,9 +40,10 @@ public interface UserService {
   public void naverJoin(HttpServletRequest request, HttpServletResponse response);
 
   public String getKakaoLoginApiURL(HttpServletRequest request);
-  public void getKakaoLogoutApiURL(HttpServletRequest request);
+  public String getKakaoLogoutApiURL(HttpServletRequest request, HttpServletResponse response);
   public String getKakaoLoginToken(HttpServletRequest request);
   public UserDTO getKakaoLoginProfile(String accessToken);
+  public void getKakaoOut(String accessToken);
   public void kakaoLogin(HttpServletRequest request, HttpServletResponse response,  UserDTO kakaoUserDTO);
   public void kakaoJoin(HttpServletRequest request, HttpServletResponse response);
   //public void kakaoLogout(HttpServletRequest request, HttpServletResponse response);

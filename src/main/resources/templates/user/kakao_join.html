@@ -4,7 +4,6 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
-<script th:src="@{/js/user/join.js}"></script>
 <style>
   .blind {
     display: none;
@@ -54,6 +53,12 @@ function fnCancel() {
     history.back();
   })
 }
+// 홈으로가기 누르면 홈페이지로 돌아간다.
+function fnHome() {
+  $('#btnHome').on('click', function() {
+    location='/';
+  })
+}
 
 function fnJoinArea(){
     $('#joinArea').hide();
@@ -65,7 +70,7 @@ function fnJoinArea(){
           return;
           
         } else {
-        	  $('#agreeArea').hide();
+            $('#agreeArea').hide();
             $('#joinArea').show();
         }
     
@@ -100,6 +105,37 @@ function fnJoinArea(){
     })
   }
   
+  
+//5. 휴대전화
+  function fnCheckMobile(){
+    
+    $('#mobile').on('keyup', function(){
+      
+      // 입력한 휴대전화
+      let mobile = $(this).val();
+      
+      // input에 입력한 내용이 없어지면 메시지를 비움
+      if (mobile.length === 0) {
+        $('#msgMobile').text('');
+        return;
+      }
+      
+      // 정규식
+      let regMobile = /^010[0-9]{7,8}$/;
+      
+      // 정규식 검사
+      verifyMobile = regMobile.test(mobile);
+      if(verifyMobile){
+        $('#msgMobile').text('');
+      } else {
+        $('#msgMobile').text('휴대전화 입력을 확인하세요.').css('color', 'FireBrick');        
+      }
+      
+    })
+    
+  }
+    
+  
   // 회원가입
   function fnNaverJoin(){
     $('#frmNaverJoin').on('submit', function(event){
@@ -132,6 +168,8 @@ function fnJoinArea(){
     })
   }
   
+
+  
   // 함수 호출
   $(function(){
     fnCheckEmail();
@@ -139,7 +177,10 @@ function fnJoinArea(){
     fnCheckAll();
     fnCheckOne();
     fnJoinArea();
-    fnCancel()
+    fnCancel();
+    fnHome();
+    fnCheckMobile();
+    fnDisplayBirthday();
   })
 </script>
 <body>
@@ -156,7 +197,7 @@ function fnJoinArea(){
         <input type="checkbox" id="checkAll" class="checkAll blind">
         <label for="checkAll" class="lblCheck">모두 동의</label>
       </div>
-      <div>-------------------------------------------</div>
+      <br>
       <div>
         <!-- 이용약관시작 -->
         <div class="box1">
@@ -275,37 +316,50 @@ function fnJoinArea(){
       <input type="hidden" name="id" th:value="${profile.id}">
     
       <div>
-        <label for="name">이름*</label>
-        <input type="text" name="name" id="name" th:value="${profile.name}">
+        <label for="name">*이름*</label>
+        <input class="input-middlehalf-Box" type="text" name="name" id="name" th:value="${profile.name}">
       </div>
       
       <div>
-        <span>성별*</span>
-        <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == 'NO'}">
+        <span>*성별*</span>
+        <div class="form_radio_btn">
+        <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == ''}">
         <label for="none">선택 안함</label>
-        <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'M'}">
+        </div>
+        <div class="form_radio_btn_male">
+        <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'male'}">
         <label for="male">남자</label>
-        <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'F'}">
+        </div>
+        <div class="form_radio_btn_female">
+        <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'female'}">
         <label for="female">여자</label>
+        </div>
       </div>
-    
           <div>
-            <label for="mobile" style="display:inline-block; width:131px; text-align: left;">*핸드폰번호*</label>
-            <input class="input-middlehalf-Box" type="text" name="mobile" id="mobile"  required="required" placeholder="‘-’를 제외하고 입력해 주세요.">
+          <div th:unless="${#strings.isEmpty(profile.mobile)}">
+            <label for="mobile">*핸드폰번호*</label>
+            <input class="input-middlehalf-Box" type="text" name="mobile" id="mobile"  required="required" placeholder="‘-’를 제외하고 입력해 주세요." th:value="|0${profile.mobile.substring(4)}|">
             <br>
             <span id="msgMobile"></span>
           </div>
-         <div>
-            <label for="birthyear" style="display:inline-block; width:80px; text-align: left;">*생일*</label>
-            <select class="input-small-Box" name="birthyear" id="birthyear"></select>
-            <select class="input-100px-Box" name="birthmonth" id="birthmonth"></select>
-            <select class="input-100px-Box" name="birthdate" id="birthdate"></select>
+          <div th:if="${#strings.isEmpty(profile.mobile)}">
+            <label for="mobile">*핸드폰번호*</label>
+            <input class="input-middlehalf-Box" type="text" name="mobile" id="mobile"  required="required" placeholder="‘-’를 제외하고 입력해 주세요.">
+            <br>
+            <span id="msgMobile"></span>
+          </div>  
+          </div>
+          <div>
+            <label for="birthyear">*생년월일*</label>
+            <input class="input-small-Box" type="text" name="birthyear" id="birthyear" th:value="${profile.birthyear}">
+            <input class="input-small-Box" type="text" name="birthmonth" th:value="${profile.birthdate.substring(0, 2)}">
+            <input class="input-small-Box" type="text" name="birthdate" th:value="${profile.birthdate.substring(2)}">
           </div>
       
       <div>
         <label for="email">이메일*</label>
-        <input type="text" name="email" id="email" th:value="${profile.email}">
-        <input type="button" value="이메일중복체크" id="btnVerifyEmail">
+        <input class="input-middlehalf-Box" type="text" name="email" id="email" th:value="${profile.email}">
+        <input class="gray-middle-Btn" type="button" value="이메일중복체크" id="btnVerifyEmail">
         <span id="msgEmail"></span>
       </div>
       
@@ -316,8 +370,9 @@ function fnJoinArea(){
       <hr>
       
       <div>
-        <button>가입하기</button>
-        <input type="button" id="btnBefore" value="이전으로가기">
+        <input class="red-middle-Btn" type="button" id="btnHome" value="취소하기">
+        <input type="button" id="btnBefore" value="약관동의가기">
+        <button class="deepGreen-small-Btn">가입하기</button>
       </div>
     
         </div> 
