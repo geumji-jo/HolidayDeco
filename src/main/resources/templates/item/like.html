@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/font.css}">
+</head>
+  <div th:replace="~{/layout/header::gnbFrag}"></div>
+
+  <style>
+    #likeTitle {
+      font-family: 'Domine', serif;
+      color: #000000;
+      font-weight: bold;
+      font-size: 32px;
+      text-align: center;
+      padding: 5px;
+      user-select: none;
+    }
+
+    .likeBox {
+      width: 830px;
+      margin: auto;
+    }
+
+    .emptyLike {
+      font-family: 'SUITE-Regular';
+      text-align: center;
+      margin-top: 100px;
+      margin-bottom: 70px;
+    }
+
+    #continueShopping {
+      width: 180px;
+      height: 50px;
+      border: 1px solid #D8D8D8;
+      background-color: transparent;
+      font-family: 'SUITE-Regular';
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+  .item {
+  position: relative;
+  width: 800px;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.MainImg {
+  position: relative;
+}
+
+.like-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.like-image {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.like-image:hover {
+  width: 22px;
+  height: 22px;
+}
+
+img {
+  width: 200px;
+  height: 130px;
+  border-radius: 10px;
+  margin-right: 20px;
+  margin-left: 30px;
+}
+
+.itemInfo {
+  font-family: 'SUITE-Regular';
+  margin: auto;
+  display: inline-block;
+  width: 800px; 
+  justify-content:center;
+  min-height: 30px; 
+  display: flex;
+  align-items: center;
+}
+    
+  </style>
+</head>
+
+<body>
+  <div class="likeList">
+    <h4 id="likeTitle">Item In Love</h4>
+    <div class="likeBox">
+      <div class="likeItem">
+        <div class="emptyLike" th:if="${itemList == null or #lists.isEmpty(itemList)}">
+          <h3>Item In love에 담긴 상품이 없습니다.</h3>
+          <p style="color:#0B6138;">회원님이 눈여겨 본 상품을 Item In Love에 담아보세요!</p>
+          <div class="continue">
+            <input type="button" value="HolidayDeco 둘러보기" id="continueShopping" onclick="fnGoItemList()" />
+          </div>
+        </div>
+        <th:block th:each="item, vs:${itemList}">
+          <div class="item">
+          <!-- itemTitle 클릭 시 이동 -->
+            <div class="MainImg">
+              <div class="like-container">
+                <input type="hidden" class="itemNo" th:value="${item.itemNo}">
+                <img th:id="${item.itemNo}" th:src="@{/images/heart2.png}" class="like-image">
+                <div class="heart-overlay"></div>
+              </div>
+              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+                <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+              </a>
+            </div>
+            <div class="itemInfo">
+              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+            </div>
+            <!-- itemPrice 클릭 시 이동 -->
+            <div class="itemInfo">
+              <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </div>
+    <div id="pagination" th:utext="${pagination}" style="margin-top:50px;"></div>
+  </div>
+
+  <script th:inline="javascript">
+    function fnGoItemList() {
+      location.href="/item/list.do";
+    }
+    $('.like-image').on('click', function() {
+        console.log('Like image clicked');
+
+        var loginStatus = /*[[${session.loginId}]]*/ null;
+        console.log('Login status:', loginStatus);
+
+        if (loginStatus != null) {
+            var itemNo = $(this).siblings('.itemNo').val();
+            console.log('ItemNo:', itemNo);
+
+            var currentItem = $(this).closest('.item');
+            console.log('Current item:', currentItem);
+
+            fnLikeAdd(itemNo, currentItem);
+        }
+    });
+
+
+    function fnLikeAdd(itemNo, currentItem) {
+        $.ajax({
+            type: 'get',
+            url: '/like/like.do?itemNo=' + itemNo,
+            dataType: 'json',
+            success: function(resData) {
+                if (resData.deleteResult == 1) {
+                    alert('찜 등록이 삭제되었습니다.');
+                    
+                    currentItem.remove();
+
+                    if ($('.likeList .item').length === 0) {
+                        location.reload();
+                    }
+
+                } 
+            }
+        });
+    }
+
+
+
+  </script>
+</body>
+
+</html>

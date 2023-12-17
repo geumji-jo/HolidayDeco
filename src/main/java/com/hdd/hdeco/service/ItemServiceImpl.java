@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.mapper.ItemMapper;
+import com.hdd.hdeco.mapper.LikeMapper;
 import com.hdd.hdeco.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemServiceImpl implements ItemService {
 
 	private final ItemMapper itemMapper;
+	private final LikeMapper likeMapper;
 	private final PageUtil pageUtil;
 
 	@Override
@@ -54,13 +57,46 @@ public class ItemServiceImpl implements ItemService {
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
 		model.addAttribute("pagination", pageUtil.getPagination("/item/list.do?query" + column));
+		
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("loginId");
 
+		// 기본값 설정
+		int userNo = 0;
+
+		// userId가 null이 아닌 경우에만 DB에서 userNo를 조회
+		if (userId != null) {
+		    userNo = likeMapper.selectUserNobyId(userId);
+		    // 수정된 userNo를 가지고 찜 목록을 조회
+		    List<Integer> likeList = likeMapper.selectItemNoInLike(userNo);
+		    model.addAttribute("likeList", likeList);
+		}
+
+		model.addAttribute("itemList", itemMapper.getItemList(map));
 	}
 
 	@Override
-	public void getItemByNo(int itemNo, Model model) {
-		model.addAttribute("item", itemMapper.getItemByNo(itemNo));
+	public void getItemByNo(Model model, HttpServletRequest request) {
+	    // 기본값 설정
+	    int userNo = 0;
+
+	    // userId가 null이 아닌 경우에만 DB에서 userNo를 조회
+	    HttpSession session = request.getSession();
+	    String userId = (String) session.getAttribute("loginId");
+	    
+	    // 아이템넘버(itemNo) 받아오기
+	    int itemNo = Integer.parseInt(request.getParameter("itemNo"));
+	    
+	    if (userId != null) {
+	        userNo = likeMapper.selectUserNobyId(userId);
+	        List<Integer> likeList = likeMapper.selectItemNoInLike(userNo);
+	        model.addAttribute("likeList", likeList);
+	    }
+	    
+	    // 나머지 코드에서 itemNo 활용
+	    model.addAttribute("item", itemMapper.getItemByNo(itemNo));
 	}
+
 
 	@Override
 	public ResponseEntity<byte[]> display(int itemNo) {

@@ -21,6 +21,7 @@ public class ItemOrderDTO {
 	private String detailAddress;
 	private int orderTotal;
 	private String itemMainImg;
+	private int deliveryFee;
 	private int payNo;
 	private int payMethod;
 	private int paySuccess;

@@ -7,7 +7,6 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -86,6 +85,22 @@ function getAllItems() {
 }
 
 $(document).ready(function() {
+
+	 function deliveryFee(totalProductAmount) {
+		 // 배송비를 적용할 기준 금액 (예: 40000원)
+	        var freeDelivery  = 40000;
+
+	        // 배송비가 총 결제금액이 기준 금액 이상이면 0으로 설정
+	        var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
+	        
+	        // 배송비를 화면에 표시
+	        $('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
+
+	        // 총 결제금액에 배송비를 추가하여 반환
+	        return deliveryFee;
+	    }
+	 
+	 
 	 // 개별 체크박스 클릭 시
     $(".checkOne").change(function() {
         if ($(".checkOne:checked").length === $(".checkOne").length) {
@@ -102,21 +117,39 @@ $(document).ready(function() {
         totalAmount();
     });
 
-    // 총 결제금액 구하기 (체크된 상품만)
+    // 총 결제금액을 계산하고 화면에 표시하는 함수
     function totalAmount() {
-        var totalAmount = 0;
+        var totalProductAmount = 0;
 
         $(".checkOne:checked").each(function() {
             var item = $(this).closest('.item');
             var quantity = parseInt(item.find('.quantity').val());
             var price = parseFloat(item.find('.itemInfo').eq(1).text().replace('원', '').replace(',', ''));
 
-            totalAmount += quantity * price;
+            totalProductAmount += quantity * price;
         });
 
-        $('.totalAmount').text(totalAmount.toLocaleString() + "원");
-    }
+        // 상품 가격을 화면에 표시
+        $('.totalProductAmount').text(totalProductAmount.toLocaleString() + "원");
 
+        // 배송비 계산
+        var deliveryFeeAmount = deliveryFee(totalProductAmount);
+
+        // 배송비를 화면에 표시
+        $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
+        
+        // 배송비를 화면에 표시
+        if (totalProductAmount < 40000) {
+            $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
+        } else {
+            $('.deliveryFee').text("");
+        }
+
+
+        // 총 주문금액을 계산하여 화면에 표시
+        var totalOrderAmount = totalProductAmount + deliveryFeeAmount;
+        $('.totalOrderAmount').text(totalOrderAmount.toLocaleString() + "원");
+    }
     /* 수량 변경 시 DB 업데이트 */
     function fnUpdateCart(quantity, itemNo) {
         $.ajax({
@@ -151,7 +184,7 @@ $(document).ready(function() {
     }
 
     // 이벤트 바인딩
-    $(document).on('click', '.btnBuyCount.plus', function () {
+   $(document).on('click', '.btnBuyCount.plus', function () {
         var item = $(this).closest('.item');
         fnBtnPlus(item);
     });
@@ -184,18 +217,6 @@ $(document).ready(function() {
           alert('삭제할 상품을 선택해주세요.');
       }
   });
-
-    
-    
-
-    /* 장바구니가 비었을 때 주문페이지 이동 막기*/
-    $('#frmOrderAll').on('submit',function(event) {
-        var cartLength = /*[[${cartList.size()}]]*/ null;
-        if(cartLength == '0') {
-            alert('장바구니가 비어있어 주문페이지 이동이 불가합니다.');
-            event.preventDefault();
-        }
-    })
 });
 </script>
 <div class="cartList">
@@ -205,7 +226,7 @@ $(document).ready(function() {
           <div class="emptyCart" th:if="${cartList == null or #lists.isEmpty(cartList)}">
              <h3>장바구니에 담긴 상품이 없습니다.</h3>
              <p style="color:#0B6138;">원하는 상품을 장바구니에 담아보세요!</p>
-                <div class="selectDelete">
+                <div class="continue">
                   <input type="button" value="쇼핑 계속하기" id="continueShopping" onclick="fnGoItemList()"/>
                 </div>
           </div>
@@ -237,7 +258,20 @@ $(document).ready(function() {
             </div>
             <hr>
             <div class="totalPrice" th:unless="${#lists.isEmpty(cartList)}">
-                <span>총 결제금액 &nbsp; </span> <span class="totalAmount"></span>
+              <div class="priceBox">
+              <span style="margin-right: 30px;">선택 상품 금액</span>
+              <span class="totalProductAmount"></span>
+              <br>
+               <span style="margin-right: 10px; letter-spacing:29px;">배송비</span>
+                  <span class="deliveryFee"></span>
+             </div>
+              <div>
+                 
+              </div>
+              <div>
+                  <span style="margin-right: 29px;letter-spacing:4px;">총 주문금액</span>
+                  <span class="totalOrderAmount"></span>
+              </div>
             </div>
             <div class=btn-forward-group th:unless="${#lists.isEmpty(cartList)}">
                 <div class="goBack">

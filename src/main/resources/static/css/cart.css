@@ -105,10 +105,6 @@ a {
   color: black;
 }
 
-.quantity {
-  font-size: 16px;
-}
-
 
 input.btnBuyCount {
 
@@ -127,9 +123,29 @@ hr {
 }
 
 .totalPrice {
+    float: right;
+   margin-bottom: 30px;
+}
+
+.priceBox {
+  
+  width: 210px;
+  height : 50px;
+  background-color: #F2F2F2;
+  border-radius: 10px;
+  line-height : 25px;
+  margin-bottom: 10px;
+  
+}
+
+.deliveryFee {
+  word-spacing:100px;
+  
+}
+
+.totalOrderAmount {
   font-family: 'SUITE-R egular';
-  float: right;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: #EB5858;
 }
@@ -150,16 +166,18 @@ hr {
   display: flex;
   margin-top:100px;
   justify-content: center;
+  width: 800px;
 }
 
 #goBack, #purchase, #delete {
-  width: 180px;
+  width: 150px;
   height: 50px;
   border: 1px solid black;
-  border-radius: 20px;
-  font-size: 18px;
+  border-radius: 10px;
+  font-size: 15px;
   text-align: center;
   margin-right: 20px;
+  margin-bottom: 20px;
   cursor: pointer;
 }
 
@@ -177,6 +195,7 @@ hr {
 }
 
 .quantity {
+  font-size: 16px;
   width: 30px;
   height: 30px;
   font-size: 15px;

@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.service.ItemService;
@@ -40,11 +39,11 @@ public class ItemController {
 		return itemService.displayDetail(itemNo);
 
 	}
-
 	@GetMapping("/detail.do")
-	public String Detail(@RequestParam(value="itemNo") int itemNo, Model model) {
-		itemService.getItemByNo(itemNo, model);
-		return "item/detail";
+	public String detail(HttpServletRequest request, Model model) {
+	    int itemNo = Integer.parseInt(request.getParameter("itemNo"));
+	    itemService.getItemByNo(model, request);
+	    return "item/detail";
 	}
 
 	

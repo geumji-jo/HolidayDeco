@@ -15,10 +15,9 @@
          , #{mobile}
          , #{postCode}
          , #{roadAddress}
-         , #{jibunAddress}
          , #{detailAddress}
          , #{orderTotal}
-         , NULL
+         , #{deliveryFee}
          , NULL
          , NULL
          , NULL
@@ -26,8 +25,8 @@
   </insert>
   
   <select id="selectUserOrder" parameterType="int" resultType="ItemOrderDTO">
-    SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL
-      FROM (SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL
+    SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS ,ORDER_TOTAL, DELIVERY_FEE
+      FROM (SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL,DELIVERY_FEE
               FROM ITEM_ORDER_T
              WHERE USER_NO = #{userNo} 
             ORDER BY ORDER_NO DESC

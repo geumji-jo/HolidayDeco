@@ -127,10 +127,9 @@ CREATE TABLE ITEM_ORDER_T (
 	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
 	POSTCODE                VARCHAR(5),	                      -- 우편번호
 	ROAD_ADDRESS            VARCHAR(100),			      -- 도로명 주소 
-	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
 	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
 	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
-	ITEM_MAIN_IMG           VARCHAR(100),	                      -- 아이템 메인 이미지
+	DELIVERY_FEE		INT NOT NULL,		              -- 배송비
 	PAY_NO                  VARCHAR(50),                   	      -- 결제 번호(merchan uid) 
 	PAY_METHOD              INT, 				      -- 결제 방식 
 	PAY_SUCCESS		INT, 				      -- 결제 여부   
@@ -189,7 +188,8 @@ CREATE TABLE AMOUNT_T (
 -- 찜하기 테이블
 CREATE TABLE LIKE_T(	
 	USER_NO INT NOT NULL,	                -- 회원 번호 
-	ITEM_NO INT NOT NULL,	            -- 상품명 
+	ITEM_NO INT NOT NULL,	                -- 상품명 
+	LIKE_CHECK INT DEFAULT 0,	            -- 찜하기 상태 
     CONSTRAINT FK_LIKE_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
     CONSTRAINT FK_LIKE_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
 );	

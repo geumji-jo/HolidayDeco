@@ -10,7 +10,8 @@
   <div th:replace="~{/layout/header::gnbFrag}"></div>
 
 <body>
-  <div id="itemList">
+<div id="itemList">
+<a th:href="@{/like/listLike.do}">찜하기페이지이동</a>
 <form id="searchForm" method="GET">
       <select name="sort" id="sort" class="sort">
         <option value="title" id="title">Title</option>
@@ -30,6 +31,15 @@
           </div>
           <!-- itemTitle 클릭 시 이동 -->
           <div class="itemInfo">
+            <div class="itemInfo">
+               <!-- itemNo를 data 속성으로 추가 -->
+            <div class="like-container">
+                <input type="hidden" class="itemNo" th:value="${item.itemNo}">
+                <img th:id="${item.itemNo}" th:src="@{/images/heart1.png}" class="like-image">
+                <div class="heart-overlay"></div>
+            </div>
+
+            </div>
             <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
           </div>
           <!-- itemPrice 클릭 시 이동 -->
@@ -39,12 +49,11 @@
         </div>
       </th:block>
     </div>
-    <div id="pagination" th:utext="${pagination}"></div>
+
+    <div id="pagination" th:utext="${pagination}" style="margin-top:50px;"></div>
   </div>
 </body>
-<script>
-
-
+<script th:inline="javascript">
 function fnSearch() {
     var query = $('#query').val();
 
@@ -87,65 +96,49 @@ $('#query').on('keydown', function (event) {
     }
 });
 
- 
-/* //itemList의 자식 중에서 클래스가 .fa-magnifying-glass인 요소에서만 발생
-$('#itemList').on('click', '.fa-magnifying-glass', function(event) {
-    event.preventDefault();
-    fnSearch();
-});
-
-//#query는 itemList의 자식 중에서 id가 query인 요소에서만 발생
-$('#itemList').on('keydown', '#query', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        fnSearch();
+$(document).ready(function() {
+    var loginStatus = /*[[${session.loginId}]]*/ null;
+    var likeList = /*[[${likeList}]]*/ null;
+    console.log(likeList);
+    function chkLike() {
+       for(let i=0; i < likeList.length; i++) {
+          console.log(likeList[i]);
+          $('#' + likeList[i]).attr('src', '/images/heart2.png');
+       }
     }
-}); 
- */
-/* function fnSearch() {
-    var query = $('#query').val();
+    chkLike();
 
-    // 검색어를 입력하지 않았을 때 경고창 띄우기
-    if (query === '') {
-        alert('검색어를 입력해주세요.');
-        return;
-    }
+    $('.like-image').on('click', function() {
+        if (loginStatus != null) {
+            // 클릭된 이미지에서 itemNo 가져오기
+            var itemNo = $(this).siblings('.itemNo').val();
 
-    // Ajax 호출
-    $.ajax({
-    	   url: '/item/search.do',
-           type: 'GET',
-           dataType: 'json', // 받아올 데이터 타입을 HTML로 변경
-           data: {
-               sort: sort,  // 'sort='와 'query=' 문자열을 제거하고 파라미터로 전달
-               query: query
-           },
-           success: function(resData){
-               if(confirm(resData.msg)) {
-                 location.href = '/item/search.do';
-               }
-        },
-        error: function(error) {
-            console.error('Ajax 요청 에러:', error);
+            if ($(this).attr('src') == '/images/heart1.png') {
+                $(this).attr('src', '/images/heart2.png');
+            } else {
+                $(this).attr('src', '/images/heart1.png');
+            } 
+
+            fnLikeAdd(itemNo);
         }
     });
-}
 
-$('.fa-magnifying-glass').click(function (event) {
-    event.preventDefault();
-    fnSearch();
+    function fnLikeAdd(itemNo) {
+        $.ajax({
+            type: 'get',
+            url: '/like/like.do?itemNo=' + itemNo,
+            dataType: 'json',
+            success: function(resData) {
+                if (resData.addResult == 1) {
+                    alert('찜 등록이 되었습니다.');
+                } else if (resData.deleteResult == 1) {
+                    alert('찜 등록이 삭제되었습니다.');
+                }
+            }
+        });
+    }
 });
 
-$('#query').on('keydown', function (event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        fnSearch();
-    }
-}); 
- */
+    
 </script>
-
-
-  
-
 </html>

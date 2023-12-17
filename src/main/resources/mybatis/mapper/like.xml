@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 @Mapper를 지정한다. -->
+<mapper namespace="com.hdd.hdeco.mapper.LikeMapper">
+
+  <select id="selectUserNobyId" parameterType="String" resultType="int">
+    SELECT USER_NO
+      FROM USER_T
+     WHERE ID = #{id}
+  </select>
+<!-- 찜 목록 삽입 -->
+<insert id="addLikeByNo" parameterType="int">
+    INSERT INTO LIKE_T (USER_NO, ITEM_NO)
+    VALUES (#{userNo}, #{itemNo})
+</insert>
+
+<!-- 찜 목록 삭제 -->
+<delete id="deleteLikeByNo" parameterType="int">
+    DELETE FROM LIKE_T
+    WHERE USER_NO = #{userNo}
+      AND ITEM_NO = #{itemNo}
+</delete> 
+
+<update id="likeCheckUpdate" parameterType="map">
+  UPDATE LIKE_T
+  SET LIKE_CHECK = LIKE_CHECK + 1
+  WHERE USER_NO = #{userNo} AND ITEM_NO = #{itemNo}
+</update>
+
+<!--    찜목록 리스트 카운트 -->
+  <select id="getLikeListCount" parameterType="int" resultType="int">
+    SELECT COUNT(*)
+      FROM LIKE_T
+     WHERE USER_NO= #{userNo}
+  </select>
+  
+<!-- User 찜목록 리스트 -->
+  <select id="selectItemNoInLike" resultType="int">
+    SELECT ITEM_NO
+      FROM LIKE_T
+     WHERE USER_NO= #{userNo}
+  </select>
+  
+    <!-- 찜 페이지 클래스 리스트 목록 뽑기 -->
+    <select id="selectLikeList" parameterType="List" resultType="ItemDTO">
+    SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+    FROM ITEM_T
+    WHERE ITEM_NO IN
+    <foreach item="itemNo" collection="likeList" open="(" separator="," close=")">
+        #{itemNo}
+    </foreach>
+    </select>
+    
+
+</mapper>

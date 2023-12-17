@@ -2,17 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 #searchForm {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
-
 }
 
-#sort{
+#sort {
   width: 120px;
   padding: .8em .5em;
   font-family: 'SUITE-Regular';
@@ -21,7 +19,7 @@
   text-align: center;
 }
 
- #query {
+#query {
   width: 200px;
   padding: .8em .5em;
   font-family: 'SUITE-Regular';
@@ -30,8 +28,9 @@
   text-align: center;
 }
 
- #sort:focus, #query:focus {
- outline: none;
+#sort:focus,
+#query:focus {
+  outline: none;
 }
 
 button {
@@ -39,22 +38,21 @@ button {
   background-color: white;
 }
 
-
 .itemMainList {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
   gap: 5px;
   margin-left: 200px;
   margin-right: 200px;
 }
 
 .item {
-  width: calc(33.33% - 20px); 
-  margin: 5px; 
-  box-sizing: border-box; 
+  width: calc(33.33% - 20px);
+  margin: 5px;
+  box-sizing: border-box;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  position: relative;
 }
 
 .MainImg {
@@ -66,7 +64,7 @@ button {
 }
 
 .MainImg:hover {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .photo_feather {
@@ -81,7 +79,28 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  aspect-ratio: 4 / 3; /* 이미지의 가로 및 세로 비율을 4:3으로 유지 */
+  aspect-ratio: 4 / 3;
+}
+
+.like-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.like-image {
+  display: block;
+  width: 22px;
+  height: 22px;
+  cursor:pointer;
+}
+
+
+.like-image:hover {
+  display: block;
+  width: 22px;
+  height: 22px;
+  cursor:pointer;
 }
 
 .itemInfo {
@@ -97,7 +116,5 @@ button {
 }
 
 a {
-  color : black;  
+  color: black;
 }
-
-
