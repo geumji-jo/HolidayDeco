@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/font.css}"> <!-- 폰트 css모음 -->
+</head>
+
+<body>
+<div id="footer" th:fragment="footerFrag">
+    <div>
+      <hr class="separator separator--footer--green" />
+      <hr class="separator separator--footer--red" />
+    </div>
+   <div class="footerLine"> 
+     <div class="info">
+    <div class="title">Information</div>
+    <div class="company"> company. (주)홀리데이데코 owner. 조은지, 장지원</div>
+    <div class="address"> address. 서울 영등포구 여의도로 9X 2층 홀리데이데코</div>
+    <div class="contact"> contact. holiday_info@holidayDeco.com</div>
+    <div class="business">company ref.no : 572-86-**** reg.no. 2023-서울영등포-2**84</div>
+    <div class="end">Copyright ⓒHolidayDeco All rights reserved</div>
+  </div>
+  
+  <div class="customer">
+    <div class="title">Customer</div>
+    <div class="customerNum"> 1588-****</div>
+    <div class="weekday">mon-fri am10:00-pm17:00</div>
+    <div class="lunch">lunch pm12:00-pm13:00</div>
+    <div class="off">sat, sun, holiday off</div>
+  </div>
+  
+   <div class="change">
+    <div class="title">반품/교환 주소</div>
+    <div class="address"> address. 서울 영등포구 여의도로 9X 2층 홀리데이데코</div>
+  </div>
+</div>
+   </div>
+
+</body>
+</html>

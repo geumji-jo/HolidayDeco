@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" th:href="@{/css/index.css}">
-<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> 
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> 
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}">
+</head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <body>
 <script th:src="@{/js/index.js}"></script>
   <div class="main">
-      <div class="text">
-        '집에서 만나는 크리스마스'<br> 
-        <br> 
-        Merry Christmas!
-        <br> 언제나 홀리데이데코와 포근하게
+      <div class="text" data-aos="fade-up" style="transform: translate(-100%, 80%); ">
+        <div data-aos="fade-up" data-aos-delay="1000" style="line-height: 3;">'집에서 만나는 크리스마스'</div>
+        <div data-aos="fade-up" data-aos-delay="2500">Merry Christmas!<br>언제나 홀리데이데코와 포근하게</div>
       </div>
     </div>
+ <script> 
+    AOS.init(); 
+</script>
 </body>
+<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

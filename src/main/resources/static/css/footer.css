@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+ #footer {
+  font-family: 'NanumSquareRound';
+  background-color: #f8f9fa;
+  height: 195px;
+}
+
+.footerLine {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+  .separator--footer--green {
+    border: 0;
+    border-bottom: 3px solid #004427;
+    margin-top:3px;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .separator--footer--red {
+    border: 0;
+    border-bottom: 3px solid #EB5858;
+    margin-bottom: 5px;
+    width: 100%; 
+  }
+  
+
+.title {
+    font-size: 1.0rem;
+    color: black;
+    margin:1.5rem 0 0 0.6rem;
+}
+
+.customerNum{
+    font-size: 1.2rem;
+    margin: 1.1rem 0  0.9rem 0.6rem;
+    color: black;
+}
+
+
+.company, .address, .contact, .business, .end, 
+ .weekday, .lunch, .off {
+    font-size:0.7rem;
+    color: #848484;
+    margin:0.4rem;
+}
