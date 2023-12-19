@@ -1,14 +1,14 @@
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+body::-webkit-scrollbar{
+  display: none;
 }
 
-body, html {
-  height: 100%;
+.main {
+  background-image: url('/images/index3.jpg');
+  background-size: cover;
+  color: white;
+  height:100vh;
+  width: 100vw;
 }
-
 .snowflake {
   width: 8px;
   height: 8px;
@@ -18,15 +18,7 @@ body, html {
   top: 270px; /* 이미지 시작점부터 눈 내릴 수 있도록 함 */
   box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.7);
 }
-
-.main {
-  background-image: url('/images/index3.jpg');
-  color: white;
-   width: 100%; 
-   height:100%;
-   background-size: cover;
    
-}
 
 @keyframes fall {  
     from{} /* 눈송이가 있는 곳에서 애니메이션이 시작할 것이기 때문에 비워둚 */
