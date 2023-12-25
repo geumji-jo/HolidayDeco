@@ -6,6 +6,7 @@
   <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
   <link rel="stylesheet" th:href="@{/css/font.css}">
   <link rel="stylesheet" th:href="@{/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 
 <body>
@@ -57,7 +58,7 @@
   </div>
 
   <div id="detailImg">
-    <img th:src="@{/item/display.do(itemNo=${item.itemNo})}">
+    <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" style="margin-bottom:50px;">
   </div>
 
   <script th:inline="javascript">
@@ -179,4 +180,5 @@
 
   </script>
 </body>
+<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

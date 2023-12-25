@@ -31,7 +31,7 @@
   </insert>  
  
   <select id="selectCartList" parameterType="int" resultType="CartDTO">
-    SELECT CART_NO, USER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+    SELECT CART_NO, USER_NO, ITEM_NO, ITEM_TITLE, QUANTITY, ITEM_PRICE, (QUANTITY * ITEM_PRICE) AS CART_PRICE, ITEM_MAIN_IMG
       FROM CART_T
      WHERE USER_NO = #{userNo} 
   </select>
@@ -57,4 +57,12 @@
     SET QUANTITY= QUANTITY + #{quantity}
     WHERE ITEM_NO = #{itemNo}
   </update>
+  
+ <!-- 장바구니 전체 금액 : 장바구니에 담긴 상품과 수량 전체 합산, 장바구니가 비어있으면 0 -->
+<select id="totalCartItemPrice" parameterType="int" resultType="int">
+   SELECT COALESCE(SUM(I.ITEM_PRICE * C.QUANTITY), 0) AS CART_PRICE
+		FROM CART_T C
+		INNER JOIN ITEM_T I ON C.ITEM_NO = I.ITEM_NO
+		WHERE C.USER_NO = #{userNo}
+</select>
 </mapper>

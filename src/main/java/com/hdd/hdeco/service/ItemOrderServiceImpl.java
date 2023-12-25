@@ -25,12 +25,14 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	private final ItemOrderMapper itemOrderMapper;
 	private final CartMapper cartMapper;
 
+	// 주문하기 : 주문 후 주문 정보 return
 	@Override
 	public ItemOrderDTO insertOrder(ItemOrderDTO itemOrderDTO) {
 		itemOrderMapper.insertOrder(itemOrderDTO);
 		return itemOrderMapper.selectUserOrder(itemOrderDTO.getUserNo());
 	}
 
+	// user정보 조회 : 아이디를 통해 userNo 확인 
 	@Override
 	public UserDTO getUserInfo(HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -56,4 +58,13 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		int itemNo = Integer.parseInt(request.getParameter("itemNo"));
 		return itemOrderMapper.getFromItem(itemNo);
 	}
+	
+	// 결제실패 (Enroll 삭제)
+	@Override
+	public void deleteOrder(HttpServletRequest request) {
+		int itemOrderNo = Integer.parseInt(request.getParameter("itemOrderNo"));
+		itemOrderMapper.deleteOrder(itemOrderNo);
+	}
+	
+	
 }

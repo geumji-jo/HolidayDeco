@@ -77,7 +77,7 @@ public class CartServiceImpl implements CartService {
 		// userNo 가져오기
 		int userNo = cartMapper.selectUserNobyId(userId);
 		List<CartDTO> cartList = cartMapper.selectCartList(userNo);
-		
+	
 		return cartList;
 	}
 
@@ -125,6 +125,11 @@ public class CartServiceImpl implements CartService {
 
 		cartMapper.updateCartQuantity(map);
 
+	}
+	
+	@Override
+	public int cartPrice(int userNo) {
+		return cartMapper.totalCartItemPrice(userNo);
 	}
 
 }

@@ -14,5 +14,6 @@ public interface CartService {
   public int getUserNo(HttpServletRequest request);
 	public int deleteCart(List<String> itemNoArr, HttpServletRequest request);
 	public void updateCartQuantity(int quantity, int itemNo);
+	public int cartPrice(int userNo);
 	 
 }

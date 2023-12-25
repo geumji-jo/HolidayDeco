@@ -5,32 +5,38 @@
 
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.hdd.hdeco.mapper.ItemOrderMapper">
-  <insert id="insertOrder" parameterType="ItemOrderDTO">
-    INSERT INTO
-    ITEM_ORDER_T
-    VALUES
-         #{userNo}
-         , NOW()
-         , #{name}
-         , #{mobile}
-         , #{postCode}
-         , #{roadAddress}
-         , #{detailAddress}
-         , #{orderTotal}
-         , #{deliveryFee}
-         , NULL
-         , NULL
-         , NULL
-      )
-  </insert>
-  
+<insert id="insertOrder" parameterType="ItemOrderDTO">
+  INSERT INTO ITEM_ORDER_T (
+    USER_NO,
+    ORDER_DATE,
+    NAME,
+    MOBILE,
+    POSTCODE,
+    ROAD_ADDRESS,
+    DETAIL_ADDRESS,
+    ORDER_TOTAL,
+    PAY_METHOD
+) VALUES (
+    #{userNo},
+    NOW(),
+    #{name},
+    #{mobile},
+    #{postcode},
+    #{roadAddress},
+    #{detailAddress},
+    #{orderTotal},
+    #{payMethod}
+);
+
+</insert>
+
   <select id="selectUserOrder" parameterType="int" resultType="ItemOrderDTO">
-    SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS ,ORDER_TOTAL, DELIVERY_FEE
-      FROM (SELECT ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL,DELIVERY_FEE
+    SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS ,ORDER_TOTAL, PAY_METHOD
+      FROM (SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD
               FROM ITEM_ORDER_T
              WHERE USER_NO = #{userNo} 
-            ORDER BY ORDER_NO DESC
-              LIMIT 1)
+            ORDER BY ITEM_ORDER_NO DESC
+              LIMIT 1) AS A
   </select>
   
   <select id="getUserByUserNo" parameterType="int" resultType="UserDTO">
@@ -50,4 +56,12 @@
       FROM ITEM_T
      WHERE ITEM_NO = #{itemNo}
   </select>
+  
+    <!-- 결제취소 -->
+  <delete id="deleteOrder" parameterType="int">
+    DELETE FROM ITEM_ORDER_T
+      WHERE ITEM_ORDER_NO = #{itemOrderNo}
+  </delete>
+  
+  
 </mapper>

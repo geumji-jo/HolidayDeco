@@ -5,13 +5,12 @@
   <th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
   <link rel="stylesheet" th:href="@{/css/list.css}">
   <link rel="stylesheet" th:href="@{/css/font.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
   <div th:replace="~{/layout/header::gnbFrag}"></div>
 
 <body>
 <div id="itemList">
-<a th:href="@{/like/listLike.do}">찜하기페이지이동</a>
 <form id="searchForm" method="GET">
       <select name="sort" id="sort" class="sort">
         <option value="title" id="title">Title</option>
@@ -50,7 +49,7 @@
       </th:block>
     </div>
 
-    <div id="pagination" th:utext="${pagination}" style="margin-top:50px;"></div>
+    <div id="pagination" th:utext="${pagination}" style="margin-top:50px; margin-bottom:50px;"></div>
   </div>
 </body>
 <script th:inline="javascript">
@@ -138,7 +137,6 @@ $(document).ready(function() {
         });
     }
 });
-
-    
 </script>
+<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

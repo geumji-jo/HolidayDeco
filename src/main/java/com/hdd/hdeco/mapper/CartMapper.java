@@ -20,5 +20,6 @@ public interface CartMapper {
 	public int deleteByItemNo(Map<String, Object> map);
 	public int updateCartQuantity(Map<String, Object> map);
 	public int updateCart(Map<String, Object> map);
+	public int totalCartItemPrice(int userNo);
 
 }

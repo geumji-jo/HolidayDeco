@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
     <div th:replace="~{/layout/header::gnbFrag}"></div>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/font.css}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
 
@@ -86,20 +86,24 @@ function getAllItems() {
 
 $(document).ready(function() {
 
-	 function deliveryFee(totalProductAmount) {
-		 // 배송비를 적용할 기준 금액 (예: 40000원)
-	        var freeDelivery  = 40000;
+	function deliveryFee(totalProductAmount) {
+	    // 배송비를 적용할 기준 금액 (예: 40000원)
+	    var freeDelivery = 40000;
 
-	        // 배송비가 총 결제금액이 기준 금액 이상이면 0으로 설정
-	        var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
-	        
-	        // 배송비를 화면에 표시
-	        $('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
+	    // 배송비가 총 결제금액이 기준 금액 이상이면 0으로 설정
+	    var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
 
-	        // 총 결제금액에 배송비를 추가하여 반환
-	        return deliveryFee;
+	    // 총 결제금액이 0원일 경우 배송비도 0으로 설정
+	    if (totalProductAmount === 0) {
+	        deliveryFee = 0;
 	    }
-	 
+
+	    // 배송비를 화면에 표시
+	    $('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
+
+	    // 총 결제금액에 배송비를 추가하여 반환
+	    return deliveryFee;
+	}
 	 
 	 // 개별 체크박스 클릭 시
     $(".checkOne").change(function() {
@@ -131,24 +135,31 @@ $(document).ready(function() {
 
         // 상품 가격을 화면에 표시
         $('.totalProductAmount').text(totalProductAmount.toLocaleString() + "원");
-
-        // 배송비 계산
         var deliveryFeeAmount = deliveryFee(totalProductAmount);
-
-        // 배송비를 화면에 표시
         $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
+        var orderTotal = totalProductAmount + deliveryFeeAmount;
+        $('.orderTotal').text(orderTotal.toLocaleString() + "원");
         
-        // 배송비를 화면에 표시
-        if (totalProductAmount < 40000) {
+        if (deliveryFeeAmount > 0) {
             $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
         } else {
             $('.deliveryFee').text("");
         }
+        
+        if (totalProductAmount > 0) {
+            $('.totalProductAmount').text(totalProductAmount.toLocaleString() + "원");
+        } else {
+            $('.totalProductAmount').text("");
+        }
+        
+        if (orderTotal > 0) {
+            $('.orderTotal').text(orderTotal.toLocaleString() + "원");
+        } else {
+            $('.orderTotal').text("");
+        }
 
 
-        // 총 주문금액을 계산하여 화면에 표시
-        var totalOrderAmount = totalProductAmount + deliveryFeeAmount;
-        $('.totalOrderAmount').text(totalOrderAmount.toLocaleString() + "원");
+      
     }
     /* 수량 변경 시 DB 업데이트 */
     function fnUpdateCart(quantity, itemNo) {
@@ -259,18 +270,17 @@ $(document).ready(function() {
             <hr>
             <div class="totalPrice" th:unless="${#lists.isEmpty(cartList)}">
               <div class="priceBox">
-              <span style="margin-right: 30px;">선택 상품 금액</span>
-              <span class="totalProductAmount"></span>
-              <br>
-               <span style="margin-right: 10px; letter-spacing:29px;">배송비</span>
-                  <span class="deliveryFee"></span>
-             </div>
-              <div>
-                 
-              </div>
-              <div>
-                  <span style="margin-right: 29px;letter-spacing:4px;">총 주문금액</span>
-                  <span class="totalOrderAmount"></span>
+                   <input type="hidden" name="cartPrice" th:value="${cartPrice}">
+                  <span style="margin-right: 30px;">선택 상품 금액</span>
+                  <span class="totalProductAmount" th:text="${totalProductAmount}"></span>
+                  <br>
+                  <input type="hidden" name="deliveryFee" th:value="${deliveryFee}">
+                  <span style="margin-right: 10px; letter-spacing:28px;">배송비</span>
+                  <span class="deliveryFee" th:text="${deliveryFee}"></span>
+                  <br>
+                  <input type="hidden" name="orderTotal" th:value="${orderTotal}">
+                  <span style="margin-right: 30px;letter-spacing:4px;">총 주문금액</span>
+                  <span class="orderTotal" th:text="${orderTotal}"></span>
               </div>
             </div>
             <div class=btn-forward-group th:unless="${#lists.isEmpty(cartList)}">
@@ -294,4 +304,5 @@ $(document).ready(function() {
 </div>
 
 </body>
+<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

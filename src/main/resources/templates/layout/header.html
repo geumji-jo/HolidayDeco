@@ -31,7 +31,7 @@
           <th:block th:if="${session.loginId  != null and session.adminChk == 0}">
             <a class="nav-link" th:href="@{/user/myPageHome.html}"><i class="far fa-home fa-xs" style="color: #000000;"></i></a>
             <a class="nav-link" th:href="@{/cart/getCartList.do}" ><i class="far fa-shopping-cart fa-xs" style="color: #000000;"></i></a>
-            <a class="nav-link" th:href="@{/}" ><i class="far fa-heart fa-xs" style="color: #000000;"></i></a>
+            <a class="nav-link" th:href="@{/like/listLike.do}" ><i class="far fa-heart fa-xs" style="color: #000000;"></i></a>
           </th:block>
           <th:block th:if="${session.loginId != null and session.adminChk == 1}">
             <a class="nav-link" th:href="@{/admin/adminPageHome.html}">adminpage</a>

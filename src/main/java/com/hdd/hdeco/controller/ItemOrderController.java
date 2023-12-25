@@ -26,9 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/order")
 @Controller
 public class ItemOrderController {
-
+	
 	private final ItemOrderService itemOrderService;
 	private final CartService cartService;
+	
+	@GetMapping("/payFinish.html")
+	public String payFinish() {
+		return "order/payFinish";
+	}
 
 	@PostMapping("/orderAll.do")
 	public String orderAll(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -36,49 +41,55 @@ public class ItemOrderController {
 		model.addAttribute("cartList", cartService.getCartList(request, response));
 		return "order/orderDetails";
 	}
-
+	
 	@PostMapping("/orderSelect.do")
 	public String orderSelect(HttpServletRequest request, Model model) {
 		model.addAttribute("orderUser", itemOrderService.getUserInfo(request));
 		model.addAttribute("cartList", itemOrderService.getSelectItemList(request));
 		return "order/orderDetails";
 	}
+	
 
 	// 결제하기 버튼 누르면 실행
 	@ResponseBody
 	@PostMapping(value = "/insertOrder.do", produces = "application/json")
-	public Map<String, Object> insertOrder(ItemOrderDTO itemOrderDTO, Model model) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("order", itemOrderService.insertOrder(itemOrderDTO));
-		return map;
+	public Map<String, Object> insertOrder(ItemOrderDTO itemOrderDTO, HttpServletRequest request, HttpServletResponse response) {
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("order", itemOrderService.insertOrder(itemOrderDTO));
+	    map.put("cartList", cartService.getCartList(request, response));
+
+	    return map;
 	}
-
-	// 결제완료
-	@RequestMapping(value = "/paymentFinish.html", method = { RequestMethod.GET, RequestMethod.POST })
-	public String paymentFinish(ItemOrderDTO itemOrderDTO, Model model) {
-
+	
+	// 결제 완료
+	@PostMapping
+	@RequestMapping(value = "/payFinish.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String payFinish(ItemOrderDTO itemOrderDTO, Model model) {
+		
 		// 주문번호 만들기 (랜덤번호 + 주문년월일)
 		String randomNum = Math.random() + "";
 		randomNum += LocalDate.now() + "";
-
+		
 		// 소수 부분만 남기고, - 없앤 후, 2023 대신 -23으로
-		int dotIndex = randomNum.indexOf(".");
+		int dotIndex = randomNum.indexOf(".");  
 		String noDotRandomNum = randomNum.substring(dotIndex + 1);
 		noDotRandomNum = noDotRandomNum.replace("-", "");
 		String changeNum = noDotRandomNum.replace("20", "-");
-		model.addAttribute("orderNum", changeNum);
-
-		model.addAttribute("map", itemOrderService.insertOrder(itemOrderDTO));
-
-		return "order/paymentFinish";
+		model.addAttribute("orderNumber", changeNum);
+		model.addAttribute("map", itemOrderDTO.getUserNo());
+		
+		return "order/payFinish";	
 	}
+	
+	
+	/* 결제 취소 */
+	@GetMapping("/payFail.do")
+	public String payFail(HttpServletRequest request) {
+		itemOrderService.deleteOrder(request);
+		return "redirect:/order/orderDetail.do?itemNo=" + request.getParameter("itemNo");
+	}
+	
 
-	/*
-	 * 결제 취소
-	 * 
-	 * @GetMapping("/paymentFail.do") public String paymentFail(HttpServletRequest
-	 * request) { itemOrderService.deleteOrder(request); return
-	 * "redirect:/item/classDetail.do?classNo=" + request.getParameter("classNo"); }
-	 */
-
+	
+	
 }

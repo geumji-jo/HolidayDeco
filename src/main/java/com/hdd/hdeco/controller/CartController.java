@@ -29,9 +29,29 @@ public class CartController {
 
 	@GetMapping("/getCartList.do")
 	public String getCartList(HttpServletRequest request, HttpServletResponse response, Model model) {
+		int userNo = cartService.getUserNo(request);
+
+    // 요청 파라미터
 		List<CartDTO> cartList = cartService.getCartList(request, response);
 		model.addAttribute("cartList", cartList);
 		model.addAttribute("userNo", cartService.getUserNo(request));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 장바구니 정보 
+		// 장바구니 전체 금액 
+		int cartPrice = cartService.cartPrice(userNo);
+		
+		// 장바구니 전체 금액에 따른 배송비 
+		// 배송비 (4만원 이상 무료, 4만원 미만 3,000원) 
+		int deliveryFee = cartPrice > 40000 ? 0 : 3000;
+		
+		map.put("cartList", cartList);
+		map.put("quantity", cartList.size());
+		map.put("cartPrice", cartPrice);
+		map.put("deliveryFee", deliveryFee);
+		map.put("orderTotal", cartPrice + deliveryFee);
+		
+		
 		return "order/cart";
 	}
 

@@ -102,6 +102,10 @@ hr {
   background-color: #FAF2E4;
 }
 
+ input[type=checkbox] {
+  accent-color:#EB5858; 
+}
+
 .title-group {
  display: flex;
 }
@@ -148,7 +152,7 @@ input[type="button"] {
   font-size: 14px;
   text-align: center;
   cursor: pointer;
-  background-color: #FCF77B;
+  background-color:  #CBCBCB;
 }
 
 #nPay {
@@ -159,7 +163,7 @@ input[type="button"] {
   font-size: 14px;
   text-align: center;
   cursor: pointer;
-  background-color: #54CE9A;
+  background-color: #CBCBCB;
 }
 
 #import {
@@ -170,7 +174,7 @@ input[type="button"] {
   font-size: 14px;
   text-align: center;
   cursor: pointer;
-  background-color: #EB5858;
+  background-color: #CBCBCB;
 }
 
 .btn-forward-group {
@@ -179,7 +183,7 @@ input[type="button"] {
   justify-content: center;
 }
 
-#goBack, #payment {
+#goBack, #btnPay {
   width: 180px;
   height: 50px;
   border: 1px solid black;
@@ -194,7 +198,7 @@ input[type="button"] {
   background-color: #EB5858;
 }
 
-#payment {
+#btnPay {
   background-color: #004427;
   color: white;
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+    <div th:replace="~{/layout/header::gnbFrag}"></div>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/orderDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<script th:inline="javascript">
+
+
+
+</script>
+<body>
+
+	<div id="main_wrap">
+		<div id="main_box">
+			<div id="paySuccess">결제가 완료되었어요.</div>
+			<div id="userNameBox">
+				<div th:text="|${session.loginName}님|" id="userName"></div>
+				<div id="soon">&nbsp;&nbsp;곧 만나요</div>
+			</div>
+			<div id="orderNum" th:text="|주문번호 : &nbsp; ${orderNumber}|"></div>
+
+				<h2>주문내역</h2>
+				<div id="applyClass">
+					<input type="hidden" th:value="${itemNo}" id="itemNo">
+					   <th:block th:each="item : ${cartList}">
+                      <div class="MainImg">
+                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+                              <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                          </a>
+                      </div>
+                      <div class="itemInfo" id="itemTitle">
+                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+                      </div>
+                      <div class="itemInfo" id="itemPrice">
+                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+                      </div>
+                      <div class="itemInfo">
+                          <input type="text" name="quantity" class="quantity" th:value="${item.quantity}">
+                      </div>
+                  </div>
+              </th:block>
+					
+				</div>
+			</div>
+		<div id="bottom">
+			<p>고객께 더 나은 서비스 제공을 위해 노력하겠습니다.</p>
+		</div>
+<div th:replace="~{/layout/footer::footerFrag}"></div>
+</body>
+</html>

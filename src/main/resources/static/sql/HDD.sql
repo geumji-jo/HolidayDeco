@@ -15,7 +15,6 @@ DROP TABLE IF EXISTS USER_ACCESS_T;
 DROP TABLE IF EXISTS USER_T;
 
 
-
 -- -- -- -- -- -- -- -- -- --<회원> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 -- 회원 테이블
@@ -113,6 +112,7 @@ CREATE TABLE CART_T (
     ITEM_TITLE VARCHAR(40),                        -- 상품명
     ITEM_PRICE VARCHAR(40),                        -- 상품 가격
     ITEM_MAIN_IMG VARCHAR(100),                    -- 상품 이미지
+    DELIVERY_FEE INT DEFAULT 3000,
     CONSTRAINT PK_CART_T PRIMARY KEY(CART_NO),
     CONSTRAINT FK_CART_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
     CONSTRAINT FK_CART_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
@@ -127,13 +127,12 @@ CREATE TABLE ITEM_ORDER_T (
 	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
 	POSTCODE                VARCHAR(5),	                      -- 우편번호
 	ROAD_ADDRESS            VARCHAR(100),			      -- 도로명 주소 
+	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
 	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
 	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
-	DELIVERY_FEE		INT NOT NULL,		              -- 배송비
 	PAY_NO                  VARCHAR(50),                   	      -- 결제 번호(merchan uid) 
 	PAY_METHOD              INT, 				      -- 결제 방식 
 	PAY_SUCCESS		INT, 				      -- 결제 여부   
-	CART_DETAIL_COUNT INT , 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
 	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
 );

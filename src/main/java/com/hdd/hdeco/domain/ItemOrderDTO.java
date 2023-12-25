@@ -20,12 +20,12 @@ public class ItemOrderDTO {
 	private String jibunAddress;
 	private String detailAddress;
 	private int orderTotal;
-	private String itemMainImg;
 	private int deliveryFee;
 	private int payNo;
 	private int payMethod;
 	private int paySuccess;
-	private int cartDetailCount;
+	private String itemTitle;
+	private String impUid;
 	private int cartNo;
 	private int itemNo;
 	private int userNo;

@@ -10,10 +10,13 @@ import com.hdd.hdeco.domain.ItemOrderDTO;
 import com.hdd.hdeco.domain.UserDTO;
 
 public interface ItemOrderService {
-	
-	public ItemOrderDTO insertOrder(ItemOrderDTO itemOrderDTO);
+	/*
+	 * public String getToken(); // 아임포트 토큰가져오기
+	 */	public ItemOrderDTO insertOrder(ItemOrderDTO itemOrderDTO);
 	public UserDTO getUserInfo(HttpServletRequest request);
 	public List<CartDTO> getSelectItemList(HttpServletRequest request);
 	public ItemDTO getItem(HttpServletRequest request);
+	public void deleteOrder(HttpServletRequest request);
 	 
 }
+

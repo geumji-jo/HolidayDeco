@@ -15,5 +15,6 @@ public interface ItemOrderMapper {
 	public UserDTO getUserByUserNo(int userNo);
 	public CartDTO getItemByNo(int itemNo);
 	public ItemDTO getFromItem(int itemNo);
+	public int deleteOrder(int itemOrderNo);
 
 }
