@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.service.ItemService;
@@ -22,23 +25,15 @@ import lombok.RequiredArgsConstructor;
 public class ItemController {
 	
 	private final ItemService itemService;
+	
 
 	@GetMapping("/list.do")
 	public String ItemList(HttpServletRequest request, Model model) {
 		itemService.getItemList(request, model);
 		return "item/list";
 	}
-
-	@GetMapping("/display.do")
-	public ResponseEntity<byte[]> display(@RequestParam("itemNo") int itemNo) {
-		return itemService.display(itemNo);
-	}
-
-	@GetMapping("/displayDetail.do")
-	public ResponseEntity<byte[]> displayDetail(@RequestParam("itemNo") int itemNo) {
-		return itemService.displayDetail(itemNo);
-
-	}
+	
+	
 	@GetMapping("/detail.do")
 	public String detail(HttpServletRequest request, Model model) {
 	    int itemNo = Integer.parseInt(request.getParameter("itemNo"));

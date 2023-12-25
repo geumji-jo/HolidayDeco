@@ -4,26 +4,13 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace는 @Mapper를 지정한다. -->
-<mapper namespace="com.hdd.hdeco.mapper.ItemMapper">
+<mapper namespace="com.hdd.hdeco.mapper.AdminMapper">
 
 
   <!-- 상품 개수 count  -->
    <select id="getItemCount" resultType="int">
       SELECT COUNT(*)
        FROM ITEM_T
-   </select>
-   
-   <!-- DB에서 상품 목록 읽어오기-->
-   <select id="getItemList" parameterType="Map" resultType="ItemDTO">
-       SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT
-         FROM ITEM_T
-         <where>
-              <if test="column != '' and query != ''">
-                  ${column} LIKE CONCAT('%', UPPER(#{query}),'%') OR ${column} LIKE CONCAT('%', LOWER(#{query}) , '%')
-              </if>
-          </where> 
-        ORDER BY ITEM_WRITED_AT DESC
-        LIMIT #{begin}, #{recordPerPage}
    </select>
    
    <!-- itemNo를 이용하여 아이템 정보 읽어오기 -->
@@ -33,6 +20,7 @@
        WHERE ITEM_NO = #{itemNo}
     </select>
     
+     <!-- DB에서 상품 목록 읽어오기-->
      <select id="getItemManageList" parameterType="Map" resultType="ItemDTO">
        SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT
          FROM ITEM_T
@@ -69,19 +57,6 @@
     <delete id="deleteItem" parameterType="int">
       DELETE 
         FROM ITEM_T
-       WGERE ITEM_NO = ${itemNo} 
+       WHERE ITEM_NO = ${itemNo} 
     </delete>
-
-    
-	<select id="searchItem" parameterType="String" resultType="ItemDTO">
-	    SELECT * 
-	    FROM ITEM_T
-	    <where>
-	        <if test="query != ''">
-	           ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT ('%',LOWER(#{query}),'%')
-	        </if>
-	    </where> 
-	</select>
-
- 
 </mapper>

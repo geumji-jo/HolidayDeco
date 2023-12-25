@@ -248,7 +248,7 @@ $(document).ready(function() {
                         <input type="checkbox" th:id="${item.itemNo}" class="checkOne"  th:value="${item.itemNo}"  />
                         <div class="MainImg">
                             <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
-                                <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                                <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
                             </a>
                         </div>
                         <div class="itemInfo">
@@ -287,13 +287,11 @@ $(document).ready(function() {
                 <div class="goBack">
                     <input type="button" value="돌아가기" id="goBack" onclick="history.back()"/>
                 </div>
-                 <form id="frmOrder" method='post'>
                     <div class="purchase">
                         <input type="hidden" name="userNo" value="${userNo}">
                         <input type="hidden" id="selectedItems" name="selectedItems">
                         <input type="button" value="구매하기" id="purchase" onclick="submitForm('orderSelect')" />
                     </div>
-                </form>
                   <div class="selectDelete">
                     <input type="hidden" name="userNo" value="${userNo}">
                     <input type="button" value="삭제" id="delete" />

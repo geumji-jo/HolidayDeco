@@ -1,7 +1,5 @@
 package com.hdd.hdeco.service;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +8,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -75,12 +70,13 @@ public class ItemServiceImpl implements ItemService {
 		model.addAttribute("itemList", itemMapper.getItemList(map));
 	}
 
+	
+	
 	@Override
 	public void getItemByNo(Model model, HttpServletRequest request) {
 	    // 기본값 설정
 	    int userNo = 0;
-
-	    // userId가 null이 아닌 경우에만 DB에서 userNo를 조회
+      // userId가 null이 아닌 경우에만 DB에서 userNo를 조회
 	    HttpSession session = request.getSession();
 	    String userId = (String) session.getAttribute("loginId");
 	    
@@ -96,46 +92,8 @@ public class ItemServiceImpl implements ItemService {
 	    // 나머지 코드에서 itemNo 활용
 	    model.addAttribute("item", itemMapper.getItemByNo(itemNo));
 	}
-
-
-	@Override
-	public ResponseEntity<byte[]> display(int itemNo) {
-		ItemDTO itemDTO = itemMapper.getItemByNo(itemNo);
-
-		ResponseEntity<byte[]> image = null;
-
-		try {
-			File mainImg = new File(itemDTO.getItemMainImg());
-			if (mainImg.exists()) {
-				FileInputStream inputStream = new FileInputStream(mainImg);
-				byte[] imageBytes = IOUtils.toByteArray(inputStream);
-				image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
-
-	@Override
-	public ResponseEntity<byte[]> displayDetail(int itemNo) {
-		ItemDTO itemDTO = itemMapper.getItemByNo(itemNo);
-
-		ResponseEntity<byte[]> image = null;
-
-		try {
-			File detailImg = new File(itemDTO.getItemDetailImg());
-			if (detailImg.exists()) {
-				FileInputStream inputStream = new FileInputStream(detailImg);
-				byte[] imageBytes = IOUtils.toByteArray(inputStream);
-				image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
-
+	
+	
 	@Override
 	public List<ItemDTO> searchItem(String query) {
 		return itemMapper.searchItem(query);

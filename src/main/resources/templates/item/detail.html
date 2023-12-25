@@ -17,7 +17,7 @@
  <div class="itemImg">
       <div class="image-container">
         <!-- 이미지와 하트 이미지를 동일한 부모 요소에 넣음 -->
-        <img class="main-image" th:src="@{/item/display.do(itemNo=${item.itemNo})}">
+        <img class="main-image" th:src="@{/admin/display.do(itemNo=${item.itemNo})}">
         <div class="like-container">
           <input type="hidden" class="itemNo" th:value="${item.itemNo}">
           <img th:id="${item.itemNo}" th:src="@{/images/heart1.png}" class="like-image">
@@ -58,7 +58,7 @@
   </div>
 
   <div id="detailImg">
-    <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" style="margin-bottom:50px;">
+    <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" style="margin-bottom:50px;">
   </div>
 
   <script th:inline="javascript">

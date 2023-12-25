@@ -221,7 +221,7 @@ $(function() {
                   <div class="item" th:each="item : ${cartList}">
                       <div class="MainImg">
                           <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
-                              <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                              <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
                           </a>
                       </div>
                       <div class="itemInfo" id="itemTitle">

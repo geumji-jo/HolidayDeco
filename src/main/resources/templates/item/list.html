@@ -25,7 +25,7 @@
         <div class="item">
           <div class="MainImg">
             <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
-              <img th:src="@{/item/display.do(itemNo=${item.itemNo})}" class="photo_image">
+              <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
             </a>
           </div>
           <!-- itemTitle 클릭 시 이동 -->
@@ -49,7 +49,7 @@
       </th:block>
     </div>
 
-    <div id="pagination" th:utext="${pagination}" style="margin-top:50px; margin-bottom:50px;"></div>
+    <div id="pagination" th:utext="${pagination}"></div>
   </div>
 </body>
 <script th:inline="javascript">
