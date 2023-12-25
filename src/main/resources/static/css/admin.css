@@ -1,0 +1,252 @@
+@charset "UTF-8";
+/*
+---------------------------------------
+사이드바 css
+---------------------------------------
+*/
+#container {
+  width: 1240px;
+  margin: 0px auto;
+  padding: 20px;
+  user-select:none;
+}
+#container-title {
+  padding: 20px;
+  text-align: center;
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+  background-color: white;
+  
+}
+ 
+
+#onlyContent {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 18px;
+  text-align: center;
+  background-color: white; /* onlyContent 영역 배경색 지정 (필요한 경우) */
+  padding-top: 60px; /* 헤더 높이만큼 패딩 추가 */
+}
+
+
+
+/* 노멀라이즈 시작 */
+body, ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+/* 노멀라이즈 끝 */
+
+/* 2차 메뉴 가두기 */
+.side-bar > ul > li {
+  position: relative;
+}
+
+/* 2차 메뉴 숨기기 */
+.side-bar > ul ul {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  background-color: #EB5858;;
+}
+
+body, #onlyContent {
+  height: 3333px;
+}
+
+.side-bar {
+  top: 226px;
+  position: fixed;
+  min-height: 100vh;
+  width: 76px;
+  background-color: black;
+  transition: .5s;
+}
+
+.side-bar ul > li > a {
+  display: block;
+  color: white;
+  font-size: 17px;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+.text-center {
+text-align: center;
+}
+
+.side-bar {
+  top: 226px;
+  position: fixed;
+  min-height: 100vh;
+  width: 76px;
+  background-color: #004427;
+  overflow: hidden; /* 넘치는 메뉴 요소 숨기기 */
+  transition: .5s;
+}
+
+/* 마우스 인식 시 너비 확장 */
+.side-bar:hover {
+  width: 180px;
+}
+/* 2차 메뉴 공간 제한 해제 */
+.side-bar:hover {
+  width: 175px;
+  overflow: visible;
+}
+
+.side-bar ul > li:hover > a {
+  background-color: #008956;
+}
+
+.side-bar > ul > li:hover > ul {
+  display: block;
+}
+
+/* 사이드바가 늘어나기 전 메뉴 노출 차단 */
+.side-bar > ul > li > a > span:last-child {
+  opacity: 0;
+  transition: .5s .1s;
+}
+
+.side-bar:hover > ul > li > a > span:last-child {
+  opacity: 1;
+}
+
+.side-bar > ul > li > a > span:first-child {
+  position: relative;
+  display: inline-block;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+}
+
+.side-bar > ul > li > a > span > i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.side-bar > ul > li > a > span {
+  vertical-align: middle;
+}
+
+#header {
+position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+}
+
+
+/* nav 밑 라인 시작 */
+
+.separator--line--green {
+  border: 0;
+  border-bottom: 3px solid #004427;
+  margin-bottom: 15px;
+  width: 100%;
+
+
+}
+.separator--line--red {
+  border: 0;
+  border-bottom: 3px solid #EB5858;
+  width: 100%; 
+
+}
+
+/* 아이콘 시작 */
+.side-bar__icon-box {
+  display: flex;
+  justify-content: center;
+}
+
+.side-bar__icon-1 {
+  position: relative;
+  width: 23px;
+  height: 17px;
+  margin: 17px;
+  margin-top: 20px;
+  transition: .5s;
+}
+
+:root {
+  --side-bar__icon: .5s;
+}
+
+.side-bar__icon-1 > div {
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  background-color: white;
+  transition: all var(--side-bar__icon);
+}
+
+.side-bar__icon-1 > div:nth-of-type(1) {
+  top: 0;
+  width: auto;
+  left: 0;
+  right: 0;
+  transition: all var(--side-bar__icon), left calc(var(--side-bar__icon) / 2) calc(var(--side-bar__icon) / 2), right calc(var(--side-bar__icon) / 2) calc(var(--side-bar__icon) / 2), height calc(var(--side-bar__icon) / 2) 0s;
+}
+
+.side-bar__icon-1 > div:nth-of-type(2) {
+  top: 40%;
+  transform-origin:bottom left;
+}
+
+.side-bar__icon-1 > div:nth-of-type(3) {
+  top: 80%;
+  left: auto;
+  right: 0;
+  transform-origin:bottom right;
+}
+
+
+.side-bar:hover .side-bar__icon-1 {
+  transform: translate(-50px, 0);
+}
+
+.side-bar:hover .side-bar__icon-1 > div:nth-of-type(2) {
+  transform:rotate(45deg);
+  width: 70.5%;
+  height: 25%;
+}
+
+.side-bar:hover .side-bar__icon-1 > div:nth-of-type(3) {
+  top: 40%;
+  transform:rotate(-45deg);
+  width: 70.5%;
+  height: 25%;
+}
+
+.side-bar:hover .side-bar__icon-1 > div:nth-of-type(1) {
+  left: 41%;
+  right: 41%;
+  height: 100%;
+  transition: all var(--side-bar__icon), left calc(var(--side-bar__icon) / 2) 0s, right calc(var(--side-bar__icon) / 2) 0s, height calc(var(--side-bar__icon) / 2) calc(var(--side-bar__icon) / 2);
+}
+/* 아이콘 끝 */
+
+.adminheader {
+    font-family: 'InkLipquid';
+    font-size: 30px;
+    text-align: right; 
+    text-decoration: none; 
+    color : black; 
+    margin-right: 35px;
+    user-select: none;
+  }
+

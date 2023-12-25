@@ -1,3 +1,5 @@
+/*타이틀 글씨체*/
+
   window.onload = function() {
       const logo = document.getElementById('logoHolidayDeco');
       const text = logo.textContent;
@@ -13,3 +15,6 @@
 
       logo.innerHTML = coloredText;
   }
+  
+/* 타이틀 글씨체 끝*/
+

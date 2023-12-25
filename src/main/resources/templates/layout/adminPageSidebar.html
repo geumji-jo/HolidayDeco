@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+</head>
+
+<body>
+  <div th:fragment="adminSidebarFrag">
+    <aside class="side-bar">
+  <section class="side-bar__icon-box">
+    <section class="side-bar__icon-1">
+      <div></div>
+      <div></div>
+      <div></div>
+    </section>
+  </section>
+  <ul>
+    <li>
+      <a th:href="@{/admin/adminPageHome.html}">
+        <span><i class="far fa-home-lg" style="color: #ffffff;"></i></span>
+        <span>관리자메인</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <span><i class="far fa-users" style="color: #ffffff;"></i></span>
+        <span>회원관리</span>
+      </a>
+      <ul class="text-center">
+        <li><a href="#">전체회원보기</a></li>
+        <li><a href="#">휴면회원보기</a></li>
+        <li><a href="#">탈퇴회원보기</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <span><i class="far fa-box" style="color: #ffffff;"></i></span>
+        <span>상품관리</span>  
+      </a>
+      <ul class="text-center">
+        <li><a href="#">상품리스트</a></li>
+        <li><a href="#">상품등록</a></li>
+        <li><a href="#">상품수정</a></li>
+        <li><a href="#">상품삭제</a></li>
+        <li><a href="#">현재판매리스트</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <span><i class="far fa-hand-holding-box" style="color: #ffffff;"></i></span>
+        <span>주문관리</span>
+      </a>
+      <ul class="text-center">
+        <li><a href="#">전체주문</a></li>
+        <li><a href="#">취소주문</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <span><i class="far fa-home-lg" style="color: #ffffff;"></i></span>
+        <span>menu4</span>
+      </a>
+      <ul class="text-center">
+        <li><a href="#">text1</a></li>
+        <li><a href="#">text2</a></li>
+        <li><a href="#">text3</a></li>
+        <li><a href="#">text4</a></li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+  </div>
+</body>
+</html>
