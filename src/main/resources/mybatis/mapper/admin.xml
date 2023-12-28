@@ -35,20 +35,19 @@
     
     <!-- 상품 등록 -->
     <insert id="uploadItem" useGeneratedKeys="true" keyProperty="itemNo" parameterType="itemDTO">
-      INSERT INTO ITEM_T {
+      INSERT INTO ITEM_T (
 	        ITEM_TITLE
 	      , ITEM_PRICE
-	      , STOCK
+	      , ITEM_STOCK
 	      , ITEM_MAIN_IMG
 	      , ITEM_DETAIL_IMG
-	      , WRITED_AT 
+	      , ITEM_WRITED_AT 
        ) VALUES (
 	         #{itemTitle}
 	        , #{itemPrice}
+	        , #{itemStock}
 	        , #{itemMainImg}
-	        , #{stock}
 	        , #{itemDetailImg}
-	        , #{stock}
 	        , NOW()
         )
     </insert>

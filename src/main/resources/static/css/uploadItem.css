@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+
+.all {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  border: 3px solid #008956;
+  border-radius: 10px;
+}
+
+.add {
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 785px;
+  height: 585px;
+  border: 3px solid #EB5858;
+  border-radius: 10px;
+}
+
+.add>div {
+   margin: 0 auto;
+}
+
+#fileList {
+  margin-top: 50px;
+  width: 800px;
+  height: 600px;
+  background-color: white;
+}
+
+.btn {
+  text-align: center;
+  justify-content: center;
+}
+
+button {
+  width: 250px;
+  height: 50px;
+  font-size: 17px;
+  font-family: 'Pretendard-Regular', serif;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.checked {
+  background-color: white;
+  border-radius: 15px;
+}
+
+#itemTitle {
+  width: 180px;
+  height: 20px;
+  border: none;
+  outline: none;
+  border-bottom: solid 2px black;
+  text-align: center;
+  font-size: 17px;
+  font-family: 'Pretendard-Regular', serif;
+  margin-bottom: 20px;
+}
+
+#itemPrice {
+  width: 170px;
+  height: 20px;
+  border: none;
+  outline: none;
+  border-bottom: solid 2px black;
+  font-size: 17px;
+  font-family: 'Pretendard-Regular', serif;
+  margin-bottom: 20px;
+ 
+}
+
+#itemStock {
+  width: 170px;
+  height: 20px;
+  border: none;
+  outline: none;
+  border-bottom: solid 2px black;
+  font-size: 17px;
+  font-family: 'Pretendard-Regular', serif;
+  margin-bottom: 20px;
+}
+
+#itemMainImg{
+  margin-bottom: 20px;
+}

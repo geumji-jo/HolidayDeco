@@ -1,96 +1,120 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
-  <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
-  <link rel="stylesheet" th:href="@{/css/font.css}">
-  <link rel="stylesheet" th:href="@{/css/footer.css}">
-</head>
-<script>
-
-   $(function(){
-
-      var itemNo = $('.itemNo');
-      
-      $('.frm_delete').on('submit', function(event){
-         if(confirm('삭제할까요?') == false){
-            event.preventDefault();
-            return;
-         }
-      })
-      
-   })
-
-</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<link rel="stylesheet" th:href="@{/css/font.css}">
 <style>
-img {
-  width: 300px;
-  height: 200px;
-  margin-right: 40px;
-  margin-bottom: 20px;
+  img {
+   width: 200px;
+  height: 130px;
   border-radius: 10px;
- }
-
-.pagination {
-  margin-top:50px;
-  margin-bottom:50px; 
-  text-align: center; 
+  }
+  
+  button {
+    font-family: 'Pretendard-Regular', serif;
+    font-size: 16px;
+    border : none;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .searchbar {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
 }
 
-.search {
-   text-align: center;
+input {
+    margin-right:80px;  
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
 }
 
-.search-bar_input { 
-  appearance: none;
-  border-width: 0 0 1px; 
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
 
 </style>
+<script th:inline="javascript">
+
+document.addEventListener("DOMContentLoaded", function() {
+    var prices = document.querySelectorAll(".price");
+    prices.forEach(function(price) {
+       price.textContent = price.textContent.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+    });
+ });
+ 
+$(function(){
+
+    var itemNo = $('.itemNo');
+    
+    $('.frm_delete').on('submit', function(event){
+       if(confirm('등록된 상품을 삭제할까요?') == false){
+          event.preventDefault();
+          return;
+       }
+    })
+ })
+</script>
 <body>
-<div th:replace="~{/layout/header::gnbFrag}"></div>
-<div class="all" >
-      <div class="search" style="display:flex;"  >
-         <div class="searchbar">
+  <div>
+    <div id="header">
+      <div class="adminheader">
+        <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
+        <a class="logout" th:href="@{/user/logout.do}">
+        <i class="fad fa-sign-out-alt" style="-fa-primary-color: #878787; --fa-secondary-color: #0d0d0d; --fa-secondary-opacity: 1;"></i></a>
+      </div>
+      <div id="container-title">
+        <h3>
+          <a th:href="@{/admin/adminPageHome.html}"> adminPage </a>
+        </h3>
+      </div>
+      <hr class="separator separator--line--green" />
+      <hr class="separator separator--line--red" />
+    </div>
+    <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
+    <div id="onlyContent" style="margin-bottom:30px;">
+      <h2></h2>
+      <br>
+      <div class="all">
+        <div class="search">
+          <div class="searchbar">
             <form id="frm" th:action="@{/admin/itemManageList.do}">
-            <input class="search-bar_input" type="text" th:id="query" th:name="query">
-               <button class="btn">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-               </button>
+              <input class="search-bar_input" type="text" th:id="query" th:name="query" >
+              <button class="btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
             </form>
-         </div>
-      </div>
-      <div class="btn1">
-         <a th:href="@{/admin/uploadItem.html}">상품 등록하기</a>
-      </div>
-        <table style="margin: 0 auto;">
+            <div class="btn1" style="margin-left:100px;">
+              <a th:href="@{/admin/uploadItem.html}">상품 등록하기</a>
+            </div>
+          </div>
+          <table style="margin: 0 auto;">
             <th:block th:each="item,vs:${itemList}">
-               <tbody class="item">
-                  <tr>
-                     <td rowspan="4" ><img th:src="@{/admin/display.do(itemNo=${item.itemNo})}"></td>
-                     <td th:text="${item.itemTitle}"></td>
-                     <td>
-                        <form class="frm_delete" method="post" th:action="@{/admin/itemDelete.do}">
-                           <input type="hidden" th:name="itemNo" th:value="${item.itemNo}">
-                           <button>삭제</button>
-                        </form>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td th:text="|가격 : *{item.itemPrice}|"></td>
-                     <td th:text="|재고 *{item.itemStock}|"></td>
-                  </tr>
-               </tbody>
+              <tbody class="item">
+                <tr>
+                  <td rowspan="4"><img th:src="@{/admin/display.do(itemNo=${item.itemNo})}"></td>
+                  <td th:text="${item.itemTitle}"></td>
+                  <td class="price" th:text="|가격 : *{item.itemPrice}|"></td>
+                  <td th:text="|재고 *{item.itemStock}|" style="padding-left: 10px; padding-right: 10px;" ></td>
+                  <td>
+                    <form class="frm_delete" method="post" th:action="@{/admin/itemDelete.do}">
+                      <input type="hidden" th:name="itemNo" th:value="${item.itemNo}">
+                      <button>삭제</button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
             </th:block>
-               <tfoot>
-                  <tr>
-                     <td class="pagination" colspan="10" th:utext="${pagination}">
-                  </tr>
-               </tfoot>
-         </table>
+            <tfoot>
+              <tr>
+                <td class="pagination" colspan="10" th:utext="${pagination}">
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
+    </div>
+  </div>
 </body>
-<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

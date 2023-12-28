@@ -30,6 +30,10 @@ public class AdminController {
     return "admin/adminPageHome";
   }
   
+  @GetMapping("/uploadItem.html")
+  public String uploadItem() {
+    return "admin/uploadItem";
+  }
   
   @GetMapping("/itemManageList.do")
 	public String itemManageList(HttpServletRequest request, Model model) {
@@ -37,14 +41,14 @@ public class AdminController {
 		return "admin/itemManageList";
 	}
 
-	// 상품 추가
-  @PostMapping("/uploadItem.do")
-  public String uploadItem(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
-  	adminService.uploadItem(multipartRequest);
-      return "redirect:/admin/itemManageList.do";
-  }
+//상품 추가
+ @PostMapping("/uploadItem.do")
+ public String uploadItem(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+ 	 adminService.uploadItem(multipartRequest);
+     return "redirect:/admin/itemManageList.do";
+ }
 	
-  // 상품 이미지 
+ // 상품 이미지 
 	@GetMapping("/display.do")
 	public ResponseEntity<byte[]> display(@RequestParam("itemNo") int itemNo) {
 		return adminService.display(itemNo);

@@ -1,11 +1,14 @@
 package com.hdd.hdeco.service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -52,119 +55,128 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void getItemManageList(HttpServletRequest request, Model model) {
 		
-		Optional<String> opt1 = Optional.ofNullable(request.getParameter("query"));
-		String query = opt1.orElse("");
+		Optional<String> opt1 = Optional.ofNullable(request.getParameter("column"));
+		String column = opt1.orElse("");
+		
+		Optional<String> opt2 = Optional.ofNullable(request.getParameter("query"));
+		String query = opt2.orElse("");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("column", column);
 		map.put("query", query);
 		
-		Optional<String> opt2 = Optional.ofNullable(request.getParameter("page"));
-		int page = Integer.parseInt(opt2.orElse("1"));
-		
+		Optional<String> opt3 = Optional.ofNullable(request.getParameter("page"));
+		int page = Integer.parseInt(opt3.orElse("1"));
 		int totalRecord = adminMapper.getItemCount();
-		
 		int recordPerPage = 10;
 		
 		pageUtil.setPageUtil(page, totalRecord, recordPerPage);
-		
-		
 		map.put("begin", pageUtil.getBegin());
 		map.put("recordPerPage", recordPerPage);
 		
 		List<ItemDTO> itemList =adminMapper.getItemManageList(map);
 		model.addAttribute("itemList", itemList);
-		model.addAttribute("pagination", pageUtil.getPagination("/item/itemManageList.do?query=" + query));
+		model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+		model.addAttribute("pagination", pageUtil.getPagination("/admin/itemManageList.do?query" + column));
 
 		
 	}
 
 	
+	
+
+
 	@Transactional
 	@Override
 	public int uploadItem(MultipartHttpServletRequest multipartRequest) throws Exception {
-		String itemTitle = multipartRequest.getParameter("itemTitle");
-		String itemPrice = multipartRequest.getParameter("itemPrice");
-		int itemStock = Integer.parseInt(multipartRequest.getParameter("itemStock"));
-		
-		ItemDTO itemDTO = new ItemDTO();
-		itemDTO.setItemTitle(itemTitle);
-		itemDTO.setItemPrice(itemPrice);
-		itemDTO.setItemStock(itemStock);
-		
-		MultipartFile itemMainImgFile = multipartRequest.getFile("MainImg");
-		
-		if(itemMainImgFile != null && itemMainImgFile.isEmpty() == false) {
-			 // 첨부파일 HDD에 저장하는 코드
-			String path = myFileUtil.getItemImgPath();
-			String itemMainImgFilename= myFileUtil.getFilesystemName(itemMainImgFile.getOriginalFilename());
-			File dir = new File(path);
-			if(dir.exists() == false) {
-				dir.mkdirs();
-			}
-			File file = new File(dir, itemMainImgFilename);
-			itemMainImgFile.transferTo(file); // 실제 서버에 저장
-			itemDTO.setItemMainImg(path + itemMainImgFilename);
-			
-		}
-		 MultipartFile detailImgFile = multipartRequest.getFile("detailImg");
-     if(detailImgFile != null && detailImgFile.isEmpty() == false) {
-        // 첨부파일 HDD에 저장하는 코드
-        String path = myFileUtil.getItemImgPath();
-        String detailImgFilename = myFileUtil.getFilesystemName(detailImgFile.getOriginalFilename());
-        File dir = new File(path);
-        if(dir.exists() == false) {
-           dir.mkdirs();
-        }
-        File file = new File(dir, detailImgFilename);
-        detailImgFile.transferTo(file);   // 실제 서버에 저장
-        itemDTO.setItemDetailImg(path + detailImgFilename);         
+	    // 상품명, 상품 가격, 재고
+	    String itemTitle = multipartRequest.getParameter("itemTitle");
+	    String itemPrice = multipartRequest.getParameter("itemPrice");
+	    int itemStock = Integer.parseInt(multipartRequest.getParameter("itemStock"));
+
+	    ItemDTO itemDTO = new ItemDTO();
+	    itemDTO.setItemTitle(itemTitle);
+	    itemDTO.setItemPrice(itemPrice);
+	    itemDTO.setItemStock(itemStock);
+
+	    MultipartFile mainImgFile = multipartRequest.getFile("itemMainImg");
+	    if (mainImgFile != null && !mainImgFile.isEmpty()) {
+	        // 첨부파일 HDD에 저장하는 코드
+	        String path = myFileUtil.getPath();
+	        String mainImgFilename = myFileUtil.getFilesystemName(mainImgFile.getOriginalFilename());
+	        File dir = new File(path);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // UUID를 사용하여 고유한 파일명 생성
+	        String uniqueFilename = UUID.randomUUID().toString() + "_" + mainImgFilename;
+
+	        // 새로운 파일 경로
+	        String fullFilePath = path + "/" + uniqueFilename; 
+	        Path filePath = Paths.get(fullFilePath).toAbsolutePath();
+	        mainImgFile.transferTo(filePath.toFile());
+	        itemDTO.setItemMainImg(fullFilePath);
+	    }
+
+	    MultipartFile detailImgFile = multipartRequest.getFile("itemDetailImg");
+	    if (detailImgFile != null && !detailImgFile.isEmpty()) {
+	        // 첨부파일 HDD에 저장하는 코드
+	        String path = myFileUtil.getPath();
+	        String detailImgFilename = myFileUtil.getFilesystemName(detailImgFile.getOriginalFilename());
+	        File dir = new File(path);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // UUID를 사용하여 고유한 파일명 생성
+	        String uniqueFilename = UUID.randomUUID().toString() + "_" + detailImgFilename;
+
+	        // 새로운 파일 경로
+	        String fullFilePath = path + "/" + uniqueFilename; 
+	        Path filePath = Paths.get(fullFilePath).toAbsolutePath();
+	        detailImgFile.transferTo(filePath.toFile());
+	        itemDTO.setItemDetailImg(fullFilePath);
+	    }
+	    int uploadItemResult = adminMapper.uploadItem(itemDTO);
+
+	    return uploadItemResult;
+	}
+
+	@Override
+  public ResponseEntity<byte[]> display(int itemNo) {
+     ItemDTO itemDTO = adminMapper.getItemByNo(itemNo);
+     ResponseEntity<byte[]> image = null;
+     try {
+        File itemMainImg = new File(itemDTO.getItemMainImg());
+        if (itemMainImg.exists()) {
+              FileInputStream inputStream = new FileInputStream(itemMainImg);
+              byte[] imageBytes = IOUtils.toByteArray(inputStream);
+              image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
+        } 
+     } catch(Exception e) {
+        e.printStackTrace();
      }
-     
-     int uploadItemResult = adminMapper.uploadItem(itemDTO);
-	
-     
-	  return uploadItemResult;
-	}
+     return image;
+  }
+  
+  @Override
+  public ResponseEntity<byte[]> displayDetail(int itemNo) {
+  	ItemDTO itemDTO = adminMapper.getItemByNo(itemNo);
+	   ResponseEntity<byte[]> image = null;
+	   try {
+		   File itemDetailImg = new File(itemDTO.getItemDetailImg());
+		   if (itemDetailImg.exists()) {
+			   FileInputStream inputStream = new FileInputStream(itemDetailImg);
+			   byte[] imageBytes = IOUtils.toByteArray(inputStream);
+			   image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
+		   } 
+	   } catch(Exception e) {
+		   e.printStackTrace();
+	   }
+	   return image;
+  }
 
-
-	@Override
-	public ResponseEntity<byte[]> display(int itemNo) {
-		ItemDTO itemDTO = adminMapper.getItemByNo(itemNo);
-
-		ResponseEntity<byte[]> image = null;
-
-		try {
-			File mainImg = new File(itemDTO.getItemMainImg());
-			if (mainImg.exists()) {
-				FileInputStream inputStream = new FileInputStream(mainImg);
-				byte[] imageBytes = IOUtils.toByteArray(inputStream);
-				image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
-
-	@Override
-	public ResponseEntity<byte[]> displayDetail(int itemNo) {
-		ItemDTO itemDTO = adminMapper.getItemByNo(itemNo);
-
-		ResponseEntity<byte[]> image = null;
-
-		try {
-			File detailImg = new File(itemDTO.getItemDetailImg());
-			if (detailImg.exists()) {
-				FileInputStream inputStream = new FileInputStream(detailImg);
-				byte[] imageBytes = IOUtils.toByteArray(inputStream);
-				image = new ResponseEntity<>(imageBytes, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
-	
 	@Override
 	public int deleteItem(int itemNo) {
 		int deleteResult = adminMapper.deleteItem(itemNo);
