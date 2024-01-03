@@ -16,6 +16,7 @@ public interface ItemOrderService {
 	public UserDTO getUserInfo(HttpServletRequest request);
 	public List<CartDTO> getSelectItemList(HttpServletRequest request);
 	public ItemDTO getItem(HttpServletRequest request);
+	public void deleteCartByUserNo(HttpServletRequest request);
 	public void deleteOrder(HttpServletRequest request);
 	 
 }

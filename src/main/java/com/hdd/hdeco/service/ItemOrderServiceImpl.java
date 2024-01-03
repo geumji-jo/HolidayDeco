@@ -59,6 +59,15 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		return itemOrderMapper.getFromItem(itemNo);
 	}
 	
+	// 결제 성공 후 카트 삭제 
+	@Override
+	public void deleteCartByUserNo(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String userId = (String)session.getAttribute("loginId");
+		int userNo = cartMapper.selectUserNobyId(userId);
+		itemOrderMapper.deleteCartByUserNo(userNo);
+	}
+	
 	// 결제실패 (Enroll 삭제)
 	@Override
 	public void deleteOrder(HttpServletRequest request) {

@@ -16,7 +16,7 @@ function execDaumPostcode() {
         oncomplete: function(data) {
             var roadAddr = data.roadAddress;
             document.getElementById('postcode').value = data.zonecode;
-            document.getElementById('roadAddress').value = roadAddr;  // Corrected ID
+            document.getElementById('roadAddress').value = roadAddr; 
         }
     }).open();
 } // 다음 주소 
@@ -93,8 +93,6 @@ function requestPay(userNo, itemTitle, orderTotal, name, email, mobile, postcode
 // 가맹점 식별코드
 IMP.init("imp31738657");
 var randomNumber = Math.floor(Math.random() * 1000);
-// 상품명          
-var itemTitle = $("#itemTitle").text();
 // 총 금액       
 var orderTotal =  $('.totalOrderAmount').val();
 // 이름 
@@ -128,20 +126,26 @@ console.log("payMethod:", payMethod);
 console.log("orderDate:", orderDate);
 
 IMP.request_pay({
-  pg: "kcp",
-  pay_method: "card",
-  merchant_uid: randomNumber,
-  name: itemTitle + "외",
-  amount: orderTotal,
-  buyer_email: email,
-  buyer_name: name,
-  buyer_tel: mobile,
-  buyer_addr: roadAddress + detailAddress,
-  buyer_postcode: postcode
+    pg: "kcp",
+    pay_method: "card",
+    merchant_uid: randomNumber,
+    name: itemTitle + "외",
+    amount: orderTotal,
+    buyer_email: email,
+    buyer_name: name,
+    buyer_tel: mobile,
+    buyer_addr: roadAddress + detailAddress,
+    buyer_postcode: postcode
 }, function (rsp) { // callback
-   alert('결제 성공');
-   location.href='/order/payFinish.html'; 
-  });
+    console.log('결제 응답:', rsp);
+
+    if (rsp.success) {
+        alert('결제 성공');
+        location.href = '/order/payFinish.do';
+    } else {
+        alert('결제 실패: ' + rsp.error_msg);
+    }
+});
 }
 $(function() {
     $('#userName').val();

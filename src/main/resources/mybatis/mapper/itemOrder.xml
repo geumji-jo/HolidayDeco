@@ -57,6 +57,14 @@
      WHERE ITEM_NO = #{itemNo}
   </select>
   
+  
+    <!-- 주문 후 카트 삭제 -->
+  <delete id="deleteCartByUserNo" parameterType="int">
+    DELETE FROM CART_T
+     WHERE USER_NO = #{userNo}
+  </delete>
+  
+  
     <!-- 결제취소 -->
   <delete id="deleteOrder" parameterType="int">
     DELETE FROM ITEM_ORDER_T

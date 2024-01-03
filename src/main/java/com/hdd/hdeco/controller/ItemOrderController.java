@@ -61,24 +61,27 @@ public class ItemOrderController {
 	    return map;
 	}
 	
+	
 	// 결제 완료
-	@PostMapping
-	@RequestMapping(value = "/payFinish.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String payFinish(ItemOrderDTO itemOrderDTO, Model model) {
-		
-		// 주문번호 만들기 (랜덤번호 + 주문년월일)
-		String randomNum = Math.random() + "";
-		randomNum += LocalDate.now() + "";
-		
-		// 소수 부분만 남기고, - 없앤 후, 2023 대신 -23으로
-		int dotIndex = randomNum.indexOf(".");  
-		String noDotRandomNum = randomNum.substring(dotIndex + 1);
-		noDotRandomNum = noDotRandomNum.replace("-", "");
-		String changeNum = noDotRandomNum.replace("20", "-");
-		model.addAttribute("orderNumber", changeNum);
-		model.addAttribute("map", itemOrderDTO.getUserNo());
-		
-		return "order/payFinish";	
+	@PostMapping(value = "/payFinish.do")
+	public String payFinish(ItemOrderDTO itemOrderDTO, Model model, HttpServletRequest request, HttpServletResponse response) {
+	    // 주문번호 만들기 (랜덤번호 + 주문년월일)
+	    String randomNum = Math.random() + "";
+	    randomNum += LocalDate.now() + "";
+
+	    // 소수 부분만 남기고, - 없앤 후, 2023 대신 -23으로
+	    int dotIndex = randomNum.indexOf(".");
+	    String noDotRandomNum = randomNum.substring(dotIndex + 1);
+	    noDotRandomNum = noDotRandomNum.replace("-", "");
+	    String changeNum = noDotRandomNum.replace("20", "-");
+
+	    
+	    model.addAttribute("itemOrderNo", changeNum);
+	    model.addAttribute("map", itemOrderService.getUserInfo(request));
+
+	    itemOrderService.deleteCartByUserNo(request);
+
+	    return "order/payFinish";
 	}
 	
 	
