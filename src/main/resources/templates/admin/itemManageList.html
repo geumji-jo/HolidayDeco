@@ -5,35 +5,64 @@
 <link rel="stylesheet" th:href="@{/css/admin.css}">
 <link rel="stylesheet" th:href="@{/css/font.css}">
 <style>
-  img {
-   width: 200px;
+.itemImg {
+  width: 200px;
   height: 130px;
   border-radius: 10px;
-  }
-  
-  button {
-    font-family: 'Pretendard-Regular', serif;
-    font-size: 16px;
-    border : none;
-    background-color: white;
-    cursor: pointer;
-  }
-  
-  .searchbar {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: row-reverse;
-    margin-bottom: 20px;
+  margin-bottom: 38px;
+}
+
+button {
+  font-family: 'Pretendard-Regular', serif;
+  font-size: 16px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.searchbar {
+  display: flex;
+  margin-bottom: 20px;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 input {
-    margin-right:80px;  
-    border: none;
-    border-bottom: 1px solid black;
-    outline: none;
+  width: 130px;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
 }
 
+.register {
+  margin-left: 5%;
+  width: 100px;
+}
 
+table {
+margin: 0 auto; 
+width:750px;
+}
+
+#delete {
+  border: 1px solid black;
+  background-color: #EB5858;
+  width: 70px;
+  height: 30px;
+  border-radius: 10px;
+}
+
+#modify {
+  border: 1px solid black;
+  background-color: #004427;
+  color: white;
+  width: 70px;
+  height: 30px;
+  border-radius: 10px;
+}
 </style>
 <script th:inline="javascript">
 
@@ -55,9 +84,14 @@ $(function(){
        }
     })
  })
+     function redirectToModifyPage(form) {
+        var itemNo = $(form).find('[name="itemNo"]').val();
+        location.href = '/admin/itemEdit.do?itemNo=' + itemNo;
+        return false; // form submit 막기
+    }
+
 </script>
 <body>
-  <div>
     <div id="header">
       <div class="adminheader">
         <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
@@ -76,36 +110,54 @@ $(function(){
     <div id="onlyContent" style="margin-bottom:30px;">
       <h2></h2>
       <br>
-      <div class="all">
+    <div class="all" >
         <div class="search">
           <div class="searchbar">
-            <form id="frm" th:action="@{/admin/itemManageList.do}">
-              <input class="search-bar_input" type="text" th:id="query" th:name="query" >
+            <form id="frm" th:action="@{/admin/manageSearch.do}">
+              <input class="search-bar_input" type="text" th:id="query" th:name="query" style="text-align: center;">
               <button class="btn">
-                <i class="fa-solid fa-magnifying-glass"></i>
+               <i class="fas fa-search"></i>
               </button>
             </form>
-            <div class="btn1" style="margin-left:100px;">
+            <div class="register">
               <a th:href="@{/admin/uploadItem.html}">상품 등록하기</a>
             </div>
           </div>
-          <table style="margin: 0 auto;">
+          <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>상품명</th>
+              <th>가격</th>
+              <th>재고</th>
+            </tr>
+          </thead>
             <th:block th:each="item,vs:${itemList}">
               <tbody class="item">
                 <tr>
-                  <td rowspan="4"><img th:src="@{/admin/display.do(itemNo=${item.itemNo})}"></td>
+                  <td rowspan="4"><img class="itemImg" th:src="@{/admin/display.do(itemNo=${item.itemNo})}"></td>
                   <td th:text="${item.itemTitle}"></td>
-                  <td class="price" th:text="|가격 : *{item.itemPrice}|"></td>
-                  <td th:text="|재고 *{item.itemStock}|" style="padding-left: 10px; padding-right: 10px;" ></td>
+                  <td class="price" th:text="|*{item.itemPrice}|"></td>
+                  <td th:text="|*{item.itemStock}|" ></td>
                   <td>
                     <form class="frm_delete" method="post" th:action="@{/admin/itemDelete.do}">
                       <input type="hidden" th:name="itemNo" th:value="${item.itemNo}">
-                      <button>삭제</button>
+                      <button id="delete">삭제</button>
                     </form>
                   </td>
+                    <td>
+                    <td>
+                  <form class="frm_edit" method="get"onsubmit="return redirectToModifyPage(this)">
+                      <input type="hidden" th:name="itemNo" th:value="${item.itemNo}">
+                      <button type="submit" id="modify">수정</button>
+                  </form>
+              </td>
                 </tr>
-              </tbody>
+                   <tr>
+                  <td colspan="20"><hr></td>
+                </tr>
             </th:block>
+              </tbody>
             <tfoot>
               <tr>
                 <td class="pagination" colspan="10" th:utext="${pagination}">
@@ -115,6 +167,5 @@ $(function(){
         </div>
       </div>
     </div>
-  </div>
 </body>
 </html>

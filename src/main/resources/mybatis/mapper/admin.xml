@@ -58,4 +58,26 @@
         FROM ITEM_T
        WHERE ITEM_NO = ${itemNo} 
     </delete>
+
+	<!-- 등록한 상품 수정 -->
+	<update id="modifyItem" parameterType="itemDTO">
+		UPDATE ITEM_T
+		SET ITEM_TITLE = #{itemTitle}
+		, ITEM_PRICE = #{itemPrice}
+		, ITEM_STOCK = #{itemStock}
+		, ITEM_MAIN_IMG = #{itemMainImg}
+		, ITEM_DETAIL_IMG = #{itemDetailImg}
+		WHERE ITEM_NO = #{itemNo}
+	</update>
+	
+	 <select id="searchItem" parameterType="String" resultType="ItemDTO">
+      SELECT * 
+      FROM ITEM_T
+      <where>
+          <if test="query != ''">
+             ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT ('%',LOWER(#{query}),'%')
+          </if>
+      </where> 
+  </select>
+	
 </mapper>

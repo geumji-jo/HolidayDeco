@@ -4,8 +4,6 @@ USE hdeco;
 DROP TABLE IF EXISTS LIKE_T;
 DROP TABLE IF EXISTS AMOUNT_T;
 DROP TABLE IF EXISTS KAKAO_APPROVE_RESPONSE_T;
-DROP TABLE IF EXISTS ITEM_ORDER_LIST_T;
-DROP TABLE IF EXISTS CART_DETAIL_T;
 DROP TABLE IF EXISTS ITEM_ORDER_T;
 DROP TABLE IF EXISTS CART_T;
 DROP TABLE IF EXISTS ITEM_T;
@@ -101,6 +99,7 @@ CREATE TABLE ITEM_T(
 
 
 
+
 -- -- -- -- -- -- -- -- -- --<장바구니> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 -- 장바구니 테이블
@@ -112,42 +111,31 @@ CREATE TABLE CART_T (
     ITEM_TITLE VARCHAR(40),                        -- 상품명
     ITEM_PRICE VARCHAR(40),                        -- 상품 가격
     ITEM_MAIN_IMG VARCHAR(100),                    -- 상품 이미지
-    DELIVERY_FEE INT DEFAULT 3000,
     CONSTRAINT PK_CART_T PRIMARY KEY(CART_NO),
     CONSTRAINT FK_CART_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
     CONSTRAINT FK_CART_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
 );
 
+
+
 -- 주문 테이블
 CREATE TABLE ITEM_ORDER_T (
 	ITEM_ORDER_NO               INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
 	USER_NO                INT,                                   -- FK 유저번호
+    ITEM_NO                INT,
 	ORDER_DATE             DATETIME,
 	NAME                   VARCHAR(40),	                      -- 회원 이름
 	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
 	POSTCODE                VARCHAR(5),	                      -- 우편번호
 	ROAD_ADDRESS            VARCHAR(100),			      -- 도로명 주소 
-	JIBUN_ADDRESS           VARCHAR(100),	                      -- 지번 주소
 	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
 	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
 	PAY_NO                  VARCHAR(50),                   	      -- 결제 번호(merchan uid) 
 	PAY_METHOD              INT, 				      -- 결제 방식 
 	PAY_SUCCESS		INT, 				      -- 결제 여부   
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
-);
-
-
--- 주문 상세 테이블 (장바구니 목록)
-CREATE TABLE CART_DETAIL_T (
-    CART_DETAIL_NO INT NOT NULL AUTO_INCREMENT,     -- 주문 상세 번호
-    ITEM_ORDER_NO INT,                    -- 주문 번호
-    QUANTITY INT,                    -- 주문 수량
-    ORDER_TOTAL INT,                 -- 주문 금액
-    ITEM_NO INT,                     -- FK 아이템번호
-    CONSTRAINT PK_CART_DETAIL_T PRIMARY KEY(CART_DETAIL_NO),
-    CONSTRAINT FK_CART_DETAIL_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
-    CONSTRAINT FK_CART_DETAIL_T_ORDER_T FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
+	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+	CONSTRAINT FK_ITEM_ORDER_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
 );
 
 
@@ -242,47 +230,4 @@ INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, P
 VALUES ('user10', 'A855A67A75ABB4B640EB387FE4F0EFAC6869E2F9EB5DEC89685E17AB5E317AE6', '유저텐', 'F', 'user10@naver.com', '01000000000','1998', '0105', 34659, '대전 동구 광명길 2', '대전 동구 대동 352-1', '1-105', '(대동)', 0, '2021-11-05 13:01:05', 0);
 
 
--- -- -- -- -- -- -- -- -- --<item Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('tree paper bag','5700','/storage/itemImg/상품(1).jpg','/storage/itemImg/상품(1).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('cutie bear doll','12000','/storage/itemImg/상품(2).jpg','/storage/itemImg/상품(2).png',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_gold','5200','/storage/itemImg/상품(3).jpg','/storage/itemImg/상품(2).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('christmas candle','8900','/storage/itemImg/상품(4).jpg','/storage/itemImg/상품(4).png',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_snowman','6000','/storage/itemImg/상품(5).jpg','/storage/itemImg/상품(5).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('snowball','9200','/storage/itemImg/상품(6).jpg','/storage/itemImg/상품(6).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('christmas cookie','5000','/storage/itemImg/상품(7).jpg','/storage/itemImg/상품(7).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_snowman2','5300','/storage/itemImg/상품(8).jpg','/storage/itemImg/상품(8).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('cane candy','1200','/storage/itemImg/상품(9).jpg','/storage/itemImg/상품(9).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('snowball_house','15000','/storage/itemImg/상품(10).jpg','/storage/itemImg/상품(10).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('tree cookie tool','4500','/storage/itemImg/상품(11).jpg','/storage/itemImg/상품(11).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_twinkle','4600','/storage/itemImg/상품(12).jpg','/storage/itemImg/상품(12).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_bell','5000','/storage/itemImg/상품(13).jpg','/storage/itemImg/상품(13).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_horse','15700','/storage/itemImg/상품(14).jpg','/storage/itemImg/상품(14).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('ornament_red','5900','/storage/itemImg/상품(15).jpg','/storage/itemImg/상품(15).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('red candle set','22000','/storage/itemImg/상품(16).jpg','/storage/itemImg/상품(16).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('christmas card','3000','/storage/itemImg/상품(17).jpg','/storage/itemImg/상품(17).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('dishes','18200','/storage/itemImg/상품(18).jpg','/storage/itemImg/상품(18).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('tree wrapper','4000','/storage/itemImg/상품(19).jpg','/storage/itemImg/상품(19).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('wrapper set','8000','/storage/itemImg/상품(20).jpg','/storage/itemImg/상품(20).jpg',100,NOW());
-INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
-VALUES ('wrapper set','40000','/storage/itemImg/상품(21).jpg','/storage/itemImg/상품(21).jpg',100,NOW());
 

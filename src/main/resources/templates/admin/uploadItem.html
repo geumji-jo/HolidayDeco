@@ -5,7 +5,11 @@
 <link rel="stylesheet" th:href="@{/css/admin.css}">
 <link rel="stylesheet" th:href="@{/css/font.css}">
 <link rel="stylesheet" th:href="@{/css/uploadItem.css}">
-
+<style>
+ #itemTitle, #itemPrice, #itemStock {
+        text-align: center;
+    }
+</style>
 <body>
   <div>
     <div id="header">
@@ -54,8 +58,6 @@
         <label for="itemDetailImg">상세이미지</label>
         <input type="file" name="itemDetailImg" id="itemDetailImg" required="required">
     </div>
-
-
          <div class="btn">
             <button>상품 등록</button>
          </div>

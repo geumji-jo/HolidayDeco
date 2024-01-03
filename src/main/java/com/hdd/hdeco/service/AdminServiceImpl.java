@@ -82,9 +82,6 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 
-	
-	
-
 
 	@Transactional
 	@Override
@@ -182,5 +179,77 @@ public class AdminServiceImpl implements AdminService {
 		int deleteResult = adminMapper.deleteItem(itemNo);
 		return deleteResult;
 	}
+	
+	@Override
+	public void getItemEdit(HttpServletRequest request, Model model) {
+		
+		 int itemNo = Integer.parseInt(request.getParameter("itemNo"));
+		
+		model.addAttribute("itemList", adminMapper.getItemByNo(itemNo));
+		System.out.println("서비스 임플에 값 : " + model);
+		
+	}
+	
+	@Override
+	public int itemModify(MultipartHttpServletRequest multipartRequest) throws Exception {
+	    // 상품명, 상품 가격, 재고
+	    String itemTitle = multipartRequest.getParameter("itemTitle");
+	    String itemPrice = multipartRequest.getParameter("itemPrice");
+	    int itemStock = Integer.parseInt(multipartRequest.getParameter("itemStock"));
+	    int itemNo = Integer.parseInt(multipartRequest.getParameter("itemNo"));
 
+	    ItemDTO itemDTO = new ItemDTO();
+	    itemDTO.setItemTitle(itemTitle);
+	    itemDTO.setItemPrice(itemPrice);
+	    itemDTO.setItemStock(itemStock);
+	    itemDTO.setItemNo(itemNo);
+
+	    MultipartFile mainImgFile = multipartRequest.getFile("itemMainImg");
+	    if (mainImgFile != null && !mainImgFile.isEmpty()) {
+	        // 첨부파일 HDD에 저장하는 코드
+	        String path = myFileUtil.getPath();
+	        String mainImgFilename = myFileUtil.getFilesystemName(mainImgFile.getOriginalFilename());
+	        File dir = new File(path);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // UUID를 사용하여 고유한 파일명 생성
+	        String uniqueFilename = UUID.randomUUID().toString() + "_" + mainImgFilename;
+
+	        // 새로운 파일 경로
+	        String fullFilePath = path + "/" + uniqueFilename; 
+	        Path filePath = Paths.get(fullFilePath).toAbsolutePath();
+	        mainImgFile.transferTo(filePath.toFile());
+	        itemDTO.setItemMainImg(fullFilePath);
+	    }
+
+	    MultipartFile detailImgFile = multipartRequest.getFile("itemDetailImg");
+	    if (detailImgFile != null && !detailImgFile.isEmpty()) {
+	        // 첨부파일 HDD에 저장하는 코드
+	        String path = myFileUtil.getPath();
+	        String detailImgFilename = myFileUtil.getFilesystemName(detailImgFile.getOriginalFilename());
+	        File dir = new File(path);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // UUID를 사용하여 고유한 파일명 생성
+	        String uniqueFilename = UUID.randomUUID().toString() + "_" + detailImgFilename;
+
+	        // 새로운 파일 경로
+	        String fullFilePath = path + "/" + uniqueFilename; 
+	        Path filePath = Paths.get(fullFilePath).toAbsolutePath();
+	        detailImgFile.transferTo(filePath.toFile());
+	        itemDTO.setItemDetailImg(fullFilePath);
+	    }
+	    int modifyResult = adminMapper.modifyItem(itemDTO);
+
+	    return modifyResult;
+	}
+
+	@Override
+	public List<ItemDTO> searchItem(String query) {
+		return adminMapper.searchItem(query);
+	}
 }

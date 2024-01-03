@@ -1,4 +1,6 @@
 package com.hdd.hdeco.controller;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.service.AdminService;
 
 import lombok.RequiredArgsConstructor;	
@@ -67,6 +70,26 @@ public class AdminController {
 		redirectAttributes.addFlashAttribute("removeResult", removeResult);
 		return "redirect:/admin/itemManageList.do";
 	}
+	
+	 @GetMapping("/itemEdit.do")
+   public String itemEdit(HttpServletRequest request, Model model) {
+      adminService.getItemEdit(request, model);
+      return "admin/itemEdit";
+   }
+	
+	 // 상품 수정 
+	 @PostMapping("/itemModify.do")
+	 public String itemModify(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+	 	 adminService.itemModify(multipartRequest);
+	     return "redirect:/admin/itemManageList.do";
+	 }
+	 
+		@GetMapping("/manageSearch.do") public String searchItem(@RequestParam(value="query") String query, Model model) { 
+			// 검색 로직 구현 및 결과를 모델에 추가 
+			List<ItemDTO>searchResult = adminService.searchItem(query); 
+		  model.addAttribute("itemList",searchResult);
+		  return "admin/itemManageList"; 
+		 }
   
  }
   
