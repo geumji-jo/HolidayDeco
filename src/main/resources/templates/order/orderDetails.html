@@ -48,32 +48,6 @@ $(document).ready(function () {
 
         $('.totalOrderAmount').val(totalOrderAmount);
         $('.totalOrderAmount').text(totalOrderAmount.toLocaleString() + "원");
-
-        var payButtons = document.querySelectorAll('.btn-payMethod-group .payMethod input[type="button"]');
-        var hiddenInput = document.querySelector('.btn-payMethod-group input[name="payMethod"]');
-
-        payButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var payMethod = button.name; // 버튼의 아이디를 가져옴
-
-                // 모든 버튼의 배경색을 어두운 회색으로 변경
-                payButtons.forEach(function (btn) {
-                    btn.style.backgroundColor = "#CBCBCB";
-                });
-
-                // 클릭한 버튼에 따라 배경색을 설정
-                if (payMethod === "1") {
-                    button.style.backgroundColor = "#54CE9A"; // nPay 색상으로 변경
-                } else if (payMethod === "3") {
-                    button.style.backgroundColor = "#EB5858"; // import 색상으로 변경
-                } else if (payMethod === "2") {
-                    button.style.backgroundColor = "#FCF77B"; // kPay 색상으로 변경
-                }
-
-                hiddenInput.value = payMethod;
-                console.log("payMethod:", payMethod);
-            });
-        }); // payButtons.forEach
     }
 }); // $(document).ready : 총금액 산정 및 버튼 클릭 
 
@@ -108,7 +82,6 @@ var roadAddress = $("#roadAddress").val();
 // 상세주소 
 var detailAddress = $("#detailAddress").val();
 // 결제 수단 (카카오페이 1, 네이버페이2, 신용카드 3)           
-var payMethod = $('.btn-payMethod-group input[name="payMethod"]').val();
 // userNo
 var userNo = $("#userNo").val();
 var orderDate = new Date();
@@ -122,7 +95,6 @@ console.log("mobile:", mobile);
 console.log("postcode:", postcode);
 console.log("roadAddress:", roadAddress);
 console.log("detailAddress:", detailAddress);
-console.log("payMethod:", payMethod);
 console.log("orderDate:", orderDate);
 
 IMP.request_pay({
@@ -166,11 +138,15 @@ $(function() {
     });
 
     $('#btnPay').on('click', function() {
-        if ($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == '') {
-            alert('배송 정보를 입력해주세요.');
+    	var selectedPayment = $('input[name="payMethod"]:checked');
+        if ($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == ''|| selectedPayment.length === 0) {
+        	alert('배송 정보 및 결제 수단을 입력해주세요.');
             return;
         } else {
+        	  // 선택된 결제 수단의 값을 가져옴
+            var selectedPayMethod = $('input[name="payMethod"]:checked').val();
             if(confirm('작성하신 정보로 주문하시겠습니까?')) {
+            	 if(selectedPayMethod === '3') {
                 $.ajax({
                   type: 'post',
                   url: '/order/insertOrder.do',
@@ -202,7 +178,24 @@ $(function() {
                     alert('결제에 실패했습니다.');
                   }
                 })
-                
+                }
+             else if(selectedPayMethod === '1') {
+                // 카카오페이 api 구현
+                  $.ajax({
+                      type: 'post',
+                      url: '/pay/kakaopayReady.do',
+                      data: $('#frmPay').serialize(),
+                      dataType: 'json',
+                      success: function(resData) {
+                        
+                      },
+                      error: function(jqXHR) {
+                        alert('결제에 실패했습니다.');
+                      }
+                    })
+              } else if (selectedPayMethod === '2') {
+                alert('네이버페이아직안함.');
+              }
               }else{
                 event.preventDefault();
                 return;
@@ -241,7 +234,7 @@ $(function() {
               </th:block>
             </div>
             <hr>
-         <form id="frmPay" method="post" th:action="@{/order/insertOrder.do}">
+         <form id="frmPay" method="post">
         <div class="orderReceiverInfo">
         <div class="orderInfoSection" style="width:420px;">
          <h4 class="infoTitle">주문자</h4>
@@ -293,8 +286,28 @@ $(function() {
                   <input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소" />
                 </div>
               </div>
-                <div class="payInfoLine" style="margin-top:30px;">
-                <h4 class="infoTitle" style="margin-right: 200px;">총 결제 금액</h4>
+               
+               
+        </div>
+            <div class="mainPayment">
+              <h4 class="infoTitle">결제 상세</h4>
+              <div class="paymentDetailSection" style="width: 400px; height: 150px; border: 1px solid black; border-radius: 10px; margin-top: 10px;">
+                <div class="DetailPrice" style="display: flex; justify-content: space-around; ">
+                  <div class="payInfoArea">
+                    <div class="payPriceArea"
+                      style="text-align: center; line-height: 30px; margin-top: 45px;">
+                      <div class="priceBox">
+                        <span style="margin-right: 150px; letter-spacing: 4px; ">총 주문금액</span> <span class="totalProductAmount"></span>
+                        <br> <span style="margin-right: 150px; letter-spacing: 23px;">배송비</span>
+                        <span class="deliveryFee"></span>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+               <div class="payInfoLine" style="margin-top:30px;">
+                <h4 class="infoTitle" style="margin-right: 170px; margin-left: 35px;">총 결제 금액</h4>
                 <div class="payInfoArea">
                   <div class="payPriceArea">
                  <div class="totalPrice"  style="font-weight: bold; color:#EB5858;">
@@ -304,51 +317,29 @@ $(function() {
                  </div>
             </div>
          </div>
-                <hr style="width:380px;">
-            <div class=btn-payMethod-group>결제 수단
-                <div class="payMethod">
-                 <input type="hidden" name="payMethod" th:value="1" />
-                 <input type="button" value="카카오페이" id="kPay" name="1" />
+          <hr style="width:400px;">
+            <div class="paymentGroup">결제 수단
+                <div class="kakaoPay">
+                 <input type="radio" value="1" id="kPay" name="payMethod"/>
+                 <label for="kPay">카카오페이</label>
                 </div>
-                <div class="payMethod">
-                 <input type="hidden" name="payMethod" th:value="2"/>
-                    <input type="button" value="N페이" id="nPay"  name="2"/>
+                <div class="naverPay">
+                  <input type="radio" value="2" id="nPay"  name="payMethod"/>
+                  <label for="nPay">N페이</label>
                 </div>
-                <div class="payMethod">
-                 <input type="hidden" name="payMethod" th:value="3"/>
-                  <input type="button" value="일반카드" id="import" name="3"/>
-                  
+                <div class="creditCard">
+                  <input type="radio" value="3" id="import"  name="payMethod"/>
+                  <label for="import">일반카드</label>
                 </div>
             </div>
-        </div>
-            <div class="mainPayment">
-              <h4 class="infoTitle">결제 상세</h4>
-              <div class="paymentDetailSection" style="width: 420px; height: 480px; border: 1px solid black; border-radius: 10px; margin-top: 10px;">
-                <div class="DetailPrice" style="display: flex; justify-content: space-around; margin-top: 100px; margin-bottom: 100px;">
-                  <div class="payInfoArea">
-                    <div class="payPriceArea"
-                      style="text-align: center; line-height: 30px; margin-top: 60px;">
-                      <div class="priceBox">
-                        <span style="margin-right: 29px; letter-spacing: 4px;">총 주문금액</span> <span class="totalProductAmount"></span>
-                        <br> <span style="margin-right: 10px; letter-spacing: 27px;">배송비</span>
-                        <span class="deliveryFee"></span>
-                      </div>
-                      <hr style="width: 340px; margin-left:25px;">
-                      <div></div>
-                      <div class="all" style="display:flex; align-items:baseline; width: 400px; justify-content:center;">
-                       <input type="hidden"  name="orderTotal" th:value="${orderTotal}">
-                        <span style="letter-spacing: 4px; width: 130px;">총 결제금액</span><input type="text" class="totalOrderAmount" style="border-bottom:none; width:50px; margin-left:10px; font-size:15px;">원
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <hr style="width:400px;">
               <div class="btn-forward-group">
                 <div class="goBack">
                   <input type="button" value="돌아가기" id="goBack"
                     onclick="history.back()" />
                 </div>
                 <div class="purchase">
+                  
                   <input type="hidden" id="userNo" name="userNo" th:value="${orderUser.userNo}" />
                   <button type="button" id="btnPay" >결제하기</button>
                 </div>
@@ -356,6 +347,20 @@ $(function() {
             </div>
           </div>
             </form>
+           <!--  <script>
+    document.getElementById("btnPay").addEventListener("click", function() {
+        const selectedPaymentMethod = document.querySelector('input[name="payMethod"]:checked').value;
+        const form = document.getElementById("frmPay"); // form 요소를 id로 찾습니다.
+
+        if (selectedPaymentMethod == 1) {
+            form.action = "/pay/kakaopayReady.do"; // 카카오페이 선택 시 URL 설정
+        } else if (selectedPaymentMethod == 3) {
+            form.action = "/order/insertOrder.do"; // 일반카드 선택 시 URL 설정
+        }
+
+        form.submit(); // 선택된 결제 수단에 따라 적절한 URL로 폼을 제출
+    });
+</script> -->
         </div>
         </div>
     </div>

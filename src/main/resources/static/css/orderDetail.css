@@ -144,38 +144,7 @@ input[type="button"] {
 
 }
 
-#kPay {
-  width: 85px;
-  height: 36px;
-  border: 1px solid black;
-  border-radius: 20px;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  background-color:  #CBCBCB;
-}
 
-#nPay {
-  width: 85px;
-  height: 36px;
-  border: 1px solid black;
-  border-radius: 20px;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #CBCBCB;
-}
-
-#import {
-  width: 85px;
-  height: 36px;
-  border: 1px solid black;
-  border-radius: 20px;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #CBCBCB;
-}
 
 .btn-forward-group {
   display: flex;
@@ -218,3 +187,101 @@ input[type="button"] {
     width:900px;
   }
 
+/*
+---------------------------------------
+라디오버튼
+---------------------------------------
+*/
+
+.kakaoPay {
+  width: 100px;
+  border: 1px solid #EAE7E7;
+  border-radius: 10px;
+  display:inline-block;
+  margin:0px 0 0 0;
+  cursor: pointer;
+  background-color: #EAE7E7;
+}
+    
+.naverPay {
+  width: 100px;
+  border: 1px solid #EAE7E7;
+  border-radius: 10px;
+  display:inline-block;
+  margin:0px 0 0 0;
+  cursor: pointer;
+  background-color: #EAE7E7;
+}
+    
+.creditCard {
+  width: 100px;
+  border: 1px solid #EAE7E7;
+  border-radius: 10px;
+  display:inline-block;
+  margin:0px 0 0 0;
+  cursor: pointer;
+  background-color: #EAE7E7;
+}
+.kakaoPay input[type=radio], .naverPay input[type=radio], .creditCard input[type=radio]{
+  display: none;
+}
+.kakaoPay label, .naverPay label, .creditCard label {
+  display: block;
+  border-radius: 10px;
+  text-align: center;
+  height: -webkit-fill-available;
+  line-height: 40px;
+}
+     
+/* Checked */
+.kakaoPay input[type=radio]:checked + label {
+  background: #F6F05D;;
+  border: 1px solid #F6F05D;;
+  color: black;
+  
+}
+/* Checked */
+.naverPay input[type=radio]:checked + label {
+  background: #36C176;;
+  border: 1px solid #36C176;;
+  color: black;
+  
+}
+/* Checked */
+.creditCard input[type=radio]:checked + label {
+  background: #d66767;
+  border: 1px solid #d66767;
+  color: black;
+  
+}
+
+/* Hover */
+.kakaoPay input[type=radio]:hover + label {
+  background: rgb(254, 241, 1);
+  cursor: pointer;
+  color: black;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+ /* Hover */
+.naverPay input[type=radio]:hover + label {
+  background: #00b300;
+  cursor: pointer;
+  color: black;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+ /* Hover */
+.creditCard input[type=radio]:hover + label {
+  background: #ff6666;
+  cursor: pointer;
+  color: black;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.paymentGroup {
+margin-bottom:30px;
+}
+/*
+---------------------------------------
+라디오버튼끝
+---------------------------------------
+*/
