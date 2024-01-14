@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+    <div th:replace="~{/layout/header::gnbFrag}"></div>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<style>
+
+</style>
+<body>
+    <section id="content">
+        <ul class="orderList">
+            <th:block th:each="orderItem : ${orderList}">
+                <li>
+                    <div>
+                        <p><span>주문번호 <a th:href="@{/admin/manageOrderView.do(n=${orderItem.itemOrderNo})}" th:text="${orderItem.itemOrderNo}"></a></span></p>
+                        <p><span>수령인 <span th:text="${orderItem.name}"></span></span></p>
+                        <p><span>주소 (<span th:text="${orderItem.postcode}"></span>) <span th:text="${orderItem.roadAddress}"></span> <span th:text="${orderItem.detailAddress}"></span></p>
+                        <p><span>가격 <span th:text="${#numbers.formatDecimal(orderItem.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></p>
+                        <p><span>상태 <span th:text="${orderItem.delivery}"></span></span></p>
+                    </div>
+                </li>
+                 
+            </th:block>
+        </ul>
+    </section>
+    <div th:replace="~{/layout/footer::footerFrag}"></div>
+</body>
+</html>

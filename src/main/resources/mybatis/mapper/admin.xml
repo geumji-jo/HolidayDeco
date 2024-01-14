@@ -70,6 +70,7 @@
 		WHERE ITEM_NO = #{itemNo}
 	</update>
 	
+	<!-- 상품 검색 -->
 	 <select id="searchItem" parameterType="String" resultType="ItemDTO">
       SELECT * 
       FROM ITEM_T
@@ -79,5 +80,34 @@
           </if>
       </where> 
   </select>
+  
+  <!-- 모든 사용자 주문 정보 -->
+    <select id="orderList" resultType="ItemOrderDTO">
+    SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY
+    FROM ITEM_ORDER_T
+  </select>
 	
+	  <!-- 특정 주문 목록  -->
+  <select id="orderView" resultType="OrderListDTO">
+  SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.DELIVERY,
+    B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
+  FROM ITEM_ORDER_T A 
+    INNER JOIN ORDER_DETAIL_T B
+    ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
+  WHERE A.ITEM_ORDER_NO = #{itemOrderNo}
+  </select>
+  
+  <!-- 배송 상태 -->
+	<update id="deliveryStatus" parameterType="Map">
+	 UPDATE ITEM_ORDER_T
+	     SET DELIVERY = #{delivery}
+	 WHERE ITEM_ORDER_NO = #{itemOrderNo}
+	</update>
+	
+	<!-- 상품 수량 조절 -->
+	<update id="UpdateItemStock" parameterType="ItemDTO">
+	 UPDATE ITEM_T
+	    SET ITEM_STOCK = ITEM_STOCK - #{itemStock}
+	 WHERE ITEM_NO = #{itemNo}
+	</update>
 </mapper>

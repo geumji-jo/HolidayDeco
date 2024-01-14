@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.hdd.hdeco.domain.ItemDTO;
+import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderListDTO;
 
 @Mapper
 public interface AdminMapper {
@@ -30,4 +32,16 @@ public interface AdminMapper {
 	
 	// 검색
 	List<ItemDTO> searchItem(String query);
+	
+	// 주문 목록
+	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
+	
+	// 특정 주문 목록
+	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
+	
+	// 배송 상태 
+	public void deliveryStatus (Map<String, Object> map);
+	
+	// 상품 재고 업데이트
+	public int UpdateItemStock(ItemDTO itemDTO);
 }

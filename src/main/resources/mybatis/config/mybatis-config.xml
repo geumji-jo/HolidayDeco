@@ -18,8 +18,9 @@
 		<typeAlias alias="SleepUserDTO" type="com.hdd.hdeco.domain.SleepUserDTO" />
 		<typeAlias alias="CartDTO" type="com.hdd.hdeco.domain.CartDTO" />
 		<typeAlias alias="ItemDTO" type="com.hdd.hdeco.domain.ItemDTO" />
-		<typeAlias alias="CartDetailDTO" type="com.hdd.hdeco.domain.CartDetailDTO" />
 		<typeAlias alias="ItemOrderDTO" type="com.hdd.hdeco.domain.ItemOrderDTO" />
+		<typeAlias alias="OrderDetailDTO" type="com.hdd.hdeco.domain.OrderDetailDTO" />
+		<typeAlias alias="OrderListDTO" type="com.hdd.hdeco.domain.OrderListDTO" />
 	</typeAliases>
 
 </configuration>

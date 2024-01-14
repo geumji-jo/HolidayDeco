@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hdd.hdeco.domain.ItemDTO;
+import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderListDTO;
 
 public interface AdminService {
 
@@ -22,4 +24,8 @@ public interface AdminService {
   public void getItemEdit(HttpServletRequest request, Model model);	
   public int itemModify(MultipartHttpServletRequest multipartRequest) throws Exception;
   List<ItemDTO> searchItem(String query);
+	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
+	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
+	public void deliveryStatus(String itemOrderNo, String delivery);
+	public void UpdateItemStock(ItemDTO itemDTO);
 }

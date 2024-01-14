@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemOrderDTO {
+public class OrderListDTO {
 	private String ItemOrderNo;
 	private Date orderDate;
 	private String name;
@@ -23,11 +23,16 @@ public class ItemOrderDTO {
 	private int payNo;
 	private int payMethod;
 	private int paySuccess;
-  private int quantity;
-  private String delivery;
 	private String impUid;
 	private int cartNo;
-	private int itemNo;
-	private int userNo;
 
+	private int orderDetailNo;
+	private int userNo;
+	private int itemNo;
+	private int quantity;
+	private String itemTitle;
+	private String itemPrice;
+	private String itemMainImg;
+
+	private String delivery;
 }

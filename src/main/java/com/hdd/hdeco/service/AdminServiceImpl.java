@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hdd.hdeco.domain.ItemDTO;
+import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.mapper.AdminMapper;
 import com.hdd.hdeco.util.MyFileUtil;
 import com.hdd.hdeco.util.PageUtil;
@@ -251,5 +253,29 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<ItemDTO> searchItem(String query) {
 		return adminMapper.searchItem(query);
+	}
+	
+	@Override
+	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception {
+		return adminMapper.orderList(itemOrderDTO);
+	}
+	
+	@Override
+	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception {
+		return adminMapper.orderView(itemOrderDTO);
+	}
+	
+	@Override
+	public void deliveryStatus(String itemOrderNo, String delivery) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("itemOrderNo", itemOrderNo);
+		map.put("delivery", delivery);
+		adminMapper.deliveryStatus(map);
+	}
+	
+	
+	@Override
+	public void UpdateItemStock(ItemDTO itemDTO) {
+		adminMapper.UpdateItemStock(itemDTO);
 	}
 }
