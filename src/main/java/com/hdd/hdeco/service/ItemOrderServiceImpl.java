@@ -2,7 +2,9 @@
 package com.hdd.hdeco.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.hdd.hdeco.domain.CartDTO;
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderDetailDTO;
+import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.CartMapper;
 import com.hdd.hdeco.mapper.ItemOrderMapper;
@@ -31,7 +35,15 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.insertOrder(itemOrderDTO);
 		return itemOrderMapper.selectUserOrder(itemOrderDTO.getUserNo());
 	}
+	
+	
+	@Override
+	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
+		itemOrderMapper.insertOrderDetail(orderDetailDTO);
+	}
 
+
+	
 	// user정보 조회 : 아이디를 통해 userNo 확인 
 	@Override
 	public UserDTO getUserInfo(HttpServletRequest request) {
@@ -43,6 +55,8 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		return itemOrderMapper.getUserByUserNo(userNo);
 	}
 
+	
+	
 	@Override
 	public List<CartDTO> getSelectItemList(HttpServletRequest request) {
 		String[] items = request.getParameter("selectedItems").split(",");
@@ -68,12 +82,26 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.deleteCartByUserNo(userNo);
 	}
 	
-	// 결제실패 (Enroll 삭제)
+	@Override
+	public void orderInfo(ItemOrderDTO itemOrderDTO) throws Exception {
+		itemOrderMapper.orderInfo(itemOrderDTO);
+	}
+	
+	@Override
+	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception {
+		return itemOrderMapper.orderList(itemOrderDTO);
+	}
+	
+	@Override
+	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception {
+		return itemOrderMapper.orderView(itemOrderDTO);
+	}
+	
+	
+	// 결제실패
 	@Override
 	public void deleteOrder(HttpServletRequest request) {
 		int itemOrderNo = Integer.parseInt(request.getParameter("itemOrderNo"));
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
-	
-	
 }

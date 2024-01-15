@@ -61,7 +61,7 @@ a {
 }
 
 body, #onlyContent {
-  height: 3333px;
+  height: 100%;
 }
 
 .side-bar {

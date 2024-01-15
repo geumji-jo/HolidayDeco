@@ -5,8 +5,11 @@
 
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.hdd.hdeco.mapper.ItemOrderMapper">
+
+<!-- 주문 정보 -->
 <insert id="insertOrder" parameterType="ItemOrderDTO">
   INSERT INTO ITEM_ORDER_T (
+    ITEM_ORDER_NO,
     USER_NO,
     ORDER_DATE,
     NAME,
@@ -16,7 +19,9 @@
     DETAIL_ADDRESS,
     ORDER_TOTAL,
     PAY_METHOD
+    
 ) VALUES (
+    #{itemOrderNo},
     #{userNo},
     NOW(),
     #{name},
@@ -30,6 +35,7 @@
 
 </insert>
 
+
   <select id="selectUserOrder" parameterType="int" resultType="ItemOrderDTO">
     SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS ,ORDER_TOTAL, PAY_METHOD
       FROM (SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD
@@ -39,6 +45,32 @@
               LIMIT 1) AS A
   </select>
   
+  <!-- 주문 상세 정보 -->
+  <insert id="insertOrderDetail" parameterType="OrderDetailDTO">
+   INSERT INTO ORDER_DETAIL_T (USER_NO, ITEM_ORDER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG)
+		SELECT USER_NO, #{itemOrderNo},ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+		FROM CART_T
+  </insert> 
+
+  
+  <!-- 특정 사용자의 주문 목록 -->
+  <select id="orderList" resultType="ItemOrderDTO">
+    SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY
+    FROM ITEM_ORDER_T
+    WHERE USER_NO = #{userNo}
+  </select>
+
+  <!-- 특정 주문 목록  -->
+  <select id="orderView" resultType="OrderListDTO">
+  SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.DELIVERY,
+    B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
+  FROM ITEM_ORDER_T A 
+    INNER JOIN ORDER_DETAIL_T B
+    ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
+  WHERE A.USER_NO = #{userNo}
+    AND A.ITEM_ORDER_NO = #{itemOrderNo}
+  </select>
+
   <select id="getUserByUserNo" parameterType="int" resultType="UserDTO">
     SELECT USER_NO, NAME, EMAIL, MOBILE
     FROM USER_T
@@ -58,18 +90,19 @@
   </select>
   
   
-    <!-- 주문 후 카트 삭제 -->
+  <!-- 카트 비우기 -->
   <delete id="deleteCartByUserNo" parameterType="int">
     DELETE FROM CART_T
      WHERE USER_NO = #{userNo}
   </delete>
   
   
-    <!-- 결제취소 -->
+  <!-- 결제취소 -->
   <delete id="deleteOrder" parameterType="int">
     DELETE FROM ITEM_ORDER_T
       WHERE ITEM_ORDER_NO = #{itemOrderNo}
   </delete>
   
+   
   
 </mapper>

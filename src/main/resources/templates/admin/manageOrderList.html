@@ -1,32 +1,85 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
-    <div th:replace="~{/layout/header::gnbFrag}"></div>
-    <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
-</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<link rel="stylesheet" th:href="@{/css/font.css}">
 <style>
+table {
+  width: 900px;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin: auto;
+}
+
+th, td {
+  border-bottom: 3px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.orderList tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* 배송 상태에 따른 클래스 추가 */
+.status-ready, .status-in-transit {
+  color: red;
+}
+
+.status-complete {
+  color: green;
+}
+
 
 </style>
 <body>
-    <section id="content">
-        <ul class="orderList">
-            <th:block th:each="orderItem : ${orderList}">
-                <li>
-                    <div>
-                        <p><span>주문번호 <a th:href="@{/admin/manageOrderView.do(n=${orderItem.itemOrderNo})}" th:text="${orderItem.itemOrderNo}"></a></span></p>
-                        <p><span>수령인 <span th:text="${orderItem.name}"></span></span></p>
-                        <p><span>주소 (<span th:text="${orderItem.postcode}"></span>) <span th:text="${orderItem.roadAddress}"></span> <span th:text="${orderItem.detailAddress}"></span></p>
-                        <p><span>가격 <span th:text="${#numbers.formatDecimal(orderItem.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></p>
-                        <p><span>상태 <span th:text="${orderItem.delivery}"></span></span></p>
-                    </div>
-                </li>
-                 
-            </th:block>
-        </ul>
+
+<div id="header">
+      <div class="adminheader">
+        <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
+        <a class="logout" th:href="@{/user/logout.do}">
+        <i class="fad fa-sign-out-alt" style="-fa-primary-color: #878787; --fa-secondary-color: #0d0d0d; --fa-secondary-opacity: 1;"></i></a>
+      </div>
+      <div id="container-title">
+        <h3>
+          <a th:href="@{/admin/adminPageHome.html}"> adminPage </a>
+        </h3>
+      </div>
+      <hr class="separator separator--line--green" />
+      <hr class="separator separator--line--red" />
+    </div>
+    <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
+    <div id="onlyContent" style="margin-bottom:30px; height:700px;">
+      <h2></h2>
+      <br>
+      <section id="content">
+        <table class="orderList">
+            <thead>
+                <tr>
+                    <th>주문번호</th>
+                    <th>수령인</th>
+                    <th>주소</th>
+                    <th>가격</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="orderItem : ${orderList}">
+                    <tr>
+                        <td><a th:href="@{/admin/manageOrderView.do(n=${orderItem.itemOrderNo})}" th:text="${orderItem.itemOrderNo}"></a></td>
+                        <td><span th:text="${orderItem.name}"></span></td>
+                        <td>(<span th:text="${orderItem.postcode}"></span>) <span th:text="${orderItem.roadAddress}"></span> <span th:text="${orderItem.detailAddress}"></span></td>
+                        <td><span th:text="${#numbers.formatDecimal(orderItem.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></td>
+                         <td th:class="${orderItem.delivery == '배송준비' ? 'status-ready' : (orderItem.delivery == '배송 중' ? 'status-in-transit' : (orderItem.delivery == '배송완료' ? 'status-complete' : ''))}">
+                            <span th:text="${orderItem.delivery}"></span>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
     </section>
-    <div th:replace="~{/layout/footer::footerFrag}"></div>
+      </div>
 </body>
 </html>
+

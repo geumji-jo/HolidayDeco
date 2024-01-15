@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -112,7 +111,7 @@ public class AdminController {
 		}
 
 	  // 주문 상세 목록 - 상태 변경
-		@PostMapping(value="/orderView.do")
+		@PostMapping(value="/manageOrderView.do")
 		public String deliveryStatus(@RequestParam("itemOrderNo") String itemOrderNo, @RequestParam("delivery") String delivery,  ItemOrderDTO itemOrderDTO) throws Exception{
 		 adminService.deliveryStatus(itemOrderNo, delivery);
 		 List<OrderListDTO> orderView = adminService.orderView(itemOrderDTO); 
@@ -124,7 +123,7 @@ public class AdminController {
 			 itemDTO.setItemStock(i.getQuantity());
 		  adminService.UpdateItemStock(itemDTO);
 		 }
-		 return "redirect:/admin/orderView.do?n=" + itemOrderNo;
+		 return "redirect:/admin/manageOrderView.do?n=" + itemOrderNo;
 		}
   
  }

@@ -1,80 +1,168 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
-    <div th:replace="~{/layout/header::gnbFrag}"></div>
-    <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
-</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<link rel="stylesheet" th:href="@{/css/font.css}">
 <style>
- .orderInfo { border:5px solid #eee; padding:10px 20px; margin:20px 0;}
- .orderInfo span { font-size:20px; font-weight:bold; display:inline-block; width:90px; }
- 
- .orderView li { margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #999; }
- .orderView li::after { content:""; display:block; clear:both; }
- 
- .MainImg { float:left; width:200px; }
- .MainImg img { width:200px; height:200px; }
- .gdsInfo { float:right; width:calc(100% - 220px); line-height:2; }
- .gdsInfo span { font-size:20px; font-weight:bold; display:inline-block; width:100px; margin-right:10px; }
-.deliveryChange { text-align:right; }
-.delivery1_btn,
-.delivery2_btn { font-size:16px; background:#fff; border:1px solid #999; margin-left:10px; }
+
+.orderInfo {
+  border: 5px solid #eee;
+  padding: 10px 20px;
+  margin: 20px 0;
+  width: 800px;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 50px;
+}
+
+.orderInfo span {
+  font-size: 20px;
+}
+
+.orderInfo p {
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+.orderView li {
+  width: 850px;
+  margin: auto;
+  text-align: center;
+}
+
+.orderView li::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.MainImg {
+  float: left;
+}
+
+.MainImg img {
+  width: 200px;
+  height: 130px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.gdsInfo {
+  width: 40px; /* 이미지와 텍스트를 합친 영역의 너비 */
+  display: inline-block; /* 이미지와 텍스트를 인라인으로 정렬 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+
+.gdsInfo span {
+  font-size: 20px;
+}
+
+.deliveryChange {
+  text-align: right;
+}
+
+.delivery1_btn, .delivery2_btn {
+  font-size: 16px;
+  background: #fff;
+  border: 1px solid #999;
+  margin-left: 10px;
+}
 </style>
 <body>
+<div id="header">
+      <div class="adminheader">
+        <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
+        <a class="logout" th:href="@{/user/logout.do}">
+        <i class="fad fa-sign-out-alt" style="-fa-primary-color: #878787; --fa-secondary-color: #0d0d0d; --fa-secondary-opacity: 1;"></i></a>
+      </div>
+      <div id="container-title">
+        <h3>
+          <a th:href="@{/admin/adminPageHome.html}"> adminPage </a>
+        </h3>
+      </div>
+      <hr class="separator separator--line--green" />
+      <hr class="separator separator--line--red" />
+    </div>
+    <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
+    <div id="onlyContent" style="margin-bottom:30px;">
+      <br>
     <section id="content">
-        <div class="orderInfo" th:each="orderView : ${orderView}">
-            <p><span>수령인<span th:text="${orderView.name}"></span></span></p>
-            <p><span>배송지 (<span th:text="${orderView.postcode}"></span>) <span th:text="${orderView.roadAddress}"></span> <span th:text="${orderView.detailAddress}"></span></p>
-            <p><span>총 결제 금액 <span th:text="${#numbers.formatDecimal(orderView.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></p>
-           <div class="deliveryChange">
-                <form role="form" method="post" class="deliveryForm">
-                
-                  <input type="hidden" name="itemOrderNo" th:value="${orderView.itemOrderNo}" />
-                  <input type="hidden" name="delivery" class="delivery" value="" />
-                  
-                  <button type="button" class="delivery1_btn">배송 중</button>
-                  <button type="button" class="delivery2_btn">배송 완료</button>
-                  
-                  <script>
-                    $(".delivery1_btn").click(function(){
-                      $(".delivery").val("배송 중");
-                      run();
-                    });
-                    
-                    $(".delivery2_btn").click(function(){
-                      $(".delivery").val("배송 완료");
-                      run();
-                      
-                    });
-                    
-                    function run(){
-                      $(".deliveryForm").submit();
-                    }
-                  
-                  </script>
-                </form>
-        </div>
-        
-        <ul class="orderView" th:each="orderItem : ${orderView}">
-            <li>
-                <div class="MainImg">
-                            <a th:href="@{/item/detail.do(itemNo=${orderItem.itemNo})}">
-                                <img th:src="@{/admin/display.do(itemNo=${orderItem.itemNo})}" class="photo_image">
-                            </a>
-                        </div>
-                <div class="gdsInfo">
-                    <p>
-                        <span>상품명 <span th:text="${orderItem.itemTitle}"></span></span><br />
-                        <span>상품 가격 <span th:text="${#numbers.formatDecimal(orderItem.itemPrice, 0, 'COMMA', 0, 'POINT')}"></span>원</span><br />
-                        <span>구입 수량 <span th:text="${orderItem.quantity}"></span> 개</span><br />
-                        <p><span>상태 <span th:text="${orderItem.delivery}"></span></span></p>
-                    </p>
+        <th:block th:if="${orderView.size() > 0}">
+            <div class="orderInfo">
+                <p><span>수령인<span th:text="${orderView[0].name}"></span></span></p>
+                <p><span>배송지 (<span th:text="${orderView[0].postcode}"></span>) <span th:text="${orderView[0].roadAddress}"></span> <span th:text="${orderView[0].detailAddress}"></span></span></p>
+                <p><span>총 결제 금액 <span th:text="${#numbers.formatDecimal(orderView[0].orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></span></p>
+                <div class="deliveryChange">
+                    <form role="form" method="post" class="deliveryForm">
+                        <input type="hidden" name="itemOrderNo" th:value="${orderView[0].itemOrderNo}" />
+                        <input type="hidden" name="delivery" class="delivery" value="" />
+                        <button type="button" class="delivery1_btn">배송 중</button>
+                        <button type="button" class="delivery2_btn">배송완료</button>
+                    </form>
                 </div>
-            </li>
-        </ul>
+            </div>
+        </th:block>
+        <ul class="orderView">
+    <li>
+        <table class="orderItemTable">
+            <thead>
+              <tr>
+                  <th style="width: 50px;"></th>
+                  <th style="width: 150px;">상품명</th>
+                  <th style="width: 80px;">상품 가격</th>
+                  <th style="width: 100px;">구입 수량</th>
+                  <th style="width: 150px;">결제 수단</th>
+                  <th style="width: 150px;">배송 상태</th>
+              </tr>
+               <tr>
+                  <td colspan="20"><hr></td>
+                </tr>
+          </thead>
+            <tbody>
+             <th:block th:each="orderItem, vs: ${orderView}">
+                <tr>
+                    <td class="MainImg">
+                        <a th:href="@{/item/detail.do(itemNo=${orderItem.itemNo})}">
+                            <img th:src="@{/admin/display.do(itemNo=${orderItem.itemNo})}" class="photo_image">
+                        </a>
+                    </td>
+                    <td class="gdsInfo">
+                            <td><span th:text="${orderItem.itemTitle}"></span></td>
+                            <td><span th:text="${#numbers.formatDecimal(orderItem.itemPrice, 0, 'COMMA', 0, 'POINT')}"></span>원
+                            <td><span th:text="${orderItem.quantity}"></span></td>
+                            <td>
+                              <th:block th:if="${orderView[0].payMethod == 1}">카카오페이</th:block>
+                              <th:block th:if="${orderView[0].payMethod == 2}">네이버페이</th:block>
+                              <th:block th:if="${orderView[0].payMethod == 3}">일반 카드</th:block>
+                            </td>
+                            <td><span th:text="${orderItem.delivery}"></span></td>
+                </tr>
+                 <tr>
+                  <td colspan="20"><hr></td>
+                </tr>
+            </tbody>
+        </table>
+    </li>
+</ul>
+
     </section>
-    <div th:replace="~{/layout/footer::footerFrag}"></div>
+     </div>
+    <script>
+        $(".delivery1_btn").click(function(){
+            $(".delivery").val("배송 중");
+            run();
+        });
+        
+        $(".delivery2_btn").click(function(){
+            $(".delivery").val("배송완료");
+            run();
+        });
+        
+        function run(){
+            $(".deliveryForm").submit();
+        }
+    </script>
 </body>
 </html>

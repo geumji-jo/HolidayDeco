@@ -1,9 +1,6 @@
 package com.hdd.hdeco.controller;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hdd.hdeco.domain.ItemOrderDTO;
 import com.hdd.hdeco.domain.UserDTO;
+import com.hdd.hdeco.mapper.CartMapper;
+import com.hdd.hdeco.service.ItemOrderService;
+import com.hdd.hdeco.service.LikeService;
 import com.hdd.hdeco.service.UserService;
 
 import lombok.RequiredArgsConstructor;	
@@ -33,7 +33,9 @@ public class UserController {
 
   //field
   private final UserService userService;
-    
+  private final ItemOrderService itemOrderService;
+  private final LikeService likeService;
+  private final CartMapper cartMapper;
 
   // 회원가입 - 이용약관
   @GetMapping("/agree.html")
@@ -161,9 +163,13 @@ public class UserController {
   
   //마이페이지메인홈
   @GetMapping("/myPageHome.html")
-  public String mypage(HttpSession session, Model model) {  // 마이페이지로 이동
+  public String mypage(HttpSession session, Model model, ItemOrderDTO itemOrderDTO, HttpServletRequest request) throws Exception{  // 마이페이지로 이동
   	String id = (String) session.getAttribute("loginId");
   	model.addAttribute("loginUser", userService.getUserById(id));
+		int userNo = cartMapper.selectUserNobyId(id);
+		itemOrderDTO.setUserNo(userNo);
+		List<ItemOrderDTO> orderList = itemOrderService.orderList(itemOrderDTO);
+		model.addAttribute("orderList", orderList);
   	return "user/myPageHome";
   }
   
