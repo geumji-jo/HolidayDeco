@@ -63,12 +63,13 @@ var IMP = window.IMP;   // 생략 가능
 
 //결제 창 띄우기
 //신용카드
-function requestPay(userNo, itemTitle, orderTotal, name, email, mobile, postcode, roadAddress, detailAddress) {
+function requestPay(userNo, orderTotal, name, email, mobile, postcode, roadAddress, detailAddress) {
 // 가맹점 식별코드
 IMP.init("imp31738657");
 var randomNumber = Math.floor(Math.random() * 1000);
 // 총 금액       
 var orderTotal =  $('.totalOrderAmount').val();
+var itemTitle = $(".itemTitle").val();
 // 이름 
 var name = $("#userName").val();
 // 이메일
@@ -87,6 +88,7 @@ var userNo = $("#userNo").val();
 var orderDate = new Date();
 
 console.log("userNo:", userNo);
+console.log("itemNo:", itemNo);
 console.log("itemTitle:", itemTitle);
 console.log("orderTotal:", orderTotal);
 console.log("name:", name);
@@ -154,7 +156,6 @@ $(function() {
                   dataType: 'json',
                   success: function(r) {
                     console.log(r.order.orderDate + r.order.itemOrderNo);
-                    console.log(r.cartList.itemTitle);
                     console.log(r.order.orderTotal);
                     console.log(r.order.userNo);
                     console.log(r.order.name);
@@ -214,14 +215,16 @@ $(function() {
               <h4 class="infoTitle">주문 상품</h4>
             <div class="orderForm">
               <th:block th:if="${#lists.size(cartList) > 0}">
-                  <!-- Check if cartList is not empty -->
+              
                   <div class="item" th:each="item : ${cartList}">
                       <div class="MainImg">
+                        <input type="hidden" id="itemNo" name="itemNo"th:value="${item.itemNo}">
                           <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
                               <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
                           </a>
                       </div>
                       <div class="itemInfo" id="itemTitle">
+                      <input type="hidden" class="itemTitle" th:value="${item.itemTitle}" />
                           <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
                       </div>
                       <div class="itemInfo" id="itemPrice">
