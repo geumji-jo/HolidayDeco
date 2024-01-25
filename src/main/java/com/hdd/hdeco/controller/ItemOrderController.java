@@ -3,17 +3,14 @@ package com.hdd.hdeco.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,8 +45,14 @@ public class ItemOrderController {
 	private final CartService cartService;
 	private final CartMapper cartMapper;
 	
+	@Value("imp_key")
+	private String imp_key;
+
+	@Value("imp_secret")
+	private String imp_secret;
+
 	// 아임포트 토큰 (성공)
-	private IamportClient client = new IamportClient("3232467880861681","lSBFzXMaebapZaF0xpcutq4Y2UzDelbeDrNqKS8Xkz8RGKDlnz4eBBJY3PzY2rcjW3VeINQdzO5LpFwH");
+	private IamportClient client = new IamportClient("imp_key","imp_secret");
   
 	// 결제 검증 (성공) 
 	@ResponseBody
@@ -117,8 +120,6 @@ public class ItemOrderController {
 		
 	  return "order/payFinish";
 	}
-	
-	    
 	
 	
   //주문 목록
