@@ -4,6 +4,7 @@ USE hdeco;
 DROP TABLE IF EXISTS LIKE_T;
 DROP TABLE IF EXISTS AMOUNT_T;
 DROP TABLE IF EXISTS KAKAO_APPROVE_RESPONSE_T;
+DROP TABLE IF EXISTS ORDER_DETAIL_T;
 DROP TABLE IF EXISTS ITEM_ORDER_T;
 DROP TABLE IF EXISTS CART_T;
 DROP TABLE IF EXISTS ITEM_T;
@@ -117,26 +118,41 @@ CREATE TABLE CART_T (
 );
 
 
-
 -- 주문 테이블
 CREATE TABLE ITEM_ORDER_T (
-	ITEM_ORDER_NO               INT    NOT NULL AUTO_INCREMENT,        -- PK 주문번호
+	ITEM_ORDER_NO          VARCHAR(20) NOT NULL,        -- PK 주문번호
 	USER_NO                INT,                                   -- FK 유저번호
-    ITEM_NO                INT,
 	ORDER_DATE             DATETIME,
-	NAME                   VARCHAR(40),	                      -- 회원 이름
-	MOBILE                  VARCHAR(15),	                      -- 회원 전화번호
-	POSTCODE                VARCHAR(5),	                      -- 우편번호
-	ROAD_ADDRESS            VARCHAR(100),			      -- 도로명 주소 
-	DETAIL_ADDRESS          VARCHAR(100),	                      -- 상세 주소
-	ORDER_TOTAL             INT,                                  -- 전체 주문 금액
-	PAY_NO                  VARCHAR(50),                   	      -- 결제 번호(merchan uid) 
-	PAY_METHOD              INT, 				      -- 결제 방식 
-	PAY_SUCCESS		INT, 				      -- 결제 여부   
+	NAME                   VARCHAR(40),	                              -- 회원 이름
+	MOBILE                  VARCHAR(15),	                          -- 회원 전화번호
+	POSTCODE                VARCHAR(5),	                              -- 우편번호
+	ROAD_ADDRESS            VARCHAR(100),			                  -- 도로명 주소 
+	DETAIL_ADDRESS          VARCHAR(100),	                          -- 상세 주소
+	ORDER_TOTAL             INT,                                      -- 전체 주문 금액
+	IMP_UID                 VARCHAR(50),                   	          -- 아임포트 결제 번호
+	PAY_METHOD              INT, 				                      -- 결제 방식 
+	PAY_SUCCESS		        INT, 				                      -- 결제 여부   
+    DELIVERY				VARCHAR(20) DEFAULT '배송준비',			  -- 배송 정보 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
-	CONSTRAINT FK_ITEM_ORDER_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
+	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
 );
+
+CREATE TABLE ORDER_DETAIL_T (
+	ORDER_DETAIL_NO INT NOT NULL AUTO_INCREMENT,           -- PK
+	ITEM_ORDER_NO VARCHAR(20),
+    USER_NO INT NOT NULL,                          -- FK 유저번호
+    ITEM_NO INT NOT NULL,                          -- FK 아이템번호
+    QUANTITY INT NOT NULL,                         -- 주문수량
+    ITEM_TITLE VARCHAR(40),                        -- 상품명
+    ITEM_PRICE VARCHAR(40),                        -- 상품 가격
+    ITEM_MAIN_IMG VARCHAR(100),                    -- 상품 이미지
+    CONSTRAINT PK_ORDER_DETAIL_T PRIMARY KEY(ORDER_DETAIL_NO),
+    CONSTRAINT FK_ORDER_DETAIL_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+    CONSTRAINT FK_ORDER_DETAIL_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE,
+    CONSTRAINT FK_ORDER_DETAIL_T_ITEM_ORDER FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
+);
+
+	
 
 
 
@@ -180,6 +196,7 @@ CREATE TABLE LIKE_T(
     CONSTRAINT FK_LIKE_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
     CONSTRAINT FK_LIKE_T_ITEM FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
 );	
+
 
 
 
