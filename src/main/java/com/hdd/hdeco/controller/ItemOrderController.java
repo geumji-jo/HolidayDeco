@@ -3,8 +3,10 @@ package com.hdd.hdeco.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,17 +46,11 @@ public class ItemOrderController {
 	private final ItemOrderService itemOrderService;
 	private final CartService cartService;
 	private final CartMapper cartMapper;
-	
-	@Value("imp_key")
-	private String imp_key;
 
-	@Value("imp_secret")
-	private String imp_secret;
-
-	// 아임포트 토큰 (성공)
-	private IamportClient client = new IamportClient("imp_key","imp_secret");
+	// 아임포트 토큰
+	private IamportClient client = new IamportClient("3232467880861681","lSBFzXMaebapZaF0xpcutq4Y2UzDelbeDrNqKS8Xkz8RGKDlnz4eBBJY3PzY2rcjW3VeINQdzO5LpFwH");
   
-	// 결제 검증 (성공) 
+	// 결제 검증
 	@ResponseBody
 	@RequestMapping(value = "/verifyIamport/{imp_uid}")
 	public IamportResponse<Payment> paymentByImpUid(Model model, Locale locale, HttpSession session, @PathVariable(value = "imp_uid") String imp_uid) throws IamportResponseException, IOException {
@@ -81,7 +77,7 @@ public class ItemOrderController {
 	// 주문하기 
 	@ResponseBody
 	@PostMapping(value = "/insertOrder.do", produces = "application/json")
-	public void insertOrder(ItemOrderDTO itemOrderDTO, OrderDetailDTO orderDetailDTO, HttpServletRequest request, HttpServletResponse response, Payment payment) throws Exception {
+	public Map<String, Object> insertOrder(ItemOrderDTO itemOrderDTO, OrderDetailDTO orderDetailDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		// 캘린더 호출
 		Calendar cal = Calendar.getInstance();
@@ -96,10 +92,12 @@ public class ItemOrderController {
 		
 		String itemOrderNo = ymd + "_" + subNum;  // [연월일]_[랜덤숫자] 로 구성된 문자
 		itemOrderDTO.setItemOrderNo(itemOrderNo);
-		
 		orderDetailDTO.setItemOrderNo(itemOrderNo);
-		
+		Map<String, Object> map = new HashMap<>();
+		map.put("order", itemOrderService.insertOrder(itemOrderDTO));
 		itemOrderService.insertOrderDetail(orderDetailDTO);
+	
+    return map;
 }
 	
 	
