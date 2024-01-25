@@ -122,7 +122,6 @@ CREATE TABLE CART_T (
 CREATE TABLE ITEM_ORDER_T (
 	ITEM_ORDER_NO          VARCHAR(20) NOT NULL,        -- PK 주문번호
 	USER_NO                INT,                                   -- FK 유저번호
-    ITEM_NO                INT,
 	ORDER_DATE             DATETIME,
 	NAME                   VARCHAR(40),	                              -- 회원 이름
 	MOBILE                  VARCHAR(15),	                          -- 회원 전화번호
@@ -130,13 +129,16 @@ CREATE TABLE ITEM_ORDER_T (
 	ROAD_ADDRESS            VARCHAR(100),			                  -- 도로명 주소 
 	DETAIL_ADDRESS          VARCHAR(100),	                          -- 상세 주소
 	ORDER_TOTAL             INT,                                      -- 전체 주문 금액
+<<<<<<< HEAD
 	PAY_NO                  VARCHAR(50),                   	          -- 결제 번호(merchan uid) 
+=======
+	IMP_UID                 VARCHAR(50),                   	          -- 아임포트 결제 번호
+>>>>>>> bbooom2
 	PAY_METHOD              INT, 				                      -- 결제 방식 
 	PAY_SUCCESS		        INT, 				                      -- 결제 여부   
     DELIVERY				VARCHAR(20) DEFAULT '배송준비',			  -- 배송 정보 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
-	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
-	CONSTRAINT FK_ITEM_ORDER_T_ITEM_T FOREIGN KEY(ITEM_NO) REFERENCES ITEM_T(ITEM_NO) ON DELETE CASCADE
+	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
 );
 
 CREATE TABLE ORDER_DETAIL_T (
@@ -200,6 +202,12 @@ CREATE TABLE LIKE_T(
 );	
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> bbooom2
 -- -- -- -- -- -- -- -- -- --<user Insert> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 -- admin/admin1!
 INSERT INTO USER_T (ID, PW, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, ADMIN_CHECK)

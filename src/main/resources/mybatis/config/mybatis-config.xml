@@ -21,6 +21,7 @@
 		<typeAlias alias="ItemOrderDTO" type="com.hdd.hdeco.domain.ItemOrderDTO" />
 		<typeAlias alias="OrderDetailDTO" type="com.hdd.hdeco.domain.OrderDetailDTO" />
 		<typeAlias alias="OrderListDTO" type="com.hdd.hdeco.domain.OrderListDTO" />
+		<typeAlias alias="PaymentCancelDTO" type="com.hdd.hdeco.domain.PaymentCancelDTO" />
 	</typeAliases>
 
 </configuration>

@@ -1,6 +1,7 @@
 package com.hdd.hdeco.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,6 +23,8 @@ public interface ItemOrderMapper {
 	public int deleteOrder(int itemOrderNo);
 	public int deleteCartByUserNo(int userNo);
 	public int insertOrderDetail(OrderDetailDTO orderDetailDTO);
+
+	/* public String updateImpUid(Map<String, String> map); */
 	// 주문 정보 
 	public void orderInfo(ItemOrderDTO itemOrderDTO) throws Exception;
 	// 주문 목록
