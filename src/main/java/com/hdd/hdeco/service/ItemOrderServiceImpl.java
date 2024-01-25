@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +31,6 @@ import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.CartMapper;
 import com.hdd.hdeco.mapper.ItemOrderMapper;
-import com.siot.IamportRestClient.IamportClient;
-import com.siot.IamportRestClient.response.Payment;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,9 +40,6 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 
 	private final ItemOrderMapper itemOrderMapper;
 	private final CartMapper cartMapper;
-
-	private IamportClient client = new IamportClient("3232467880861681",
-			"lSBFzXMaebapZaF0xpcutq4Y2UzDelbeDrNqKS8Xkz8RGKDlnz4eBBJY3PzY2rcjW3VeINQdzO5LpFwH");
 
 	// 주문하기 : 주문 후 주문 정보 return
 	@Override
@@ -116,48 +110,6 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		int itemOrderNo = Integer.parseInt(request.getParameter("itemOrderNo"));
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
-	/*
-	 * @Override public void refundRequest(String access_token, String merchant_uid,
-	 * String reason) throws IOException { URL url = new
-	 * URL("https://api.iamport.kr/payments/cancel"); HttpsURLConnection conn =
-	 * (HttpsURLConnection) url.openConnection();
-	 * 
-	 * // 요청 방식을 POST로 설정 conn.setRequestMethod("POST");
-	 * 
-	 * // 요청의 Content-Type, Accept, Authorization 헤더 설정
-	 * conn.setRequestProperty("Content-type", "application/json");
-	 * conn.setRequestProperty("Accept", "application/json");
-	 * conn.setRequestProperty("Authorization", access_token);
-	 * 
-	 * // 해당 연결을 출력 스트림(요청)으로 사용 conn.setDoOutput(true);
-	 * 
-	 * // JSON 객체에 해당 API가 필요로하는 데이터 추가. JsonObject json = new JsonObject();
-	 * json.addProperty("merchant_uid", merchant_uid); json.addProperty("reason",
-	 * reason);
-	 * 
-	 * // 출력 스트림으로 해당 conn에 요청 BufferedWriter bw = new BufferedWriter(new
-	 * OutputStreamWriter(conn.getOutputStream())); bw.write(json.toString());
-	 * bw.flush(); bw.close();
-	 * 
-	 * // 입력 스트림으로 conn 요청에 대한 응답 반환 BufferedReader br = new BufferedReader(new
-	 * InputStreamReader(conn.getInputStream())); br.close(); conn.disconnect();
-	 * 
-	 * System.out.println("결제 취소 완료 : 주문 번호 {} :" + merchant_uid);
-	 * 
-	 * String responseJson = new BufferedReader(new
-	 * InputStreamReader(conn.getInputStream())) .lines()
-	 * .collect(Collectors.joining("\n"));
-	 * 
-	 * System.out.println("응답 본문: " + responseJson);
-	 * 
-	 * JsonObject jsonResponse =
-	 * JsonParser.parseString(responseJson).getAsJsonObject(); String resultCode =
-	 * jsonResponse.get("code").getAsString(); String resultMessage =
-	 * jsonResponse.get("message").getAsString();
-	 * 
-	 * System.out.println("결과 코드 = " + resultCode); System.out.println("결과 메시지 = " +
-	 * resultMessage); }
-	 */
 
 	// ---------------------환불, 결제 토큰생성
 	@Value("imp_key")
@@ -227,6 +179,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	    p = (JSONObject) parser.parse(response);
 
 	    String amount = p.get("amount").toString();
+
 	    return amount;
 	}
 
@@ -265,11 +218,4 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 	}
-	/*
-	 * @Override public void updateImpUid(String itemOrderNo, String imp_uid) {
-	 * Map<String, String> map = new HashMap<>(); map.put("itemOrderNo",
-	 * itemOrderNo); map.put("imp_uid", imp_uid); itemOrderMapper.updateImpUid(map);
-	 * 
-	 * }
-	 */
 }
