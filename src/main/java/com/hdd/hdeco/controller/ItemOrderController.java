@@ -113,7 +113,9 @@ public class ItemOrderController {
 		model.addAttribute("orderList", orderList);
 		model.addAttribute("map", itemOrderService.getUserInfo(request));
 		
-	    return "order/payFinish";
+		itemOrderService.deleteCartByUserNo(request);
+		
+	  return "order/payFinish";
 	}
 	
 	    
