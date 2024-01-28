@@ -1,62 +1,58 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
+
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
-<link rel="stylesheet" th:href="@{/css/font.css}">
-<link rel="stylesheet" th:href="@{/css/user.css}">
-</head>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/modal.css}"> <!-- modal -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
 <style>
 body::-webkit-scrollbar {
   display: none;
 }
 
-#Title {
-  font-family: 'Domine', serif;
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  text-align: center;
-  padding: 5px;
-  user-select: none;
-  margin-bottom: 30px;
-}
 
-#content {
-  width: 100%;
-  overflow-x: hidden;
-}
 
 table.orderSummary {
-  width: 800px;
+  width: 680px;
   float: left;
   border-collapse: collapse;
   margin-bottom: 50px;
-  margin-left: 120px;
+  margin-left: 60px;
+  font-size: 16px;
+  /* 글자수가 길이보다넘어가면 단어단위로 줄바꿈  */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 table.orderSummary th, table.orderSummary td {
   border-bottom: 3px solid #ddd;
-  padding: 8px;
+  padding: 20px;
   text-align: center;
 }
 
 Img {
-  width: 200px;
+  width: 100px;
   height: 130px;
   border-radius: 10px;
   margin-bottom: 20px;
   margin-top: 20px;
-  margin-right: 80px;
+  margin-right: 10px;
+  margin-left: 5px;
 }
 
 table.orderView {
-  width: 800px;
+  width: 680px;
   float: left;
   border-collapse: collapse;
   margin-top: 20px;
-  margin-left: 120px;
+  margin-left: 60px;
+  font-size: 16px;
+  /* 글자수가 길이보다넘어가면 단어단위로 줄바꿈  */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 table.orderView th, table.orderView td {
@@ -72,16 +68,17 @@ table.orderView img {
 
 </style>
 <body>
-  <div id="content">
-    <div>
-      <section id="content">
-        <h4 id="Title">Order View</h4>
-        <div id="sidebar-left">
-          <div id="sidebar-left-inner">
-            <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
-          </div>
+     <div id="container">
+      <div id="container-title">
+        <h3>Order View</h3>
+      </div>
+      <div id="sidebar-left">
+        <div id="sidebar-left-inner">
+          <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
         </div>
-        <th:block th:if="${orderView.size() > 0}">
+      </div>
+      <div id="content">
+          <th:block th:if="${orderView.size() > 0}">
           <table class="orderSummary">
             <thead>
               <tr>
@@ -110,7 +107,7 @@ table.orderView img {
         <table class="orderView">
           <thead>
             <tr>
-              <th></th>
+              <th>상품이미지</th>
               <th>상품명</th>
               <th>상품 가격</th>
               <th>구입 수량</th>
@@ -131,14 +128,13 @@ table.orderView img {
             </tr>
           </tbody>
         </table>
-      </section>
+        </div>
+      <div id="sidebar-right">
+        <h2>rightSidebar</h2>
+      </div>
+      <div id="footer">
+        <p>Copyright</p>
+      </div>
     </div>
-  </div>
-  <div id="sidebar-right">
-    <h2>rightSidebar</h2>
-  </div>
-  <div id="footer">
-    <p>Copyright</p>
-  </div>
 </body>
 </html>

@@ -25,7 +25,7 @@ public class ItemOrderDTO {
 	private int paySuccess;
   private int quantity;
   private String delivery;
-	private String impUid;
+	private String imp_uid;
 	private int cartNo;
 	private int itemNo;
 	private int userNo;

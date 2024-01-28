@@ -61,102 +61,67 @@ function deliveryFee(totalProductAmount) {
 /* 객체 초기화 */
 var IMP = window.IMP;   // 생략 가능
 
-// 결제 창 띄우기
-// 신용카드
+//결제 창 띄우기
+//신용카드
 function requestPay(userNo, orderTotal, name, email, mobile, postcode, roadAddress, detailAddress) {
-    // 가맹점 식별코드
-    IMP.init("imp31738657");
+// 가맹점 식별코드
+IMP.init("imp31738657");
+var randomNumber = Math.floor(Math.random() * 1000);
+// 총 금액       
+var orderTotal =  $('.totalOrderAmount').val();
+var itemTitle = $(".itemTitle").val();
+// 이름 
+var name = $("#userName").val();
+// 이메일
+var email = $('#userEmail').val();
+// 핸드폰 번호 
+var mobile = $("#userTel").val();
+// 우편번호 
+var postcode = $("#postcode").val();
+// 도로명 주소 
+var roadAddress = $("#roadAddress").val();
+// 상세주소 
+var detailAddress = $("#detailAddress").val();
+// 결제 수단 (카카오페이 1, 네이버페이2, 신용카드 3)           
+// userNo
+var userNo = $("#userNo").val();
+var orderDate = new Date();
 
-    // 총 금액
-    var orderTotal =  $('.totalOrderAmount').val();
-    var itemTitle = $(".itemTitle").val();
-    // 이름
-    var name = $("#userName").val();
-    // 이메일
-    var email = $('#userEmail').val();
-    // 핸드폰 번호
-    var mobile = $("#userTel").val();
-    // 우편번호
-    var postcode = $("#postcode").val();
-    // 도로명 주소
-    var roadAddress = $("#roadAddress").val();
-    // 상세주소
-    var detailAddress = $("#detailAddress").val();
-    // 결제 수단 (카카오페이 1, 네이버페이 2, 신용카드 3)
-    // userNo
-    var userNo = $("#userNo").val();
-    var orderDate = new Date();
-    var payMethod = $('input[name="payMethod"]:checked').val();
 
-    console.log("userNo:", userNo);
-    console.log("itemTitle:", itemTitle);
-    console.log("orderTotal:", orderTotal);
-    console.log("name:", name);
-    console.log("email:", email);
-    console.log("mobile:", mobile);
-    console.log("postcode:", postcode);
-    console.log("roadAddress:", roadAddress);
-    console.log("detailAddress:", detailAddress);
-    console.log("orderDate:", orderDate);
-  
+console.log("userNo:", userNo);
+console.log("itemNo:", itemNo);
+console.log("itemTitle:", itemTitle);
+console.log("orderTotal:", orderTotal);
+console.log("name:", name);
+console.log("email:", email);
+console.log("mobile:", mobile);
+console.log("postcode:", postcode);
+console.log("roadAddress:", roadAddress);
+console.log("detailAddress:", detailAddress);
+console.log("orderDate:", orderDate);
 
-    IMP.request_pay({
-        pg: "kcp",
-        pay_method: "card",
-        merchant_uid: "HDECO_" + new Date().getTime(),
-        name: itemTitle,
-        amount: orderTotal,
-        buyer_email: email,
-        buyer_name: name,
-        buyer_tel: mobile,
-        buyer_addr: roadAddress + detailAddress,
-        buyer_postcode: postcode
-    }, function(rsp) { // callback
-        if (rsp.success) {
-            // 결제검증
-            $.ajax({
-                url: "/order/verifyIamport/" + rsp.imp_uid,
-                type: "post",
-            }).done(function(data) {
-                if (rsp.paid_amount == data.response.amount) {
-                    alert('결제 및 검증 성공')
-                    location.href = '/order/payFinish.do';
-                } else {
-                    alert('결제 실패: 결제 금액 불일치');
-                    location.href = '/order/payFail.do';
-                }
-            }).fail(function() {
-                alert('결제 실패: 서버 오류');
-            });
+IMP.request_pay({
+    pg: "kcp",
+    pay_method: "card",
+    merchant_uid: randomNumber,
+    name: itemTitle + "외",
+    amount: orderTotal,
+    buyer_email: email,
+    buyer_name: name,
+    buyer_tel: mobile,
+    buyer_addr: roadAddress + detailAddress,
+    buyer_postcode: postcode
+}, function (rsp) { // callback
+    console.log('결제 응답:', rsp);
 
-            // 주문 정보 등록 요청
-            $.ajax({
-                url: "/order/insertOrder.do",
-                type: "post",
-                data: {
-                    userNo: userNo,
-                    orderTotal: orderTotal,
-                    name: name,
-                    email: email,
-                    mobile: mobile,
-                    postcode: postcode,
-                    roadAddress: roadAddress,
-                    detailAddress: detailAddress,
-                    imp_uid: rsp.imp_uid,  
-                    payMethod : payMethod
-                },
-                success: function(response) {
-                    console.log("주문 정보 등록 성공:", response);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("주문 정보 등록 실패:", textStatus, errorThrown);
-                }
-            });
-        }
-    });
+    if (rsp.success) {
+        alert('결제 성공');
+        location.href = '/order/payFinish.do';
+    } else {
+        alert('결제 실패: ' + rsp.error_msg);
+    }
+});
 }
-
-
 $(function() {
     $('#userName').val();
     $('#userEmail').val();
@@ -174,38 +139,76 @@ $(function() {
             receiverTel.val('');
         }
     });
+    
 
     $('#btnPay').on('click', function() {
-        var payment = $('input[name="payMethod"]:checked');
-        if ($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == '' || payment.length === 0) {
-            alert('배송 정보 및 결제 수단을 입력해주세요.');
+    	var selectedPayment = $('input[name="payMethod"]:checked');
+        if ($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == ''|| selectedPayment.length === 0) {
+        	alert('배송 정보 및 결제 수단을 입력해주세요.');
             return;
         } else {
-            // 선택된 결제 수단의 값을 가져옴
-            var payMethod = $('input[name="payMethod"]:checked').val();
-            if (confirm('작성하신 정보로 주문하시겠습니까?')) {
-                if (payMethod === '3') {
-                    requestPay();
-                } else if (payMethod === '1') {
-                    $.ajax({
-                        type: 'post',
-                        url: '/pay/kakaopayReady.do',
-                        data: $('#frmPay').serialize(),
-                        dataType: 'json',
-                        success: function(resData) {
-                            // 카카오페이 API 호출이 성공한 경우에 추가 처리
-                        },
-                        error: function(jqXHR) {
-                            alert('결제에 실패했습니다.');
-                        }
-                    });
-                } else if (payMethod === '2') {
-                    alert('네이버페이는 아직 지원되지 않습니다.');
+        	  // 선택된 결제 수단의 값을 가져옴
+            var selectedPayMethod = $('input[name="payMethod"]:checked').val();
+            if(confirm('작성하신 정보로 주문하시겠습니까?')) {
+            	 if(selectedPayMethod === '3') {
+                $.ajax({
+                  type: 'post',
+                  url: '/order/insertOrder.do',
+                  data: $('#frmPay').serialize(),
+                  dataType: 'json',
+                  success: function(r) {
+                    console.log(r.order.orderDate + r.order.itemOrderNo);
+                    console.log(r.order.orderTotal);
+                    console.log(r.order.userNo);
+                    console.log(r.order.name);
+                    console.log(r.order.mobile);
+                    console.log(r.order.roadAddress);
+                    console.log(r.order.detailAddress);
+                    console.log(r.order.postcode);
+                    requestPay(
+                        r.order.orderDate 
+                        , r.order.orderTotal
+                        , r.order.userNo
+                        , r.order.name
+                        , r.order.mobile
+                        , r.order.roadAddress
+                        ,r.order.detailAddress
+                        ,r.order.postcode
+                    );
+                    
+                  },
+                  error: function(jqXHR) {
+                    alert('결제에 실패했습니다.');
+                  }
+                })
                 }
+             else if(selectedPayMethod === '1') {
+                // 카카오페이 api 구현
+                  $.ajax({
+                      type: 'post',
+                      url: '/pay/kakaopayReady.do',
+                      data: $('#frmPay').serialize(),
+                      dataType: 'json',
+                      success: function(resData) {
+                    	  location.href=resData.url;
+                    	  console.log(resData);
+                    	  
+                      },
+                      error: function(jqXHR) {
+                        alert('결제에 실패했습니다.');
+                        console.log(jqXHR);
+                      }
+                    })
+              } else if (selectedPayMethod === '2') {
+                alert('네이버페이아직안함.');
+              }
+              }else{
+                event.preventDefault();
+                return;
+              }
+            
             }
-        }
-    });
-
+          })
           
 }); // 주문자 정보와 동일 시 같은 정보 입력 
 </script>
@@ -213,6 +216,8 @@ $(function() {
 <div class="orderList">
     <h4 id="orderTitle">Order Details</h4>
     <div class="orderBox">
+    <form id="frmPay" method="post">
+    
         <div class="orderItem">
               <h4 class="infoTitle">주문 상품</h4>
             <div class="orderForm">
@@ -226,7 +231,7 @@ $(function() {
                           </a>
                       </div>
                       <div class="itemInfo" id="itemTitle">
-                      <input type="hidden" class="itemTitle" th:value="${item.itemTitle}" />
+                      <input type="hidden" class="itemTitle" th:value="${item.itemTitle}" name="itemTitle"/>
                           <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
                       </div>
                       <div class="itemInfo" id="itemPrice">
@@ -239,14 +244,14 @@ $(function() {
               </th:block>
             </div>
             <hr>
-         <form id="frmPay" method="post">
-        <div class="orderReceiverInfo">
+                 <div class="orderReceiverInfo">
         <div class="orderInfoSection" style="width:420px;">
          <h4 class="infoTitle">주문자</h4>
           <div class="orderUserInfo">
             <div>
               <div>이름</div>
               <div>
+              
                 <input id="userName" name="name" th:value="${orderUser.name}" readonly />
               </div>
             </div>
@@ -304,6 +309,7 @@ $(function() {
                         <span style="margin-right: 150px; letter-spacing: 4px; ">총 주문금액</span> <span class="totalProductAmount"></span>
                         <br> <span style="margin-right: 150px; letter-spacing: 23px;">배송비</span>
                         <span class="deliveryFee"></span>
+                        
                       </div>
                     </div>
                   </div>
@@ -338,32 +344,18 @@ $(function() {
             <hr style="width:400px;">
               <div class="btn-forward-group">
                 <div class="goBack">
-                  <input type="button" value="돌아가기" id="goBack"
-                    onclick="history.back()" />
+                  <input type="button" value="돌아가기" id="goBack" onclick="history.back()" />
                 </div>
                 <div class="purchase">
+                  
                   <input type="hidden" id="userNo" name="userNo" th:value="${orderUser.userNo}" />
                   <button type="button" id="btnPay" >결제하기</button>
                 </div>
               </div>
             </div>
           </div>
-            </form>
-           <!--  <script>
-    document.getElementById("btnPay").addEventListener("click", function() {
-        const selectedPaymentMethod = document.querySelector('input[name="payMethod"]:checked').value;
-        const form = document.getElementById("frmPay"); // form 요소를 id로 찾습니다.
-
-        if (selectedPaymentMethod == 1) {
-            form.action = "/pay/kakaopayReady.do"; // 카카오페이 선택 시 URL 설정
-        } else if (selectedPaymentMethod == 3) {
-            form.action = "/order/insertOrder.do"; // 일반카드 선택 시 URL 설정
-        }
-
-        form.submit(); // 선택된 결제 수단에 따라 적절한 URL로 폼을 제출
-    });
-</script> -->
         </div>
+            </form>
         </div>
     </div>
     <div th:replace="~{/layout/footer::footerFrag}"></div>

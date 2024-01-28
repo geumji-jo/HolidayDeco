@@ -12,6 +12,7 @@ public class PageUtil {
 	private int totalRecord;       // 전체 레코드 개수(DB에서 구해온다)
 	private int recordPerPage;     // 한 페이지에 표시할 레코드 개수(파라미터로 받아온다)
 	private int begin;             // 한 페이지에 표시할 레코드의 시작 번호(계산한다)
+	private int end;               // 한 페이지에 표시할 레코드의 종료 번호(계산한다)
 	
 	private int pagePerBlock = 5;  // 한 블록에 표시할 페이지의 개수(임의로 정한다)
 	private int totalPage;         // 전체 페이지 개수(계산한다)
@@ -27,7 +28,7 @@ public class PageUtil {
 		
 		// begin 계산
 		begin = (page - 1) * recordPerPage;
-				
+		end = begin + recordPerPage - 1;
 		// totalPage 계산
 		totalPage = totalRecord / recordPerPage;
 		if(totalRecord % recordPerPage != 0) {

@@ -1,35 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
-    <div th:replace="~{/layout/header::gnbFrag}"></div>
-    <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
-    <link rel="stylesheet" th:href="@{/css/user.css}">
-</head>
+
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <style>
 
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-#Title {
-  font-family: 'Domine', serif;
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  text-align: center;
-  padding: 5px;
-  user-select: none;
-}
-
 .orderTable {
-  width: 900px;
-  margin-top: 50px; 
+  width: 670px;
   border-collapse: collapse;
   text-align: center;
+  font-size: 16px;
+    margin-bottom: 50px;
+  margin-left: 60px;
 }
 
 .orderTable th, .orderTable td {
@@ -52,17 +35,17 @@ html, body {
 
 </style>
 <body>
- <div id="container">
-    <h4 id="Title">My OrderList</h4>
-    <div id="sidebar-left">
+     <div id="container">
+      <div id="container-title">
+        <h3>My OrderList</h3>
+      </div>
+      <div id="sidebar-left">
         <div id="sidebar-left-inner">
-            <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
+          <div th:replace="~{/layout/myPageSidebar::sidebarFrag}"></div>
         </div>
-    </div>
-    <div id="content">
-          <div>
-    <section id="content">
-        <table class="orderTable">
+      </div>
+      <div id="content">
+          <table class="orderTable">
             <thead>
                 <tr>
                     <th>주문번호</th>
@@ -88,10 +71,6 @@ html, body {
                 </th:block>
             </tbody>
         </table>
-    </section>
-    </div>
-          
-        </div> 
       </div>
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
@@ -99,5 +78,6 @@ html, body {
       <div id="footer">
         <p>Copyright</p>
       </div>
+    </div>
 </body>
 </html>
