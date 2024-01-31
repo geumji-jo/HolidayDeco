@@ -110,88 +110,88 @@
     updateTotalPrice();
     
     function addToCart() {
-    	  // 수량 값 가져오기
-    	  const quantity = parseInt($('#totalQuantity').text());
-    	  // 상품 번호 가져오기
-    	  var itemNo = /*[[${item.itemNo}]]*/ null;
-    	  
-    	  // 재고 가져오기
-    	   
-		  	var stock = /*[[${item.itemStock}]]*/null;
+        // 수량 값 가져오기
+        const quantity = parseInt($('#totalQuantity').text());
+        // 상품 번호 가져오기
+        var itemNo = /*[[${item.itemNo}]]*/ null;
+        
+        // 재고 가져오기
+         
+        var stock = /*[[${item.itemStock}]]*/null;
 
-				if (stock === 0) {
-					alert('품절된 상품으로 장바구니에 담을 수 없습니다.');
-					return;
-				}
+        if (stock === 0) {
+          alert('품절된 상품으로 장바구니에 담을 수 없습니다.');
+          return;
+        }
 
-				// 값 사용하여 데이터 전송
-				const data = {
-					itemNo : itemNo,
-					quantity : quantity
-				};
+        // 값 사용하여 데이터 전송
+        const data = {
+          itemNo : itemNo,
+          quantity : quantity
+        };
 
-				$.ajax({
-					type : 'post',
-					url : '/cart/addCart.do',
-					data : data,
-					dataType : 'json',
-					success : function(resData) {
-						if (confirm(resData.msg)) {
-							location.href = '/cart/getCartList.do';
-						}
-					},
-					error : function() {
-						// 로그인이 필요한 서비스 경고 메시지
-						alert('로그인이 필요한 서비스입니다.');
-						// 로그인 페이지로 이동
-						location.href = '/user/login.html';
-					}
-				});
-			}
+        $.ajax({
+          type : 'post',
+          url : '/cart/addCart.do',
+          data : data,
+          dataType : 'json',
+          success : function(resData) {
+            if (confirm(resData.msg)) {
+              location.href = '/cart/getCartList.do';
+            }
+          },
+          error : function() {
+            // 로그인이 필요한 서비스 경고 메시지
+            alert('로그인이 필요한 서비스입니다.');
+            // 로그인 페이지로 이동
+            location.href = '/user/login.html';
+          }
+        });
+      }
 
-			$(document).ready(function() {
-				var loginStatus = /*[[${session.loginId}]]*/null;
-				var likeList = /*[[${likeList}]]*/null;
-				console.log(likeList);
-				function chkLike() {
-					for (let i = 0; i < likeList.length; i++) {
-						console.log(likeList[i]);
-						$('#' + likeList[i]).attr('src', '/images/heart2.png');
-					}
-				}
-				chkLike();
+      $(document).ready(function() {
+        var loginStatus = /*[[${session.loginId}]]*/null;
+        var likeList = /*[[${likeList}]]*/null;
+        console.log(likeList);
+        function chkLike() {
+          for (let i = 0; i < likeList.length; i++) {
+            console.log(likeList[i]);
+            $('#' + likeList[i]).attr('src', '/images/heart2.png');
+          }
+        }
+        chkLike();
 
-				$('.like-image').on('click', function() {
-					if (loginStatus != null) {
-						// 클릭된 이미지에서 itemNo 가져오기
-						var itemNo = $(this).siblings('.itemNo').val();
+        $('.like-image').on('click', function() {
+          if (loginStatus != null) {
+            // 클릭된 이미지에서 itemNo 가져오기
+            var itemNo = $(this).siblings('.itemNo').val();
 
-						if ($(this).attr('src') == '/images/heart1.png') {
-							$(this).attr('src', '/images/heart2.png');
-						} else {
-							$(this).attr('src', '/images/heart1.png');
-						}
+            if ($(this).attr('src') == '/images/heart1.png') {
+              $(this).attr('src', '/images/heart2.png');
+            } else {
+              $(this).attr('src', '/images/heart1.png');
+            }
 
-						fnLikeAdd(itemNo);
-					}
-				});
+            fnLikeAdd(itemNo);
+          }
+        });
 
-				function fnLikeAdd(itemNo) {
-					$.ajax({
-						type : 'get',
-						url : '/like/like.do?itemNo=' + itemNo,
-						dataType : 'json',
-						success : function(resData) {
-							if (resData.addResult == 1) {
-								alert('찜 등록이 되었습니다.');
-							} else if (resData.deleteResult == 1) {
-								alert('찜 등록이 삭제되었습니다.');
-							}
-						}
-					});
-				}
-			});
-		</script>
+        function fnLikeAdd(itemNo) {
+          $.ajax({
+            type : 'get',
+            url : '/like/like.do?itemNo=' + itemNo,
+            dataType : 'json',
+            success : function(resData) {
+              if (resData.addResult == 1) {
+                alert('찜 등록이 되었습니다.');
+              } else if (resData.deleteResult == 1) {
+                alert('찜 등록이 삭제되었습니다.');
+              }
+            }
+          });
+        }
+      });
+    </script>
 </body>
 <div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

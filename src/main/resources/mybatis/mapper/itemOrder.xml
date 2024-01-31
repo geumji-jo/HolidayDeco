@@ -6,7 +6,6 @@
 <!-- namespace는 @Mapper를 지정한다. -->
 <mapper namespace="com.hdd.hdeco.mapper.ItemOrderMapper">
 
-<!-- 주문 정보 -->
 <insert id="insertOrder" parameterType="ItemOrderDTO">
   INSERT INTO ITEM_ORDER_T (
     ITEM_ORDER_NO,
@@ -18,10 +17,8 @@
     ROAD_ADDRESS,
     DETAIL_ADDRESS,
     ORDER_TOTAL,
-    PAY_SUCCESS,
     PAY_METHOD,
     IMP_UID
-    
 ) VALUES (
     #{itemOrderNo},
     #{userNo},
@@ -32,13 +29,10 @@
     #{roadAddress},
     #{detailAddress},
     #{orderTotal},
-    1,
     #{payMethod},
     #{imp_uid}
 );
-
 </insert>
-
 
   <select id="selectUserOrder" parameterType="int" resultType="ItemOrderDTO">
     SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS ,ORDER_TOTAL, PAY_METHOD, IMP_UID
@@ -62,19 +56,19 @@
     SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, IMP_UID, DELIVERY
     FROM ITEM_ORDER_T
     WHERE USER_NO = #{userNo}
+    ORDER BY ORDER_DATE DESC
   </select>
 
   <!-- 특정 주문 목록  -->
-  <select id="orderView" resultType="OrderListDTO">
-  SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.IMP_UID, A.DELIVERY,
-    B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
-  FROM ITEM_ORDER_T A 
-    INNER JOIN ORDER_DETAIL_T B
-    ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
-  WHERE A.USER_NO = #{userNo}
-    AND A.ITEM_ORDER_NO = #{itemOrderNo}
-    ORDER BY ITEM_ORDER_NO DESC
-  </select>
+	<select id="orderView" resultType="OrderListDTO">
+	  SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.IMP_UID, A.DELIVERY,
+	    B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
+	  FROM ITEM_ORDER_T A 
+	    INNER JOIN ORDER_DETAIL_T B
+	    ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
+	  WHERE A.USER_NO = #{userNo}
+	    AND A.ITEM_ORDER_NO = #{itemOrderNo}
+	</select>
 
   <select id="getUserByUserNo" parameterType="int" resultType="UserDTO">
     SELECT USER_NO, NAME, EMAIL, MOBILE
@@ -94,20 +88,23 @@
      WHERE ITEM_NO = #{itemNo}
   </select>
   
-  
   <!-- 카트 비우기 -->
   <delete id="deleteCartByUserNo" parameterType="int">
     DELETE FROM CART_T
      WHERE USER_NO = #{userNo}
   </delete>
   
-  
   <!-- 결제취소 -->
-  <delete id="deleteOrder" parameterType="int">
-    DELETE FROM ITEM_ORDER_T
-      WHERE ITEM_ORDER_NO = #{itemOrderNo}
+  <delete id="deleteOrder" parameterType="String">
+    DELETE 
+      FROM ITEM_ORDER_T
+    WHERE ITEM_ORDER_NO = #{itemOrderNo}
   </delete>
   
-   
+  <update id="orderCancle" parameterType="map">
+    UPDATE ITEM_ORDER_T
+    SET DELIVERY = '주문 취소'
+    WHERE ITEM_ORDER_NO = #{itemOrderNo}
+</update>
   
 </mapper>

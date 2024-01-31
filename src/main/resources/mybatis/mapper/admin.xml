@@ -7,107 +7,156 @@
 <mapper namespace="com.hdd.hdeco.mapper.AdminMapper">
 
 
-  <!-- 상품 개수 count  -->
-   <select id="getItemCount" resultType="int">
-      SELECT COUNT(*)
-       FROM ITEM_T
-   </select>
-   
-   <!-- itemNo를 이용하여 아이템 정보 읽어오기 -->
-   <select id="getItemByNo" parameterType="int" resultType="ItemDTO">
-      SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT
-        FROM ITEM_T
-       WHERE ITEM_NO = #{itemNo}
-    </select>
-    
-     <!-- DB에서 상품 목록 읽어오기-->
-     <select id="getItemManageList" parameterType="Map" resultType="ItemDTO">
-       SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT
-         FROM ITEM_T
-         <where>
-              <if test="column != '' and query != ''">
-                  ${column} LIKE CONCAT('%', UPPER(#{query}),'%') OR ${column} LIKE CONCAT('%', LOWER(#{query}) , '%')
-              </if>
-          </where> 
-        ORDER BY ITEM_WRITED_AT DESC
-        LIMIT #{begin}, #{recordPerPage}
-   </select>
-    
-    <!-- 상품 등록 -->
-    <insert id="uploadItem" useGeneratedKeys="true" keyProperty="itemNo" parameterType="itemDTO">
-      INSERT INTO ITEM_T (
-	        ITEM_TITLE
-	      , ITEM_PRICE
-	      , ITEM_STOCK
-	      , ITEM_MAIN_IMG
-	      , ITEM_DETAIL_IMG
-	      , ITEM_WRITED_AT 
-       ) VALUES (
-	         #{itemTitle}
-	        , #{itemPrice}
-	        , #{itemStock}
-	        , #{itemMainImg}
-	        , #{itemDetailImg}
-	        , NOW()
-        )
-    </insert>
-    
-    <!-- 상품 삭제 -->
-    <delete id="deleteItem" parameterType="int">
-      DELETE 
-        FROM ITEM_T
-       WHERE ITEM_NO = ${itemNo} 
-    </delete>
+	<!-- 상품 개수 count -->
+	<select id="getItemCount" resultType="int">
+		SELECT COUNT(*)
+		FROM ITEM_T
+	</select>
+
+	<!-- itemNo를 이용하여 아이템 정보 읽어오기 -->
+	<select id="getItemByNo" parameterType="int"
+		resultType="ItemDTO">
+		SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG,
+		ITEM_STOCK, ITEM_WRITED_AT
+		FROM ITEM_T
+		WHERE ITEM_NO = #{itemNo}
+	</select>
+
+	<!-- DB에서 상품 목록 읽어오기 -->
+	<select id="getItemManageList" parameterType="Map"
+		resultType="ItemDTO">
+		SELECT ITEM_NO, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG,
+		ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT
+		FROM ITEM_T
+		<where>
+			<if test="column != '' and query != ''">
+				${column} LIKE CONCAT('%', UPPER(#{query}),'%') OR ${column} LIKE CONCAT('%',
+				LOWER(#{query}) , '%')
+			</if>
+		</where>
+		ORDER BY ITEM_WRITED_AT DESC
+		LIMIT #{begin}, #{recordPerPage}
+	</select>
+
+	<!-- 상품 등록 -->
+	<insert id="uploadItem" useGeneratedKeys="true"
+		keyProperty="itemNo" parameterType="itemDTO">
+		INSERT INTO ITEM_T (
+		ITEM_TITLE
+		, ITEM_PRICE
+		, ITEM_STOCK
+		, ITEM_MAIN_IMG
+		, ITEM_DETAIL_IMG
+		, ITEM_WRITED_AT
+		) VALUES (
+		#{itemTitle}
+		, #{itemPrice}
+		, #{itemStock}
+		, #{itemMainImg}
+		, #{itemDetailImg}
+		, NOW()
+		)
+	</insert>
+
+	<!-- 상품 삭제 -->
+	<delete id="deleteItem" parameterType="int">
+		DELETE
+		FROM ITEM_T
+		WHERE ITEM_NO = ${itemNo}
+	</delete>
 
 	<!-- 등록한 상품 수정 -->
 	<update id="modifyItem" parameterType="itemDTO">
 		UPDATE ITEM_T
-		SET ITEM_TITLE = #{itemTitle}
+		SET
+		ITEM_TITLE = #{itemTitle}
 		, ITEM_PRICE = #{itemPrice}
-		, ITEM_STOCK = #{itemStock}
+		, ITEM_STOCK =
+		#{itemStock}
 		, ITEM_MAIN_IMG = #{itemMainImg}
-		, ITEM_DETAIL_IMG = #{itemDetailImg}
+		, ITEM_DETAIL_IMG =
+		#{itemDetailImg}
 		WHERE ITEM_NO = #{itemNo}
 	</update>
-	
+
 	<!-- 상품 검색 -->
-	 <select id="searchItem" parameterType="String" resultType="ItemDTO">
-      SELECT * 
-      FROM ITEM_T
-      <where>
-          <if test="query != ''">
-             ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT ('%',LOWER(#{query}),'%')
-          </if>
-      </where> 
-  </select>
-  
-  <!-- 모든 사용자 주문 정보 -->
-    <select id="orderList" resultType="ItemOrderDTO">
-    SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY
-    FROM ITEM_ORDER_T
-  </select>
-	
-	  <!-- 특정 주문 목록  -->
-  <select id="orderView" resultType="OrderListDTO">
-  SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.DELIVERY,
-    B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
-  FROM ITEM_ORDER_T A 
-    INNER JOIN ORDER_DETAIL_T B
-    ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
-  WHERE A.ITEM_ORDER_NO = #{itemOrderNo}
-  </select>
-  
-  <!-- 배송 상태 -->
+	<select id="searchItem" parameterType="String"
+		resultType="ItemDTO">
+		SELECT *
+		FROM ITEM_T
+		<where>
+			<if test="query != ''">
+				ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT
+				('%',LOWER(#{query}),'%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 모든 사용자 주문 정보 -->
+	<resultMap type="ItemOrderDTO" id="orderResultMap">
+		<result property="itemOrderNo" column="ITEM_ORDER_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="orderDate" column="ORDER_DATE" />
+		<result property="name" column="NAME" />
+		<result property="mobile" column="MOBILE" />
+		<result property="postcode" column="POSTCODE" />
+		<result property="roadAddress" column="ROAD_ADDRESS" />
+		<result property="detailAddress" column="DETAIL_ADDRESS" />
+		<result property="orderTotal" column="ORDER_TOTAL" />
+		<result property="payMethod" column="PAY_METHOD" />
+		<result property="delivery" column="DELIVERY" />
+		<result property="imp_uid" column="IMP_UID" />
+	</resultMap>
+
+
+	<select id="orderList" resultType="ItemOrderDTO"
+		resultMap="orderResultMap">
+		SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE,
+		ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY,
+		IMP_UID
+		FROM ITEM_ORDER_T
+		ORDER BY ORDER_DATE DESC;
+	</select>
+
+
+	<!-- 특정 주문 목록 -->
+	<select id="orderView" resultType="OrderListDTO">
+		SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE,
+		A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD,
+		A.DELIVERY, A.IMP_UID,
+		B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
+		FROM ITEM_ORDER_T A
+		INNER JOIN ORDER_DETAIL_T B
+		ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
+		WHERE A.ITEM_ORDER_NO = #{itemOrderNo}
+	</select>
+
+	<!-- 배송 상태 -->
 	<update id="deliveryStatus" parameterType="Map">
-	 UPDATE ITEM_ORDER_T
-	     SET DELIVERY = #{delivery}
-	 WHERE ITEM_ORDER_NO = #{itemOrderNo}
+		UPDATE ITEM_ORDER_T
+		SET DELIVERY = #{delivery}
+		WHERE ITEM_ORDER_NO = #{itemOrderNo}
 	</update>
-	
+
 	<!-- 상품 수량 조절 -->
 	<update id="UpdateItemStock" parameterType="ItemDTO">
-	 UPDATE ITEM_T
-	    SET ITEM_STOCK = ITEM_STOCK - #{itemStock}
-	 WHERE ITEM_NO = #{itemNo}
+		UPDATE ITEM_T
+		SET ITEM_STOCK = ITEM_STOCK - #{itemStock}
+		WHERE ITEM_NO = #{itemNo}
 	</update>
+
+	<!-- 주문취소 -->
+	<update id="orderCancle">
+		UPDATE ITEM_ORDER_T
+		SET DELIVERY = '주문취소'
+		WHERE ITEM_ORDER_NO = #{itemOrderNo}
+	</update>
+
+	<!-- 주문 취소 정보 -->
+	<insert id="insertOrderCancel" parameterType="OrderCancelDTO">
+		INSERT INTO ORDER_CANCEL_T (USER_NO, ITEM_ORDER_NO, ORDER_TOTAL, IMP_UID)
+		SELECT USER_NO, ITEM_ORDER_NO, ORDER_TOTAL, IMP_UID
+		FROM ITEM_ORDER_T
+	</insert>
+
 </mapper>

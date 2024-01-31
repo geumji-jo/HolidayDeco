@@ -10,22 +10,27 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderCancelDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
 
 public interface AdminService {
 
-	// 상품 관리 
-	public void getItemByNo(Model model,HttpServletRequest request);
+	// 상품 관리
+	public void getItemByNo(Model model, HttpServletRequest request);
 	public void getItemManageList(HttpServletRequest request, Model model);
 	public int uploadItem(MultipartHttpServletRequest multipartRequest) throws Exception;
-  public ResponseEntity<byte[]> display(int itemNo);
-  public ResponseEntity<byte[]> displayDetail(int itemNo);
-  public int deleteItem(int itemNo);
-  public void getItemEdit(HttpServletRequest request, Model model);	
-  public int itemModify(MultipartHttpServletRequest multipartRequest) throws Exception;
-  List<ItemDTO> searchItem(String query);
+	public ResponseEntity<byte[]> display(int itemNo);
+	public ResponseEntity<byte[]> displayDetail(int itemNo);
+	public int deleteItem(int itemNo);
+	public void getItemEdit(HttpServletRequest request, Model model);
+	public int itemModify(MultipartHttpServletRequest multipartRequest) throws Exception;
+	List<ItemDTO> searchItem(String query);
 	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
 	public void deliveryStatus(String itemOrderNo, String delivery);
 	public void UpdateItemStock(ItemDTO itemDTO);
+
+	// 주문 취소
+	public void orderCancel(OrderCancelDTO orderCancelDTO);
+	public void insertOrderCancel(OrderCancelDTO orderCancelDTO) throws Exception;
 }

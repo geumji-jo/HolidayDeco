@@ -1,364 +1,367 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
-    <div th:replace="~{/layout/header::gnbFrag}"></div>
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" th:href="@{/css/font.css}">
-    <link rel="stylesheet" th:href="@{/css/orderDetail.css}">
-       <link rel="stylesheet" th:href="@{/css/footer.css}">
+<meta charset="UTF-8">
+<head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
+<div th:replace="~{/layout/header::gnbFrag}"></div>
+<script type="text/javascript"
+  src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script
+  src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="stylesheet" th:href="@{/css/font.css}">
+<link rel="stylesheet" th:href="@{/css/orderDetail.css}">
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <script th:inline="javascript">
-function execDaumPostcode() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-            var roadAddr = data.roadAddress;
-            document.getElementById('postcode').value = data.zonecode;
-            document.getElementById('roadAddress').value = roadAddr; 
-        }
-    }).open();
-} // 다음 주소 
+	function execDaumPostcode() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				var roadAddr = data.roadAddress;
+				document.getElementById('postcode').value = data.zonecode;
+				document.getElementById('roadAddress').value = roadAddr;
+			}
+		}).open();
+	} // 다음 주소 
 
+	$(document).ready(
+			function() {
+				totalAmount();
 
-$(document).ready(function () {
-    totalAmount();
+				function totalAmount() {
+					var totalProductAmount = 0;
 
-    function totalAmount() {
-        var totalProductAmount = 0;
+					$(".item").each(
+							function() {
+								var item = $(this);
+								var quantity = parseInt(item.find('.quantity')
+										.val());
+								var price = parseFloat(item.find('#itemPrice')
+										.text().replace('원', '').replace(',',
+												''));
+								totalProductAmount += quantity * price;
+							});
 
-        $(".item").each(function () {
-            var item = $(this);
-            var quantity = parseInt(item.find('.quantity').val());
-            var price = parseFloat(item.find('#itemPrice').text().replace('원', '').replace(',', ''));
-            totalProductAmount += quantity * price;
-        });
+					var deliveryFeeAmount = deliveryFee(totalProductAmount);
 
-        var deliveryFeeAmount = deliveryFee(totalProductAmount);
+					$('.totalProductAmount').text(
+							totalProductAmount.toLocaleString() + "원");
 
-        $('.totalProductAmount').text(totalProductAmount.toLocaleString() + "원");
+					if (deliveryFeeAmount > 0) {
+						$('.deliveryFee').text(
+								deliveryFeeAmount.toLocaleString() + "원");
+					} else {
+						$('.deliveryFee').text("");
+					}
+					var totalOrderAmount = totalProductAmount
+							+ deliveryFeeAmount;
 
-        if (deliveryFeeAmount > 0) {
-            $('.deliveryFee').text(deliveryFeeAmount.toLocaleString() + "원");
-        } else {
-            $('.deliveryFee').text("");
-        }
-        var totalOrderAmount = totalProductAmount + deliveryFeeAmount;
+					$('.totalOrderAmount').val(totalOrderAmount);
+					$('.totalOrderAmount').text(
+							totalOrderAmount.toLocaleString() + "원");
+				}
+			}); // $(document).ready : 총금액 산정 및 버튼 클릭 
 
-        $('.totalOrderAmount').val(totalOrderAmount);
-        $('.totalOrderAmount').text(totalOrderAmount.toLocaleString() + "원");
-    }
-}); // $(document).ready : 총금액 산정 및 버튼 클릭 
+	function deliveryFee(totalProductAmount) {
+		var freeDelivery = 40000;
+		var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
+		$('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
+		return deliveryFee;
+	} // 배송비 
 
-function deliveryFee(totalProductAmount) {
-    var freeDelivery = 40000;
-    var deliveryFee = totalProductAmount >= freeDelivery ? 0 : 3000;
-    $('.deliveryFee').text(deliveryFee.toLocaleString() + "원");
-    return deliveryFee;
-} // 배송비 
+	/* 객체 초기화 */
+	var IMP = window.IMP; // 생략 가능
 
-/* 객체 초기화 */
-var IMP = window.IMP;   // 생략 가능
+	// 결제 창 띄우기
+	// 신용카드
+	function requestPay(userNo, orderTotal, name, email, mobile, postcode,
+			roadAddress, detailAddress) {
+		// 가맹점 식별코드
+		IMP.init("imp31738657");
 
-//결제 창 띄우기
-//신용카드
-function requestPay(userNo, orderTotal, name, email, mobile, postcode, roadAddress, detailAddress) {
-// 가맹점 식별코드
-IMP.init("imp31738657");
-var randomNumber = Math.floor(Math.random() * 1000);
-// 총 금액       
-var orderTotal =  $('.totalOrderAmount').val();
-var itemTitle = $(".itemTitle").val();
-// 이름 
-var name = $("#userName").val();
-// 이메일
-var email = $('#userEmail').val();
-// 핸드폰 번호 
-var mobile = $("#userTel").val();
-// 우편번호 
-var postcode = $("#postcode").val();
-// 도로명 주소 
-var roadAddress = $("#roadAddress").val();
-// 상세주소 
-var detailAddress = $("#detailAddress").val();
-// 결제 수단 (카카오페이 1, 네이버페이2, 신용카드 3)           
-// userNo
-var userNo = $("#userNo").val();
-var orderDate = new Date();
+		// 총 금액
+		var orderTotal = $('.totalOrderAmount').val();
+		var itemTitle = $(".itemTitle").val();
+		// 이름
+		var name = $("#userName").val();
+		// 이메일
+		var email = $('#userEmail').val();
+		// 핸드폰 번호
+		var mobile = $("#userTel").val();
+		// 우편번호
+		var postcode = $("#postcode").val();
+		// 도로명 주소
+		var roadAddress = $("#roadAddress").val();
+		// 상세주소
+		var detailAddress = $("#detailAddress").val();
+		// 결제 수단 (카카오페이 1, 네이버페이 2, 신용카드 3)
+		// userNo
+		var userNo = $("#userNo").val();
+		var orderDate = new Date();
+		var payMethod = $('input[name="payMethod"]:checked').val();
 
+		console.log("userNo:", userNo);
+		console.log("itemTitle:", itemTitle);
+		console.log("orderTotal:", orderTotal);
+		console.log("name:", name);
+		console.log("email:", email);
+		console.log("mobile:", mobile);
+		console.log("postcode:", postcode);
+		console.log("roadAddress:", roadAddress);
+		console.log("detailAddress:", detailAddress);
+		console.log("orderDate:", orderDate);
 
-console.log("userNo:", userNo);
-console.log("itemNo:", itemNo);
-console.log("itemTitle:", itemTitle);
-console.log("orderTotal:", orderTotal);
-console.log("name:", name);
-console.log("email:", email);
-console.log("mobile:", mobile);
-console.log("postcode:", postcode);
-console.log("roadAddress:", roadAddress);
-console.log("detailAddress:", detailAddress);
-console.log("orderDate:", orderDate);
+		IMP.request_pay({
+			pg : "kcp",
+			pay_method : "card",
+			merchant_uid : "HDECO_" + new Date().getTime(),
+			name : itemTitle,
+			amount : orderTotal,
+			buyer_email : email,
+			buyer_name : name,
+			buyer_tel : mobile,
+			buyer_addr : roadAddress + detailAddress,
+			buyer_postcode : postcode
+		}, function(rsp) { // callback
+			if (rsp.success) {
+				// 결제검증
+				$.ajax({
+					url : "/order/verifyIamport/" + rsp.imp_uid,
+					type : "post",
+				}).done(function(data) {
+					if (rsp.paid_amount == data.response.amount) {
+						alert('결제 및 검증 성공')
+						location.href = '/order/payFinish.do';
+					} else {
+						alert('결제 실패: 결제 금액 불일치');
+						//결제 실패 시 주문번호를 통해 해당 주문정보를 삭제
+						location.href = '/order/payFail.do';
+					}
+				}).fail(function() {
+					alert('결제 실패: 서버 오류');
+				});
 
-IMP.request_pay({
-    pg: "kcp",
-    pay_method: "card",
-    merchant_uid: randomNumber,
-    name: itemTitle + "외",
-    amount: orderTotal,
-    buyer_email: email,
-    buyer_name: name,
-    buyer_tel: mobile,
-    buyer_addr: roadAddress + detailAddress,
-    buyer_postcode: postcode
-}, function (rsp) { // callback
-    console.log('결제 응답:', rsp);
+				// 주문 정보 등록 요청
+				$.ajax({
+					url : "/order/insertOrder.do",
+					type : "post",
+					data : {
+						userNo : userNo,
+						orderTotal : orderTotal,
+						name : name,
+						email : email,
+						mobile : mobile,
+						postcode : postcode,
+						roadAddress : roadAddress,
+						detailAddress : detailAddress,
+						imp_uid : rsp.imp_uid,
+						payMethod : payMethod
+					},
+					success : function(response) {
+						console.log("주문 정보 등록 성공:", response);
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						console.error("주문 정보 등록 실패:", textStatus, errorThrown);
+					}
+				});
+			}
+		});
+	}
+	$(function() {
+		$('#userName').val();
+		$('#userEmail').val();
+		$('#userTel').val();
 
-    if (rsp.success) {
-        alert('결제 성공');
-        location.href = '/order/payFinish.do';
-    } else {
-        alert('결제 실패: ' + rsp.error_msg);
-    }
-});
-}
-$(function() {
-    $('#userName').val();
-    $('#userEmail').val();
-    $('#userTel').val();
+		$('#sameUserInfo').on('click', function() {
+			var receiverName = $('#receiverName');
+			var receiverTel = $('#receiverTel');
 
-    $('#sameUserInfo').on('click', function() {
-        var receiverName = $('#receiverName');
-        var receiverTel = $('#receiverTel');
+			if ($(this).is(':checked')) {
+				receiverName.val($('#userName').val());
+				receiverTel.val($('#userTel').val());
+			} else {
+				receiverName.val('');
+				receiverTel.val('');
+			}
+		});
 
-        if ($(this).is(':checked')) {
-            receiverName.val($('#userName').val());
-            receiverTel.val($('#userTel').val());
-        } else {
-            receiverName.val('');
-            receiverTel.val('');
-        }
-    });
-    
+		$('#btnPay').on(
+				'click',
+				function() {
+					var payment = $('input[name="payMethod"]:checked');
+					if ($('#receiverName').val() == ''
+							|| $('#receiverTel').val() == ''
+							|| $('#postcode').val() == ''
+							|| payment.length === 0) {
+						alert('배송 정보 및 결제 수단을 입력해주세요.');
+						return;
+					} else {
+						// 선택된 결제 수단의 값을 가져옴
+						var payMethod = $('input[name="payMethod"]:checked')
+								.val();
+						if (confirm('작성하신 정보로 주문하시겠습니까?')) {
+							if (payMethod === '3') {
+								requestPay();
+							} else if (selectedPayMethod === '1') {
+								// 카카오페이 api 구현
+								$.ajax({
+									type : 'post',
+									url : '/pay/kakaopayReady.do',
+									data : $('#frmPay').serialize(),
+									dataType : 'json',
+									success : function(resData) {
+										location.href = resData.url;
+										console.log(resData);
 
-    $('#btnPay').on('click', function() {
-    	var selectedPayment = $('input[name="payMethod"]:checked');
-        if ($('#receiverName').val() == '' || $('#receiverTel').val() == '' || $('#postcode').val() == ''|| selectedPayment.length === 0) {
-        	alert('배송 정보 및 결제 수단을 입력해주세요.');
-            return;
-        } else {
-        	  // 선택된 결제 수단의 값을 가져옴
-            var selectedPayMethod = $('input[name="payMethod"]:checked').val();
-            if(confirm('작성하신 정보로 주문하시겠습니까?')) {
-            	 if(selectedPayMethod === '3') {
-                $.ajax({
-                  type: 'post',
-                  url: '/order/insertOrder.do',
-                  data: $('#frmPay').serialize(),
-                  dataType: 'json',
-                  success: function(r) {
-                    console.log(r.order.orderDate + r.order.itemOrderNo);
-                    console.log(r.order.orderTotal);
-                    console.log(r.order.userNo);
-                    console.log(r.order.name);
-                    console.log(r.order.mobile);
-                    console.log(r.order.roadAddress);
-                    console.log(r.order.detailAddress);
-                    console.log(r.order.postcode);
-                    requestPay(
-                        r.order.orderDate 
-                        , r.order.orderTotal
-                        , r.order.userNo
-                        , r.order.name
-                        , r.order.mobile
-                        , r.order.roadAddress
-                        ,r.order.detailAddress
-                        ,r.order.postcode
-                    );
-                    
-                  },
-                  error: function(jqXHR) {
-                    alert('결제에 실패했습니다.');
-                  }
-                })
-                }
-             else if(selectedPayMethod === '1') {
-                // 카카오페이 api 구현
-                  $.ajax({
-                      type: 'post',
-                      url: '/pay/kakaopayReady.do',
-                      data: $('#frmPay').serialize(),
-                      dataType: 'json',
-                      success: function(resData) {
-                    	  location.href=resData.url;
-                    	  console.log(resData);
-                    	  
-                      },
-                      error: function(jqXHR) {
-                        alert('결제에 실패했습니다.');
-                        console.log(jqXHR);
-                      }
-                    })
-              } else if (selectedPayMethod === '2') {
-                alert('네이버페이아직안함.');
-              }
-              }else{
-                event.preventDefault();
-                return;
-              }
-            
-            }
-          })
-          
-}); // 주문자 정보와 동일 시 같은 정보 입력 
+									},
+									error : function(jqXHR) {
+										alert('결제에 실패했습니다.');
+										console.log(jqXHR);
+									}
+								})
+							} else if (selectedPayMethod === '2') {
+								alert('네이버페이아직안함.');
+							}
+						} else {
+							event.preventDefault();
+							return;
+						}
+					}
+				})
+	}); // 주문자 정보와 동일 시 같은 정보 입력
 </script>
 <body>
-<div class="orderList">
+  <div class="orderList">
     <h4 id="orderTitle">Order Details</h4>
     <div class="orderBox">
-    <form id="frmPay" method="post">
-    
+      <form id="frmPay" method="post">
         <div class="orderItem">
-              <h4 class="infoTitle">주문 상품</h4>
-            <div class="orderForm">
-              <th:block th:if="${#lists.size(cartList) > 0}">
-              
-                  <div class="item" th:each="item : ${cartList}">
-                      <div class="MainImg">
-                        <input type="hidden" id="itemNo" name="itemNo"th:value="${item.itemNo}">
-                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
-                              <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
-                          </a>
-                      </div>
-                      <div class="itemInfo" id="itemTitle">
-                      <input type="hidden" class="itemTitle" th:value="${item.itemTitle}" name="itemTitle"/>
-                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
-                      </div>
-                      <div class="itemInfo" id="itemPrice">
-                          <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
-                      </div>
-                      <div class="itemInfo">
-                          <input type="text" name="quantity" class="quantity" th:value="${item.quantity}">
-                      </div>
-                  </div>
-              </th:block>
-            </div>
-            <hr>
-                 <div class="orderReceiverInfo">
-        <div class="orderInfoSection" style="width:420px;">
-         <h4 class="infoTitle">주문자</h4>
-          <div class="orderUserInfo">
-            <div>
-              <div>이름</div>
-              <div>
-              
-                <input id="userName" name="name" th:value="${orderUser.name}" readonly />
-              </div>
-            </div>
-            <div>
-              <div>이메일</div>
-              <div>
-                <input id="userEmail" name="mail" th:value="${orderUser.email}" readonly />
-              </div>
-            </div>
-            <div>
-              <div>연락처</div>
-              <div>
-                <input id="userTel" name="mobile" th:value="${orderUser.mobile}" readonly />
-              </div>
-            </div>
-          </div>
-            <div class=title-group style="align-items:center;">
-              <h4 class="infoTitle" style="margin-right:10px;">배송지</h4>
-              <div>
-                <label for="sameUserInfo">
-                  <input type="checkbox" id="sameUserInfo" style="margin:auto;"/>주문자와 동일
-                </label>
-              </div>
-            </div>
-          <div class="deliveryLine">
-            <div class="receiveInfo">
-              <div>수령자</div>
-              <div>
-                <input id="receiverName" name="receiverName" placeholder="이름을 입력해주세요."/>
-              </div>
-              <div>연락처</div>
-              <div>
-                <input id="receiverTel" name="receiverTel" placeholder="하이픈(-)을 제외한 숫자만 입력해주세요."/>
-              </div>
-            </div>
-                <div>주소</div>
-                <div>
-                  <input type="text" onclick="execDaumPostcode()"name="postcode" id="postcode"placeholder="우편번호"readonly="readonly"/>
-                  <input type="button" onclick="execDaumPostcode()"value="우편번호 찾기"/><br />
-                  <input type="text" name="roadAddress"id="roadAddress"placeholder="도로명주소"/>
-                  <input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소" />
+          <h4 class="infoTitle">주문 상품</h4>
+          <div class="orderForm">
+            <th:block th:if="${#lists.size(cartList) > 0}">
+              <div class="item" th:each="item : ${cartList}">
+                <div class="MainImg">
+                  <input type="hidden" id="itemNo" name="itemNo" th:value="${item.itemNo}"> <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}">
+                    <img th:src="@{/admin/display.do(itemNo=${item.itemNo})}" class="photo_image">
+                  </a>
+                </div>
+                <div class="itemInfo" id="itemTitle">
+                  <input type="hidden" class="itemTitle" th:value="${item.itemTitle}" name="itemTitle" /> <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${item.itemTitle}"></a>
+                </div>
+                <div class="itemInfo" id="itemPrice">
+                  <a th:href="@{/item/detail.do(itemNo=${item.itemNo})}" th:text="${#numbers.formatDecimal(item.itemPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></a>
+                </div>
+                <div class="itemInfo">
+                  <input type="text" name="quantity" class="quantity" th:value="${item.quantity}">
                 </div>
               </div>
-               
-               
-        </div>
+            </th:block>
+          </div>
+          <hr>
+          <div class="orderReceiverInfo">
+            <div class="orderInfoSection" style="width: 420px;">
+              <h4 class="infoTitle">주문자</h4>
+              <div class="orderUserInfo">
+                <div>
+                  <div>이름</div>
+                  <div>
+                    <input id="userName" name="name" th:value="${orderUser.name}" readonly />
+                  </div>
+                </div>
+                <div>
+                  <div>이메일</div>
+                  <div>
+                    <input id="userEmail" name="mail" th:value="${orderUser.email}" readonly />
+                  </div>
+                </div>
+                <div>
+                  <div>연락처</div>
+                  <div>
+                    <input id="userTel" name="mobile" th:value="${orderUser.mobile}" readonly />
+                  </div>
+                </div>
+              </div>
+              <div class=title-group style="align-items: center;">
+                <h4 class="infoTitle" style="margin-right: 10px;">배송지</h4>
+                <div>
+                  <label for="sameUserInfo"> <input type="checkbox" id="sameUserInfo" style="margin: auto;" />주문자와 동일
+                  </label>
+                </div>
+              </div>
+              <div class="deliveryLine">
+                <div class="receiveInfo">
+                  <div>수령자</div>
+                  <div>
+                    <input id="receiverName" name="receiverName" placeholder="이름을 입력해주세요." />
+                  </div>
+                  <div>연락처</div>
+                  <div>
+                    <input id="receiverTel" name="receiverTel" placeholder="하이픈(-)을 제외한 숫자만 입력해주세요." />
+                  </div>
+                </div>
+                <div>주소</div>
+                <div>
+                  <input type="text" onclick="execDaumPostcode()" name="postcode" id="postcode" placeholder="우편번호" readonly="readonly" /> <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" /><br />
+                  <input type="text" name="roadAddress" id="roadAddress" placeholder="도로명주소" /> <input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소" />
+                </div>
+              </div>
+            </div>
             <div class="mainPayment">
               <h4 class="infoTitle">결제 상세</h4>
               <div class="paymentDetailSection" style="width: 400px; height: 150px; border: 1px solid black; border-radius: 10px; margin-top: 10px;">
-                <div class="DetailPrice" style="display: flex; justify-content: space-around; ">
+                <div class="DetailPrice"
+                  style="display: flex; justify-content: space-around;">
                   <div class="payInfoArea">
-                    <div class="payPriceArea"
-                      style="text-align: center; line-height: 30px; margin-top: 45px;">
+                    <div class="payPriceArea" style="text-align: center; line-height: 30px; margin-top: 45px;">
                       <div class="priceBox">
-                        <span style="margin-right: 150px; letter-spacing: 4px; ">총 주문금액</span> <span class="totalProductAmount"></span>
+                        <span style="margin-right: 150px; letter-spacing: 4px;">총 주문금액</span> <span class="totalProductAmount"></span>
                         <br> <span style="margin-right: 150px; letter-spacing: 23px;">배송비</span>
                         <span class="deliveryFee"></span>
-                        
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-               <div class="payInfoLine" style="margin-top:30px;">
+              <div class="payInfoLine" style="margin-top: 30px;">
                 <h4 class="infoTitle" style="margin-right: 170px; margin-left: 35px;">총 결제 금액</h4>
                 <div class="payInfoArea">
                   <div class="payPriceArea">
-                 <div class="totalPrice"  style="font-weight: bold; color:#EB5858;">
-                <input type="hidden"  class="totalOrderAmount" name="orderTotal"th:value="${orderTotal}">
-                 <span class="totalOrderAmount"></span>
+                    <div class="totalPrice"
+                      style="font-weight: bold; color: #EB5858;">
+                      <input type="hidden" class="totalOrderAmount"name="orderTotal" th:value="${orderTotal}">
+                      <span class="totalOrderAmount"></span>
+                    </div>
+                  </div>
                 </div>
-                 </div>
-            </div>
-         </div>
-          <hr style="width:400px;">
-            <div class="paymentGroup">결제 수단
+              </div>
+              <hr style="width: 400px;">
+              <div class="paymentGroup">
+                결제 수단
                 <div class="kakaoPay">
-                 <input type="radio" value="1" id="kPay" name="payMethod"/>
-                 <label for="kPay">카카오페이</label>
+                  <input type="radio" value="1" id="kPay" name="payMethod" /> <label for="kPay">카카오페이</label>
                 </div>
                 <div class="naverPay">
-                  <input type="radio" value="2" id="nPay"  name="payMethod"/>
-                  <label for="nPay">N페이</label>
+                  <input type="radio" value="2" id="nPay" name="payMethod" /> <label for="nPay">N페이</label>
                 </div>
                 <div class="creditCard">
-                  <input type="radio" value="3" id="import"  name="payMethod"/>
-                  <label for="import">일반카드</label>
+                  <input type="radio" value="3" id="import" name="payMethod" /> <label for="import">일반카드</label>
                 </div>
-            </div>
-            <hr style="width:400px;">
+              </div>
+              <hr style="width: 400px;">
               <div class="btn-forward-group">
                 <div class="goBack">
                   <input type="button" value="돌아가기" id="goBack" onclick="history.back()" />
                 </div>
                 <div class="purchase">
-                  
                   <input type="hidden" id="userNo" name="userNo" th:value="${orderUser.userNo}" />
-                  <button type="button" id="btnPay" >결제하기</button>
+                  <button type="button" id="btnPay">결제하기</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-            </form>
-        </div>
+      </form>
     </div>
-    <div th:replace="~{/layout/footer::footerFrag}"></div>
+  </div>
+  <div th:replace="~{/layout/footer::footerFrag}"></div>
 </body>
-
 </html>

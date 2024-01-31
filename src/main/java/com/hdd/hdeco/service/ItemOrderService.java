@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.simple.parser.ParseException;
-
 import com.hdd.hdeco.domain.CartDTO;
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
@@ -26,9 +24,8 @@ public interface ItemOrderService {
 	public void orderInfo(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
-
-	/* public void updateImpUid(String itemOrderNo, String imp_uid); */
+	
 	public String getToken() throws Exception;
-	public String paymentInfo(String imp_uid, String access_token, ItemOrderDTO itemOrderDTO) throws IOException, ParseException;
-	public void payMentCancle(String access_token, String imp_uid, String amount,String reason) throws IOException, ParseException;
+	public int paymentInfo(String imp_uid, String access_token) throws IOException;
+	public void payMentCancel(String access_token, String imp_uid, int amount, String reason) throws IOException;
 }

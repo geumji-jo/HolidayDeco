@@ -1,9 +1,9 @@
 package com.hdd.hdeco.service;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderCancelDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.mapper.AdminMapper;
 import com.hdd.hdeco.util.MyFileUtil;
@@ -185,7 +186,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void getItemEdit(HttpServletRequest request, Model model) {
 		
-		 int itemNo = Integer.parseInt(request.getParameter("itemNo"));
+		int itemNo = Integer.parseInt(request.getParameter("itemNo"));
 		
 		model.addAttribute("itemList", adminMapper.getItemByNo(itemNo));
 		System.out.println("서비스 임플에 값 : " + model);
@@ -277,5 +278,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void UpdateItemStock(ItemDTO itemDTO) {
 		adminMapper.UpdateItemStock(itemDTO);
+	}
+	
+//주문 취소
+	@Override
+	public void orderCancel(OrderCancelDTO orderCancelDTO) {
+		adminMapper.orderCancel(orderCancelDTO);
+	}
+	
+	@Override
+	public void insertOrderCancel(OrderCancelDTO orderCancelDTO) throws Exception {
+		adminMapper.insertOrderCancel(orderCancelDTO);
 	}
 }

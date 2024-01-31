@@ -131,7 +131,6 @@ CREATE TABLE ITEM_ORDER_T (
 	ORDER_TOTAL             INT,                                      -- 전체 주문 금액
 	IMP_UID                 VARCHAR(50),                   	          -- 아임포트 결제 번호
 	PAY_METHOD              INT, 				                      -- 결제 방식 
-	PAY_SUCCESS		        INT, 				                      -- 결제 여부   
     DELIVERY				VARCHAR(20) DEFAULT '배송준비',			  -- 배송 정보 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
 	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE
@@ -152,10 +151,16 @@ CREATE TABLE ORDER_DETAIL_T (
     CONSTRAINT FK_ORDER_DETAIL_T_ITEM_ORDER FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
 );
 
-	
-
-
-
+CREATE TABLE ORDER_CANCEL_T (
+	ORDER_CANCEL_NO INT NOT NULL AUTO_INCREMENT,           -- PK
+	ITEM_ORDER_NO VARCHAR(20),
+    USER_NO INT NOT NULL,                          -- FK 유저번호
+    ORDER_TOTAL             INT,                   -- 전체 주문 금액
+	IMP_UID                 VARCHAR(50),           -- 아임포트 결제 번호
+    CONSTRAINT PK_ORDER_CANCEL_T PRIMARY KEY(ORDER_CANCEL_NO),
+    CONSTRAINT FK_ORDER_CANCEL_T_USER FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE,
+    CONSTRAINT FK_ORDER_CANCEL_T_ITEM_ORDER FOREIGN KEY(ITEM_ORDER_NO) REFERENCES ITEM_ORDER_T(ITEM_ORDER_NO) ON DELETE CASCADE
+);
 
 -- -- -- -- -- -- -- -- -- --<카카오페이> -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -286,3 +291,4 @@ INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM
 VALUES ('tree wrapper','4000','/storage/itemImg/상품(19).jpg','/storage/itemImg/상품(19).jpg',100,NOW());
 INSERT INTO ITEM_T (ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG, ITEM_DETAIL_IMG, ITEM_STOCK, ITEM_WRITED_AT)
 VALUES ('wrapper set','8000','/storage/itemImg/상품(20).jpg','/storage/itemImg/상품(20).jpg',100,NOW());
+

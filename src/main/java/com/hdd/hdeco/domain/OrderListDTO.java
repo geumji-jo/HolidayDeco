@@ -23,7 +23,7 @@ public class OrderListDTO {
 	private int payNo;
 	private int payMethod;
 	private int paySuccess;
-	private String impUid;
+	private String imp_uid;
 	private int cartNo;
 
 	private int orderDetailNo;

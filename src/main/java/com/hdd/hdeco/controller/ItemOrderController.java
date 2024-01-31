@@ -3,22 +3,18 @@ package com.hdd.hdeco.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,13 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hdd.hdeco.domain.ItemOrderDTO;
 import com.hdd.hdeco.domain.OrderDetailDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
-import com.hdd.hdeco.domain.PaymentCancelDTO;
 import com.hdd.hdeco.mapper.CartMapper;
 import com.hdd.hdeco.service.CartService;
 import com.hdd.hdeco.service.ItemOrderService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
@@ -54,7 +48,6 @@ public class ItemOrderController {
 	@ResponseBody
 	@RequestMapping(value = "/verifyIamport/{imp_uid}")
 	public IamportResponse<Payment> paymentByImpUid(Model model, Locale locale, HttpSession session, @PathVariable(value = "imp_uid") String imp_uid) throws IamportResponseException, IOException {
-	  System.out.println(client.paymentByImpUid(imp_uid));
 		return client.paymentByImpUid(imp_uid);
 	}
 
@@ -77,7 +70,7 @@ public class ItemOrderController {
 	// 주문하기 
 	@ResponseBody
 	@PostMapping(value = "/insertOrder.do", produces = "application/json")
-	public Map<String, Object> insertOrder(ItemOrderDTO itemOrderDTO, OrderDetailDTO orderDetailDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void insertOrder(ItemOrderDTO itemOrderDTO, OrderDetailDTO orderDetailDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		// 캘린더 호출
 		Calendar cal = Calendar.getInstance();
@@ -93,11 +86,9 @@ public class ItemOrderController {
 		String itemOrderNo = ymd + "_" + subNum;  // [연월일]_[랜덤숫자] 로 구성된 문자
 		itemOrderDTO.setItemOrderNo(itemOrderNo);
 		orderDetailDTO.setItemOrderNo(itemOrderNo);
-		Map<String, Object> map = new HashMap<>();
-		map.put("order", itemOrderService.insertOrder(itemOrderDTO));
+		
+		itemOrderService.insertOrder(itemOrderDTO);
 		itemOrderService.insertOrderDetail(orderDetailDTO);
-	
-    return map;
 }
 	
 	
@@ -146,17 +137,10 @@ public class ItemOrderController {
 		model.addAttribute("orderView", orderView);
 	}
 	
-	// 결제 취소 
 	@GetMapping("/payFail.do")
 	public String payFail(HttpServletRequest request) {
 		itemOrderService.deleteOrder(request);
-		return "redirect:/order/orderDetail.do?itemNo=" + request.getParameter("itemNo");
+		return "redirect:/order/orderDetail.do?itemOrderNo=" + request.getParameter("itemOrderNo");
 	}
-	
-  @PostMapping("/payment/cancel")
-  private IamportResponse<Payment> cancelPaymentByImpUid(@RequestBody PaymentCancelDTO paymentCancelDTO) throws IamportResponseException, IOException {
-      String impUid = paymentCancelDTO.getImp_uid();
-      return client.cancelPaymentByImpUid(new CancelData(impUid, true));
-  }
-	
+
 }

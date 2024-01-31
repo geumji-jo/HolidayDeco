@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -15,8 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderCancelDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.service.AdminService;
+import com.hdd.hdeco.service.ItemOrderService;
 
 import lombok.RequiredArgsConstructor;	
 
@@ -27,11 +30,13 @@ public class AdminController {
 
   //field
   private final AdminService adminService;
+  private final ItemOrderService itemOrderService;
   
-  
-  //관리자페이지메인홈
+  //관리자 페이지 메인 홈
   @GetMapping("/adminPageHome.html")
-  public String adminPageHome() {
+  public String adminPageHome(ItemOrderDTO itemOrderDTO, Model model) throws Exception{
+		List<ItemOrderDTO> orderList = adminService.orderList(itemOrderDTO);
+		model.addAttribute("orderList", orderList);
     return "admin/adminPageHome";
   }
   
@@ -46,14 +51,14 @@ public class AdminController {
 		return "admin/itemManageList";
 	}
 
-//상품 추가
+ // 상품 추가
  @PostMapping("/uploadItem.do")
  public String uploadItem(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
  	 adminService.uploadItem(multipartRequest);
      return "redirect:/admin/itemManageList.do";
  }
 	
- // 상품 이미지 
+  // 상품 이미지 
 	@GetMapping("/display.do")
 	public ResponseEntity<byte[]> display(@RequestParam("itemNo") int itemNo) {
 		return adminService.display(itemNo);
@@ -73,6 +78,7 @@ public class AdminController {
 		return "redirect:/admin/itemManageList.do";
 	}
 	
+	 // 편집 화면 
 	 @GetMapping("/itemEdit.do")
    public String itemEdit(HttpServletRequest request, Model model) {
       adminService.getItemEdit(request, model);
@@ -86,8 +92,8 @@ public class AdminController {
 	     return "redirect:/admin/itemManageList.do";
 	 }
 	 
+	  // 상품 검색 
 		@GetMapping("/manageSearch.do") public String searchItem(@RequestParam(value="query") String query, Model model) { 
-			// 검색 로직 구현 및 결과를 모델에 추가 
 			List<ItemDTO>searchResult = adminService.searchItem(query); 
 		  model.addAttribute("itemList",searchResult);
 		  return "admin/itemManageList"; 
@@ -125,8 +131,23 @@ public class AdminController {
 		 }
 		 return "redirect:/admin/manageOrderView.do?n=" + itemOrderNo;
 		}
+		
+		// 주문 취소
+		@PostMapping(value= "/orderCancel", produces = "application/json")
+		public ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO orderCancelDTO) throws Exception {
+		    adminService.insertOrderCancel(orderCancelDTO);
+		    System.out.println(orderCancelDTO.toString());
+		    if(!"".equals(orderCancelDTO.getImp_uid())) {
+		        String token = itemOrderService.getToken();
+		        int amount = itemOrderService.paymentInfo(orderCancelDTO.getImp_uid(), token);
+		        itemOrderService.payMentCancel(token, orderCancelDTO.getImp_uid(), amount, "관리자 취소");
+		    }
+		    
+		    adminService.orderCancel(orderCancelDTO);
+
+		    // 주문 취소가 성공했음을 응답으로 반환
+		    return ResponseEntity.ok().body("{\"message\": \"주문취소완료\"}");
+		}
   
  }
-  
-	  
 	

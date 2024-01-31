@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
+import com.hdd.hdeco.domain.OrderCancelDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
 
 @Mapper
@@ -44,4 +45,9 @@ public interface AdminMapper {
 	
 	// 상품 재고 업데이트
 	public int UpdateItemStock(ItemDTO itemDTO);
+	
+	//주문취소
+	public void orderCancel(OrderCancelDTO orderCancelDTO);
+	
+	public int insertOrderCancel(OrderCancelDTO orderCancelDTO);
 }

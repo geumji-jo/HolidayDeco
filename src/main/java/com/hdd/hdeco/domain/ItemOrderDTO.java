@@ -20,14 +20,20 @@ public class ItemOrderDTO {
 	private String detailAddress;
 	private int orderTotal;
 	private int deliveryFee;
-	private int payNo;
 	private int payMethod;
-	private int paySuccess;
   private int quantity;
   private String delivery;
 	private String imp_uid;
 	private int cartNo;
 	private int itemNo;
 	private int userNo;
+	
+  public String getImp_uid() {
+    return imp_uid;
+}
+
+public void setImp_uid(String imp_uid) {
+    this.imp_uid = imp_uid;
+}
 
 }

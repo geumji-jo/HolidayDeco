@@ -15,9 +15,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +29,7 @@ import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.CartMapper;
 import com.hdd.hdeco.mapper.ItemOrderMapper;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.insertOrder(itemOrderDTO);
 		return itemOrderMapper.selectUserOrder(itemOrderDTO.getUserNo());
 	}
-
+  // 카트 정보 orderDetail에 저장 
 	@Override
 	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
 		itemOrderMapper.insertOrderDetail(orderDetailDTO);
@@ -107,21 +105,33 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	// 결제실패
 	@Override
 	public void deleteOrder(HttpServletRequest request) {
-		int itemOrderNo = Integer.parseInt(request.getParameter("itemOrderNo"));
+		String itemOrderNo = request.getParameter("itemOrderNo");
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
 
 	// ---------------------환불, 결제 토큰생성
-	@Value("imp_key")
-	private String imp_key;
+	@Value("${imp_key}")
+	private String impKey;
 
-	@Value("imp_secret")
-	private String imp_secret;
-
-	@Override
-	public String getToken() throws Exception {
+	@Value("${imp_secret}")
+	private String impSecret;
+	
+	@Data
+	private class Response{
+		private PaymentInfo response;
+	}
+	
+	@Data
+	private class PaymentInfo{
+		private int amount;
+	}
+	
+	// 아임포트 토큰 
+  @Override
+	public String getToken() throws IOException {
 
 		HttpsURLConnection conn = null;
+
 		URL url = new URL("https://api.iamport.kr/users/getToken");
 
 		conn = (HttpsURLConnection) url.openConnection();
@@ -132,11 +142,11 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		conn.setDoOutput(true);
 		JsonObject json = new JsonObject();
 
-		json.addProperty("imp_key", imp_key);
-		json.addProperty("imp_secret", imp_secret);
-
+		json.addProperty("imp_key", impKey);
+		json.addProperty("imp_secret", impSecret);
+		
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-
+		
 		bw.write(json.toString());
 		bw.flush();
 		bw.close();
@@ -146,6 +156,8 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		Gson gson = new Gson();
 
 		String response = gson.fromJson(br.readLine(), Map.class).get("response").toString();
+		
+		System.out.println(response);
 
 		String token = gson.fromJson(response, Map.class).get("access_token").toString();
 
@@ -154,68 +166,73 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 
 		return token;
 	}
+  
+  // 아임포트 결제 정보 
+  @Override
+	public int paymentInfo(String imp_uid, String access_token) throws IOException {
 
-	// 결제 정보 불러오기
-	@Override
-	public String paymentInfo(String imp_uid, String access_token, ItemOrderDTO itemOrderDTO) throws IOException, ParseException {
 	    HttpsURLConnection conn = null;
-
+	    
 	    URL url = new URL("https://api.iamport.kr/payments/" + imp_uid);
-
+	 
 	    conn = (HttpsURLConnection) url.openConnection();
-
+	 
 	    conn.setRequestMethod("GET");
 	    conn.setRequestProperty("Authorization", access_token);
 	    conn.setDoOutput(true);
-
+	 
 	    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
-	    JSONParser parser = new JSONParser();
-
-	    JSONObject p = (JSONObject) parser.parse(br.readLine());
-
-	    String response = p.get("response").toString();
-
-	    p = (JSONObject) parser.parse(response);
-
-	    String amount = p.get("amount").toString();
-
-	    return amount;
+	    
+	    Gson gson = new Gson();
+	    
+	    Response response = gson.fromJson(br.readLine(), Response.class);
+	    
+	    br.close();
+	    conn.disconnect();
+	    
+	    return response.getResponse().getAmount();
 	}
-
-	@Override
-	public void payMentCancle(String access_token, String imp_uid, String amount, String reason)
-			throws IOException, ParseException {
-		System.out.println("imp_uid = " + imp_uid);
+	
+	
+	// 아임포트 결제 취소 
+	public void payMentCancel(String access_token, String imp_uid, int amount, String reason) throws IOException  {
+		System.out.println("결제 취소");
+		
+		System.out.println(access_token);
+		
+		System.out.println(imp_uid);
+		
 		HttpsURLConnection conn = null;
 		URL url = new URL("https://api.iamport.kr/payments/cancel");
-
+ 
 		conn = (HttpsURLConnection) url.openConnection();
-
+ 
 		conn.setRequestMethod("POST");
-
+ 
 		conn.setRequestProperty("Content-type", "application/json");
 		conn.setRequestProperty("Accept", "application/json");
 		conn.setRequestProperty("Authorization", access_token);
-
+ 
 		conn.setDoOutput(true);
-
+		
 		JsonObject json = new JsonObject();
-
+ 
 		json.addProperty("reason", reason);
 		json.addProperty("imp_uid", imp_uid);
 		json.addProperty("amount", amount);
 		json.addProperty("checksum", amount);
-
-		System.out.println("check 1 : " + imp_uid);
-		System.out.println("check 2 : " + amount);
-		System.out.println(reason);
+ 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-
+ 
 		bw.write(json.toString());
 		bw.flush();
 		bw.close();
-
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+ 
+		br.close();
+		conn.disconnect();
 	}
 }
+
+
