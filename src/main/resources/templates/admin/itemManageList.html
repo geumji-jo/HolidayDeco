@@ -4,6 +4,9 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/admin.css}">
 <link rel="stylesheet" th:href="@{/css/font.css}">
+<head th:replace="~{/layout/adminheader::adminHeadFrag('HolidayDeco::adminPage')}">
+</head>
+<div th:replace="~{/layout/adminHeader::adminHeaderFrag}"></div>
 <style>
 .itemImg {
   width: 200px;
@@ -92,20 +95,6 @@ $(function(){
 
 </script>
 <body>
-    <div id="header">
-      <div class="adminheader">
-        <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
-        <a class="logout" th:href="@{/user/logout.do}">
-        <i class="fad fa-sign-out-alt" style="-fa-primary-color: #878787; --fa-secondary-color: #0d0d0d; --fa-secondary-opacity: 1;"></i></a>
-      </div>
-      <div id="container-title">
-        <h3>
-          <a th:href="@{/admin/adminPageHome.html}"> adminPage </a>
-        </h3>
-      </div>
-      <hr class="separator separator--line--green" />
-      <hr class="separator separator--line--red" />
-    </div>
     <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
     <div id="onlyContent" style="margin-bottom:30px;">
       <h2></h2>

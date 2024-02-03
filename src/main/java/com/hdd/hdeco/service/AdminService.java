@@ -33,4 +33,9 @@ public interface AdminService {
 	// 주문 취소
 	public void orderCancel(OrderCancelDTO orderCancelDTO);
 	public void insertOrderCancel(OrderCancelDTO orderCancelDTO) throws Exception;
+	
+	// 회원관리
+	public void getTotalUserList(HttpServletRequest request, Model model);
+	public void getSleepUserList(HttpServletRequest request, Model model);
+	public void getOutUserList(HttpServletRequest request, Model model);
 }

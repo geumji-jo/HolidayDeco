@@ -1,37 +1,25 @@
 @charset "UTF-8";
 /*
 ---------------------------------------
-사이드바 css
+css
 ---------------------------------------
 */
-#container {
-  width: 1240px;
-  margin: 0px auto;
-  padding: 20px;
-  user-select:none;
-}
-#container-title {
-  padding: 20px;
-  text-align: center;
-  font-family: 'Domine', serif;
-  color: #000000;
-  font-weight: bold;
-  font-size: 32px;
-  background-color: white;
-  
-}
- 
+
 
 #onlyContent {
   font-family: 'Pretendard-Regular', serif;
-  font-size: 18px;
+  font-size: 16px;
+  width: 1000px;
+  margin: 250px auto 200px;
   text-align: center;
-  background-color: white; /* onlyContent 영역 배경색 지정 (필요한 경우) */
   padding-top: 60px; /* 헤더 높이만큼 패딩 추가 */
 }
 
-
-
+/*
+---------------------------------------
+관리자 페이지 사이드바 css
+---------------------------------------
+*/
 /* 노멀라이즈 시작 */
 body, ul, li {
   margin: 0;
@@ -60,12 +48,12 @@ a {
   background-color: #EB5858;;
 }
 
-body, #onlyContent {
+body {
   height: 100%;
 }
 
 .side-bar {
-  top: 226px;
+  top: 229px;
   position: fixed;
   min-height: 100vh;
   width: 76px;
@@ -85,7 +73,7 @@ text-align: center;
 }
 
 .side-bar {
-  top: 226px;
+  top: 229px;
   position: fixed;
   min-height: 100vh;
   width: 76px;
@@ -142,30 +130,6 @@ text-align: center;
   vertical-align: middle;
 }
 
-#header {
-position: sticky;
-    top: 0;
-    z-index: 100;
-    background-color: white;
-}
-
-
-/* nav 밑 라인 시작 */
-
-.separator--line--green {
-  border: 0;
-  border-bottom: 3px solid #004427;
-  margin-bottom: 15px;
-  width: 100%;
-
-
-}
-.separator--line--red {
-  border: 0;
-  border-bottom: 3px solid #EB5858;
-  width: 100%; 
-
-}
 
 /* 아이콘 시작 */
 .side-bar__icon-box {
@@ -239,14 +203,4 @@ position: sticky;
   transition: all var(--side-bar__icon), left calc(var(--side-bar__icon) / 2) 0s, right calc(var(--side-bar__icon) / 2) 0s, height calc(var(--side-bar__icon) / 2) calc(var(--side-bar__icon) / 2);
 }
 /* 아이콘 끝 */
-
-.adminheader {
-    font-family: 'InkLipquid';
-    font-size: 30px;
-    text-align: right; 
-    text-decoration: none; 
-    color : black; 
-    margin-right: 35px;
-    user-select: none;
-  }
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="adminHeadFrag(title)">
+  <meta charset="UTF-8">
+  <title th:text="${title}"></title>
+  <link rel="stylesheet" th:href="@{/css/font.css}"> <!-- 폰트 css모음 -->
+  <link rel="stylesheet" th:href="@{/css/adminHeader.css}"> <!-- header css모음 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+  <script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+</head>
+<body>
+  <div th:fragment="adminHeaderFrag">
+    <header id="header">
+      <div class="adminheader">
+        <a th:href="@{/}"><i class="fad fa-home-lg" style="-fa-primary-color: #c41b08; --fa-secondary-color: #1bac61; --fa-secondary-opacity: 1;"></i></a>
+        <a class="logout" th:href="@{/user/logout.do}">
+        <i class="fad fa-sign-out-alt" style="-fa-primary-color: #878787; --fa-secondary-color: #0d0d0d; --fa-secondary-opacity: 1;"></i></a>
+      </div>
+      <div id="container-title">
+        <h3>
+          <a th:href="@{/admin/adminPageHome.html}"> adminPage </a>
+        </h3>
+      </div>
+      <hr class="separator separator--line--green" />
+      <hr class="separator separator--line--red" />
+    </header>
+  </div>
+</body>
+</html>

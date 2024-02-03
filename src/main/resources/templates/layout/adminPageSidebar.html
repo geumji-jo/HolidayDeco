@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
-<script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
-</head>
-
 <body>
   <div th:fragment="adminSidebarFrag">
     <aside class="side-bar">
@@ -27,15 +24,15 @@
         <span>회원관리</span>
       </a>
       <ul class="text-center">
-        <li><a href="#">전체회원보기</a></li>
-        <li><a href="#">휴면회원보기</a></li>
-        <li><a href="#">탈퇴회원보기</a></li>
+        <li><a th:href="@{/admin/totalUserList.html}">전체회원보기</a></li>
+        <li><a th:href="@{/admin/sleepUserList.html}">휴면회원보기</a></li>
+        <li><a th:href="@{/admin/outUserList.html}">탈퇴회원보기</a></li>
       </ul>
     </li>
     <li>
       <a href="#">
         <span><i class="far fa-box" style="color: #ffffff;"></i></span>
-        <span>상품관리</span>  
+        <span>상품관리</span>
       </a>
       <ul class="text-center">
         <li><a th:href="@{/admin/itemManageList.do}">상품리스트</a></li>
@@ -49,6 +46,7 @@
       </a>
       <ul class="text-center">
         <li><a href="/admin/manageOrderList.do">전체주문</a></li>
+        <li><a href="#">취소주문</a></li>
       </ul>
     </li>
     <li>

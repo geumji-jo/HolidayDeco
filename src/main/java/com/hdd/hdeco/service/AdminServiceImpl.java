@@ -26,6 +26,7 @@ import com.hdd.hdeco.domain.ItemDTO;
 import com.hdd.hdeco.domain.ItemOrderDTO;
 import com.hdd.hdeco.domain.OrderCancelDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
+import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.AdminMapper;
 import com.hdd.hdeco.util.MyFileUtil;
 import com.hdd.hdeco.util.PageUtil;
@@ -290,4 +291,248 @@ public class AdminServiceImpl implements AdminService {
 	public void insertOrderCancel(OrderCancelDTO orderCancelDTO) throws Exception {
 		adminMapper.insertOrderCancel(orderCancelDTO);
 	}
+	
+	
+//전체 유저 리스트 가져오기
+ @Override
+ public void getTotalUserList(HttpServletRequest request, Model model) {
+  
+  // 'page' 매개변수가 제공되지 않으면 1로 설정.
+  Optional<String> opt1 = Optional.ofNullable(request.getParameter("page"));
+  int page = Integer.parseInt(opt1.orElse("1"));
+
+  // 세션에서 'recordPerPage' 값을 가져오기. 세션에 없을 경우 10으로 기본값을 설정.
+  HttpSession session = request.getSession();
+  Optional<Object> opt2 = Optional.ofNullable(session.getAttribute("recordPerPage"));
+  int recordPerPage = (int)(opt2.orElse(10));
+
+  // 'order' 매개변수가 제공되지 않으면 'ASC'로 설정.(정렬)
+  Optional<String> opt3 = Optional.ofNullable(request.getParameter("order"));
+  String order = opt3.orElse("ASC");
+
+  // 'column' 매개변수가 제공되지 않으면 'FAQ_NO'로 설정.(정렬칼럼)
+  Optional<String> opt4 = Optional.ofNullable(request.getParameter("column"));
+  String column = opt4.orElse("USER_NO");
+  
+  // 파라미터 query가 전달되지 않는 경우 query=""로 처리. (검색어)
+
+	  Optional<Object> opt6 = Optional.ofNullable(request.getParameter("query"));
+	  String query = (String)opt6.orElse("");
+	//큰따옴표가 포함되어 있다면 제거
+	  if (query.contains("\"")) {
+	      query = query.replace("\"", "");
+	  }
+
+  
+//파라미터 query가 전달되지 않거나 값이 null 또는 "undefined"인 경우 session에서 query 값을 가져옴. (검색어)
+	/*
+	 * String query = Optional.ofNullable(request.getParameter("query")) .filter(s
+	 * -> !"undefined".equals(s)) .orElseGet(() -> (String)
+	 * session.getAttribute("query"));
+	 */
+
+  // 데이터베이스로 전달할 맵(Map)을 생성.
+  Map<String, Object> map = new HashMap<String, Object>();
+  map.put("query", query);
+  int totalRecord = adminMapper.getUserSearchCount(map);
+  
+  // column과 query를 이용해 검색된 레코드 개수를 구한다.
+
+
+  // 'recordPerPage' 값이 변경되었을 때, 현재 페이지의 데이터가 없는 경우를 확인한다.
+  int totalPage = (int) Math.ceil((double) totalRecord / recordPerPage);
+  if ((page - 1) * recordPerPage >= totalRecord) {
+      page = Math.max(totalPage, 1);
+  }
+  
+
+  // 페이지 유틸리티(PageUtil)를 계산한다. (페이지네이션에 필요한 모든 정보 포함)
+ 
+  pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+  map.put("begin", pageUtil.getBegin());
+  map.put("order", order);
+  map.put("recordPerPage", recordPerPage);
+  map.put("column", column);
+  
+  // 지정된 범위(begin ~ end)의 목록을 가져온다.
+  List<UserDTO> totalUserList = adminMapper.getTotalUserList(map);
+  switch(order) {
+  case "ASC" : model.addAttribute("order", "DESC"); break;  // 현재 ASC 정렬이므로 다음 정렬은 DESC이라고 Jsp에 알려준다.
+  case "DESC": model.addAttribute("order", "ASC"); break;
+  }
+  
+
+  
+  // pagination.jsp로 전달할 정보를 저장.
+  model.addAttribute("totalUserList",  totalUserList);
+  model.addAttribute("pagination", pageUtil.getPagination(request.getContextPath() + "/admin/totalUserList.html?column=" + column + "&order=" + order + "&query=" + query));
+  model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+  model.addAttribute("totalRecord", totalRecord);
+  model.addAttribute("page", page);
+  model.addAttribute("query", query);
+  
+}
+ 
+ 
+//휴면 유저 리스트 가져오기
+ @Override
+ public void getSleepUserList(HttpServletRequest request, Model model) {
+	 
+	  // 'page' 매개변수가 제공되지 않으면 1로 설정.
+	  Optional<String> opt1 = Optional.ofNullable(request.getParameter("page"));
+	  int page = Integer.parseInt(opt1.orElse("1"));
+
+	  // 세션에서 'recordPerPage' 값을 가져오기. 세션에 없을 경우 10으로 기본값을 설정.
+	  HttpSession session = request.getSession();
+	  Optional<Object> opt2 = Optional.ofNullable(session.getAttribute("recordPerPage"));
+	  int recordPerPage = (int)(opt2.orElse(10));
+
+	  // 'order' 매개변수가 제공되지 않으면 'ASC'로 설정.(정렬)
+	  Optional<String> opt3 = Optional.ofNullable(request.getParameter("order"));
+	  String order = opt3.orElse("ASC");
+
+	  // 'column' 매개변수가 제공되지 않으면 'FAQ_NO'로 설정.(정렬칼럼)
+	  Optional<String> opt4 = Optional.ofNullable(request.getParameter("column"));
+	  String column = opt4.orElse("USER_NO");
+	  
+	  // 파라미터 query가 전달되지 않는 경우 query=""로 처리. (검색어)
+
+		  Optional<Object> opt6 = Optional.ofNullable(request.getParameter("query"));
+		  String query = (String)opt6.orElse("");
+		//큰따옴표가 포함되어 있다면 제거
+		  if (query.contains("\"")) {
+		      query = query.replace("\"", "");
+		  }
+
+	  
+	//파라미터 query가 전달되지 않거나 값이 null 또는 "undefined"인 경우 session에서 query 값을 가져옴. (검색어)
+		/*
+		 * String query = Optional.ofNullable(request.getParameter("query")) .filter(s
+		 * -> !"undefined".equals(s)) .orElseGet(() -> (String)
+		 * session.getAttribute("query"));
+		 */
+
+	  // 데이터베이스로 전달할 맵(Map)을 생성.
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  map.put("query", query);
+	  int totalRecord = adminMapper.getSleepUserSearchCount(map);
+	  
+	  // column과 query를 이용해 검색된 레코드 개수를 구한다.
+
+
+	  // 'recordPerPage' 값이 변경되었을 때, 현재 페이지의 데이터가 없는 경우를 확인한다.
+	  int totalPage = (int) Math.ceil((double) totalRecord / recordPerPage);
+	  if ((page - 1) * recordPerPage >= totalRecord) {
+	      page = Math.max(totalPage, 1);
+	  }
+	  
+
+	  // 페이지 유틸리티(PageUtil)를 계산한다. (페이지네이션에 필요한 모든 정보 포함)
+	 
+	  pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+	  map.put("begin", pageUtil.getBegin());
+	  map.put("order", order);
+	  map.put("recordPerPage", recordPerPage);
+	  map.put("column", column);
+	  
+	  // 지정된 범위(begin ~ end)의 목록을 가져온다.
+	  List<UserDTO> totalUserList = adminMapper.getSleepUserList(map);
+	  switch(order) {
+	  case "ASC" : model.addAttribute("order", "DESC"); break;  // 현재 ASC 정렬이므로 다음 정렬은 DESC이라고 Jsp에 알려준다.
+	  case "DESC": model.addAttribute("order", "ASC"); break;
+	  }
+	  
+
+	  
+	  // pagination.jsp로 전달할 정보를 저장.
+	  model.addAttribute("sleepUserList",  totalUserList);
+	  model.addAttribute("pagination", pageUtil.getPagination(request.getContextPath() + "/admin/sleepUserList.html?column=" + column + "&order=" + order + "&query=" + query));
+	  model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+	  model.addAttribute("totalRecord", totalRecord);
+	  model.addAttribute("page", page);
+	  model.addAttribute("query", query);
+	  
+	
+ }
+//탈퇴 유저 리스트 가져오기
+ @Override
+ public void getOutUserList(HttpServletRequest request, Model model) {
+	  // 'page' 매개변수가 제공되지 않으면 1로 설정.
+	  Optional<String> opt1 = Optional.ofNullable(request.getParameter("page"));
+	  int page = Integer.parseInt(opt1.orElse("1"));
+
+	  // 세션에서 'recordPerPage' 값을 가져오기. 세션에 없을 경우 10으로 기본값을 설정.
+	  HttpSession session = request.getSession();
+	  Optional<Object> opt2 = Optional.ofNullable(session.getAttribute("recordPerPage"));
+	  int recordPerPage = (int)(opt2.orElse(10));
+
+	  // 'order' 매개변수가 제공되지 않으면 'ASC'로 설정.(정렬)
+	  Optional<String> opt3 = Optional.ofNullable(request.getParameter("order"));
+	  String order = opt3.orElse("ASC");
+
+	  // 'column' 매개변수가 제공되지 않으면 'FAQ_NO'로 설정.(정렬칼럼)
+	  Optional<String> opt4 = Optional.ofNullable(request.getParameter("column"));
+	  String column = opt4.orElse("USER_NO");
+	  
+	  // 파라미터 query가 전달되지 않는 경우 query=""로 처리. (검색어)
+
+		  Optional<Object> opt6 = Optional.ofNullable(request.getParameter("query"));
+		  String query = (String)opt6.orElse("");
+		//큰따옴표가 포함되어 있다면 제거
+		  if (query.contains("\"")) {
+		      query = query.replace("\"", "");
+		  }
+
+	  
+	//파라미터 query가 전달되지 않거나 값이 null 또는 "undefined"인 경우 session에서 query 값을 가져옴. (검색어)
+		/*
+		 * String query = Optional.ofNullable(request.getParameter("query")) .filter(s
+		 * -> !"undefined".equals(s)) .orElseGet(() -> (String)
+		 * session.getAttribute("query"));
+		 */
+
+	  // 데이터베이스로 전달할 맵(Map)을 생성.
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  map.put("query", query);
+	  int totalRecord = adminMapper.getOutUserSearchCount(map);
+	  
+	  // column과 query를 이용해 검색된 레코드 개수를 구한다.
+
+
+	  // 'recordPerPage' 값이 변경되었을 때, 현재 페이지의 데이터가 없는 경우를 확인한다.
+	  int totalPage = (int) Math.ceil((double) totalRecord / recordPerPage);
+	  if ((page - 1) * recordPerPage >= totalRecord) {
+	      page = Math.max(totalPage, 1);
+	  }
+	  
+
+	  // 페이지 유틸리티(PageUtil)를 계산한다. (페이지네이션에 필요한 모든 정보 포함)
+	 
+	  pageUtil.setPageUtil(page, totalRecord, recordPerPage);
+	  map.put("begin", pageUtil.getBegin());
+	  map.put("order", order);
+	  map.put("recordPerPage", recordPerPage);
+	  map.put("column", column);
+	  
+	  // 지정된 범위(begin ~ end)의 목록을 가져온다.
+	  List<UserDTO> totalUserList = adminMapper.getOutUserList(map);
+	  switch(order) {
+	  case "ASC" : model.addAttribute("order", "DESC"); break;  // 현재 ASC 정렬이므로 다음 정렬은 DESC이라고 Jsp에 알려준다.
+	  case "DESC": model.addAttribute("order", "ASC"); break;
+	  }
+	  
+
+	  
+	  // pagination.jsp로 전달할 정보를 저장.
+	  model.addAttribute("outUserList",  totalUserList);
+	  model.addAttribute("pagination", pageUtil.getPagination(request.getContextPath() + "/admin/outUserList.html?column=" + column + "&order=" + order + "&query=" + query));
+	  model.addAttribute("beginNo", totalRecord - (page - 1) * recordPerPage);
+	  model.addAttribute("totalRecord", totalRecord);
+	  model.addAttribute("page", page);
+	  model.addAttribute("query", query);
+	  
+	
+	
+ }
+ 
 }

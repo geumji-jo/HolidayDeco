@@ -159,4 +159,154 @@
 		FROM ITEM_ORDER_T
 	</insert>
 
+
+
+  
+  <!-- 회원 전체 목록 가져오기 -->
+<select id="getTotalUserList" parameterType="Map" resultType="UserDTO">
+  SELECT USER_NO, ID, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, PW_MODIFIED_AT 
+    FROM USER_T
+   <where>
+    <if test="query != null and query != '' and query != 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{query}, '%') 
+        OR ID LIKE CONCAT('%', #{query}, '%') 
+        OR NAME LIKE CONCAT('%', #{query}, '%')
+        OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+        OR ROAD_ADDRESS LIKE CONCAT('%', #{query}, '%')
+        OR JIBUN_ADDRESS LIKE CONCAT('%', #{query}, '%')
+        OR DETAIL_ADDRESS LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+    <if test="query == 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{session.query}, '%') 
+        OR ID LIKE CONCAT('%', #{session.query}, '%') 
+        OR NAME LIKE CONCAT('%', #{session.query}, '%')
+        OR JOINED_AT LIKE CONCAT('%', #{session.query}, '%')
+        OR ROAD_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+        OR JIBUN_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+        OR DETAIL_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+      )
+    </if>
+  </where>
+   ORDER BY ${column} ${order}
+    LIMIT #{begin}, #{recordPerPage}
+  </select>
+  
+  
+  <!-- 전체 카운트 중 query값 결과 카운트 조건문 넣어준 쿼리문 -->
+  <select id="getUserSearchCount" parameterType="Map" resultType="int">
+    SELECT COUNT(*)
+      FROM USER_T
+    <where>
+      <if test="query != null and query != ''">
+        USER_NO LIKE CONCAT('%', #{query}, '%') 
+     OR ID LIKE CONCAT('%', #{query}, '%') 
+     OR NAME LIKE CONCAT('%', #{query}, '%')
+     OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+     OR ROAD_ADDRESS LIKE CONCAT('%', #{query}, '%')
+     OR JIBUN_ADDRESS LIKE CONCAT('%', #{query}, '%')
+     OR DETAIL_ADDRESS LIKE CONCAT('%', #{query}, '%')
+      </if>
+    </where>
+  </select>
+  
+  
+  <!-- 휴면회원 전체 목록 가져오기 -->
+  <select id="getSleepUserList" parameterType="Map" resultType="SleepUserDTO">
+  SELECT USER_NO, ID, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, PW_MODIFIED_AT, SLEPT_AT 
+    FROM SLEEP_USER_T
+   <where>
+    <if test="query != null and query != '' and query != 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{query}, '%') 
+        OR ID LIKE CONCAT('%', #{query}, '%') 
+        OR NAME LIKE CONCAT('%', #{query}, '%')
+        OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+        OR ROAD_ADDRESS LIKE CONCAT('%', #{query}, '%')
+        OR JIBUN_ADDRESS LIKE CONCAT('%', #{query}, '%')
+        OR DETAIL_ADDRESS LIKE CONCAT('%', #{query}, '%')
+        OR SLEPT_AT LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+    <if test="query == 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{session.query}, '%') 
+        OR ID LIKE CONCAT('%', #{session.query}, '%') 
+        OR NAME LIKE CONCAT('%', #{session.query}, '%')
+        OR JOINED_AT LIKE CONCAT('%', #{session.query}, '%')
+        OR ROAD_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+        OR JIBUN_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+        OR DETAIL_ADDRESS LIKE CONCAT('%', #{session.query}, '%')
+        OR SLEPT_AT LIKE CONCAT('%', #{session.query}, '%')
+      )
+    </if>
+  </where>
+   ORDER BY ${column} ${order}
+    LIMIT #{begin}, #{recordPerPage}
+  </select>
+  
+  
+  <!-- 휴면회원 전체 카운트 중 query값 결과 카운트 조건문 넣어준 쿼리문 -->
+  <select id="getSleepUserSearchCount" parameterType="Map" resultType="int">
+    SELECT COUNT(*)
+      FROM SLEEP_USER_T
+    <where>
+      <if test="query != null and query != ''">
+        USER_NO LIKE CONCAT('%', #{query}, '%') 
+     OR ID LIKE CONCAT('%', #{query}, '%') 
+     OR NAME LIKE CONCAT('%', #{query}, '%')
+     OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+     OR ROAD_ADDRESS LIKE CONCAT('%', #{query}, '%')
+     OR JIBUN_ADDRESS LIKE CONCAT('%', #{query}, '%')
+     OR DETAIL_ADDRESS LIKE CONCAT('%', #{query}, '%')
+     OR SLEPT_AT LIKE CONCAT('%', #{query}, '%')
+      </if>
+    </where>
+  </select>
+  
+  <!-- 탈퇴회원 전체 목록 가져오기 -->
+  <select id="getOutUserList" parameterType="Map" resultType="OutUserDTO">
+  SELECT OUT_USER_NO,USER_NO, ID,EMAIL, JOINED_AT, OUT_AT 
+    FROM OUT_USER_T
+   <where>
+    <if test="query != null and query != '' and query != 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{query}, '%') 
+        OR ID LIKE CONCAT('%', #{query}, '%') 
+        OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+        OR EMAIL LIKE CONCAT('%', #{query}, '%')
+        OR OUT_AT LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+    <if test="query == 'undefined'">
+      AND (
+        USER_NO LIKE CONCAT('%', #{session.query}, '%') 
+        OR ID LIKE CONCAT('%', #{session.query}, '%') 
+        OR JOINED_AT LIKE CONCAT('%', #{session.query}, '%')
+        OR EMAIL LIKE CONCAT('%', #{session.query}, '%')
+        OR OUT_AT LIKE CONCAT('%', #{session.query}, '%')
+      )
+    </if>
+  </where>
+   ORDER BY ${column} ${order}
+    LIMIT #{begin}, #{recordPerPage}
+  </select>
+  
+  
+  <!-- 휴면회원 전체 카운트 중 query값 결과 카운트 조건문 넣어준 쿼리문 -->
+  <select id="getOutUserSearchCount" parameterType="Map" resultType="int">
+    SELECT COUNT(*)
+      FROM OUT_USER_T
+    <where>
+      <if test="query != null and query != ''">
+           USER_NO LIKE CONCAT('%', #{query}, '%') 
+        OR ID LIKE CONCAT('%', #{query}, '%') 
+        OR JOINED_AT LIKE CONCAT('%', #{query}, '%')
+        OR EMAIL LIKE CONCAT('%', #{query}, '%')
+        OR OUT_AT LIKE CONCAT('%', #{query}, '%')
+      </if>
+    </where>
+  </select>
 </mapper>

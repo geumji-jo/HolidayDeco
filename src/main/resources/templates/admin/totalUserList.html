@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/admin.css}"> <!-- admin css모음 -->
+<link rel="stylesheet" th:href="@{/css/font.css}"> <!-- 폰트 css모음 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" /> <!-- 폰트어썸 -->
+<script th:src="@{/js/lib/jquery-3.6.4.min.js}"></script>
+<head th:replace="~{/layout/adminheader::adminHeadFrag('HolidayDeco::adminPage')}">
+</head>
+<div th:replace="~{/layout/adminHeader::adminHeaderFrag}"></div>
+<script th:inline="javascript">
+
+
+</script>
+<style>
+
+  .title {
+    cursor: pointer;
+  }
+
+  .title:hover {
+    color: gray;
+  }
+
+  .pagination {
+    width: 350px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .pagination span, .pagination a {
+    display: inline-block;
+    margin: 0 15px;
+  }
+  
+  .hidden {
+    visibility: hidden;
+  }
+  .strong {
+    font-weight: 900;
+    color: #EB5858;
+  }
+  .link {
+    color: balck;
+  }
+
+.totalUserTable {
+  width: 1000px;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 50px;
+}
+
+.totalUserTable th, .totalUserTable td {
+  border-bottom: 3px solid #ddd; 
+  text-align: center; 
+  padding: 5px;
+
+}
+
+
+.totalUserTable tbody tr:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+#reload {
+cursor: pointer;
+}
+
+</style>
+<body>
+     <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
+      <div id="onlyContent">
+        <h2 class="miniTitle">전체회원리스트</h2>
+        <br>
+        <div>
+          <div>
+            <form action="/admin/totalUserList.html" class="search-form">
+              <div class="form-group">
+                <span><i class="fad fa-search" style="--fa-primary-color: #3cd391; --fa-secondary-color: #d96d6d;"></i></span>
+                <input type="text" class="form-control" placeholder="검색어를 입력하세요." name="query" id="query">
+                <span id="reload"><i class="fad fa-sync-alt" style="--fa-primary-color: #3cd391; --fa-secondary-color: #d96d6d; --fa-secondary-opacity: 1;"></i></span>
+              </div>
+            </form>
+          <div style="margin-top:30px;">
+            <select style="float: left;" id="recordPerPage">
+              <option value="10">10개</option>
+              <option value="20">20개</option>
+              <option value="30">30개</option>
+            </select>
+           <div style="float: right;" id="totalRecord" th:text="|전체 ${totalRecord}개|"></div>
+          </div>
+          </div>
+          <div>
+            <table class="totalUserTable">
+              <thead>
+                <tr>
+                  <th><span class="title" data-column="USER_NO" th:attr="data-order=${order}">회원번호</span></th>
+                  <th><span class="title" data-column="ID" th:attr="data-order=${order}">ID</span></th>
+                  <th><span class="title" data-column="NAME" th:attr="data-order=${order}">이름</span></th>
+                  <th><span class="title" data-column="GENDER" th:attr="data-order=${order}">성별</span></th>
+                  <th><span class="title" data-column="MOBILE" th:attr="data-order=${order}">휴대폰</span></th>
+                  <th><span class="title" data-column="EMAIL" th:attr="data-order=${order}">이메일</span></th>
+                  <th><span class="title" data-column="ROAD_ADDRESS" th:attr="data-order=${order}">주소</span></th><!-- /* roadAddress */ -->
+                  <th><span class="title" data-column="DETAIL_ADDRESS" th:attr="data-order=${order}">상세주소</span></th><!-- /* detailAddress */ -->
+                  <th><span class="title" data-column="JOINED_AT" th:attr="data-order=${order}">가입일</span></th>
+                </tr>
+              </thead>
+               <th:block th:if="${#lists.isEmpty(totalUserList)}">
+                <tr>
+                  <th style="pointer-events: none;" scope="row" colspan="9">게시글이 없습니다.</th>
+                </tr>
+              </th:block>
+               <th:block th:if="${not #lists.isEmpty(totalUserList)}">
+                <th:block th:each="user, vs:${totalUserList}" > 
+                  <tr class="btnDedatil" th:data-user_no="${user.userNo}">
+                    <td th:text="${user.userNo}"></td>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.gender}"></td>
+                    <td th:text="${user.mobile}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="|(${user.postcode})${user.roadAddress}|"></td>
+                    <td th:text="${user.detailAddress}"></td>
+                    <td th:text="${#dates.format(user.joinedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                  </tr>
+                </th:block>
+              </th:block>
+            </table>
+          </div>
+          <nav>
+            <div>
+             <div th:utext="${pagination}"></div>
+            </div>
+          </nav>
+        </div>
+      </div>
+</body>
+<script th:inline="javascript">
+ // recordPerPage의 변경
+ $('#recordPerPage').on('change', function(){
+   location.href = '/admin/change/record.do?recordPerPage=' + $(this).val();  // session에 recorePerPage 올리기
+ });
+ 
+ // 세션에 저장된 recordPerPage값으로 <select> 태그의 값을 세팅
+ let a = /*[[${session.recordPerPage}]]*/ null;
+ if(a === null){
+   $('#recordPerPage').val(10);
+ } else {
+   $('#recordPerPage').val(a);
+ }
+ 
+
+
+ $('.btnDedatil').on('click', function() {
+      location.href = '/admin/userDetail.html?userNo=' + $(this).data('user_no');
+    });
+
+ // 세션에 저장된 query값으로 <input>값을 세팅
+ var b = /*[[${session.query}]]*/ null;
+ // 큰따옴표 제거
+ b = b.replace(/[""]/g, "");
+ if(b === null){
+   $('#query').val("");
+ } else {
+	  $('#query').val(b);
+ }
+
+
+//제목을 클릭하면 정렬 방식을 바꿈
+$('.title').on('click', function(){
+location.href = '/admin/totalUserList.html?column=' + $(this).data('column') + '&order=' + $(this).data('order') + '&page=[[${page}]]' + '&query='+ b;
+})
+ 
+$('#reload').on('click', function() {
+    $.ajax({
+        type: 'GET',
+        url: '/admin/totalUserList.html',
+        success: function(data) {
+            location.href = '/admin/totalUserList.html';
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+});
+</script>
+</html>

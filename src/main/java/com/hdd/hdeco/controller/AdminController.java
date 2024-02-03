@@ -2,6 +2,7 @@ package com.hdd.hdeco.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -132,22 +133,87 @@ public class AdminController {
 		 return "redirect:/admin/manageOrderView.do?n=" + itemOrderNo;
 		}
 		
-		// 주문 취소
-		@PostMapping(value= "/orderCancel", produces = "application/json")
-		public ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO orderCancelDTO) throws Exception {
-		    adminService.insertOrderCancel(orderCancelDTO);
-		    System.out.println(orderCancelDTO.toString());
-		    if(!"".equals(orderCancelDTO.getImp_uid())) {
-		        String token = itemOrderService.getToken();
-		        int amount = itemOrderService.paymentInfo(orderCancelDTO.getImp_uid(), token);
-		        itemOrderService.payMentCancel(token, orderCancelDTO.getImp_uid(), amount, "관리자 취소");
+		/*
+		 * // 주문 취소
+		 * 
+		 * @PostMapping(value= "/orderCancel", produces = "application/json") public
+		 * ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO
+		 * orderCancelDTO) throws Exception {
+		 * adminService.insertOrderCancel(orderCancelDTO);
+		 * System.out.println(orderCancelDTO.toString());
+		 * if(!"".equals(orderCancelDTO.getImp_uid())) { String token =
+		 * itemOrderService.getToken(); int amount =
+		 * itemOrderService.paymentInfo(orderCancelDTO.getImp_uid(), token);
+		 * itemOrderService.payMentCancel(token, orderCancelDTO.getImp_uid(), amount,
+		 * "관리자 취소"); }
+		 * 
+		 * adminService.orderCancel(orderCancelDTO);
+		 * 
+		 * // 주문 취소가 성공했음을 응답으로 반환 return
+		 * ResponseEntity.ok().body("{\"message\": \"주문취소완료\"}"); }
+		 */
+		
+		// 전체 회원리스트보기
+		@GetMapping("/totalUserList.html")
+		 public String totalUserList(HttpServletRequest request, Model model,
+				 												@RequestParam(value = "query", required = false, defaultValue = "") String query
+				 												) {
+			
+			HttpSession session =request.getSession();
+			session.setAttribute("query", query);
+			System.out.println(session.getAttribute("query"));
+	    //session에 올라간 recordPerPage,query 값 날려주기
+	    if(request.getHeader("referer").contains("totalUserList.html") == false) {
+	      request.getSession().removeAttribute("recordPerPage");
+	      request.getSession().removeAttribute("query");
+	    }
+	    adminService.getTotalUserList(request, model);
+			return "admin/totalUserList"; 
+		 }
+		
+	  @GetMapping("/change/record.do")
+	  public String changeRecord(HttpSession session, HttpServletRequest request,
+	      											 @RequestParam(value = "recordPerPage", required = false, defaultValue = "10") int recordPerPage) {
+	    System.out.println(recordPerPage);
+	    session.setAttribute("recordPerPage", recordPerPage);
+	    return "redirect:" + request.getHeader("referer"); // 현재 주소의 이전 주소(Referer)로 이동하시오.
+	  }
+	  
+		// 휴면회원리스트보기
+		@GetMapping("/sleepUserList.html")
+		 public String sleepUserList(HttpServletRequest request, Model model,
+				 												@RequestParam(value = "query", required = false, defaultValue = "") String query
+				 												) {
+			HttpSession session =request.getSession();
+			session.setAttribute("query", query);
+			System.out.println(session.getAttribute("query"));
+	    //session에 올라간 recordPerPage,query 값 날려주기
+	    if(request.getHeader("referer").contains("sleepUserList.html") == false) {
+	      request.getSession().removeAttribute("recordPerPage");
+	      request.getSession().removeAttribute("query");
+	    }
+	    adminService.getSleepUserList(request, model);
+			return "admin/sleepUserList"; 
+		 }
+		
+		
+	// 탈퇴회원리스트보기
+			@GetMapping("/outUserList.html")
+			 public String outUserList(HttpServletRequest request, Model model,
+					 												@RequestParam(value = "query", required = false, defaultValue = "") String query
+					 												) {
+				HttpSession session =request.getSession();
+				session.setAttribute("query", query);
+				System.out.println(session.getAttribute("query"));
+		    //session에 올라간 recordPerPage,query 값 날려주기
+		    if(request.getHeader("referer").contains("outUserList.html") == false) {
+		      request.getSession().removeAttribute("recordPerPage");
+		      request.getSession().removeAttribute("query");
 		    }
-		    
-		    adminService.orderCancel(orderCancelDTO);
+		    adminService.getOutUserList(request, model);
+				return "admin/outUserList"; 
+			 }
 
-		    // 주문 취소가 성공했음을 응답으로 반환
-		    return ResponseEntity.ok().body("{\"message\": \"주문취소완료\"}");
-		}
   
  }
 	
