@@ -21,6 +21,11 @@ public interface ItemOrderService {
 	public void deleteCartByUserNo(HttpServletRequest request);
 	public void deleteOrder(HttpServletRequest request);
 	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception;
+
+	/*
+	 * public void insertOrderDirectDetail(OrderDetailDTO orderDetailDTO) throws
+	 * Exception;
+	 */
 	public void orderInfo(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
@@ -28,4 +33,9 @@ public interface ItemOrderService {
 	public String getToken() throws Exception;
 	public int paymentInfo(String imp_uid, String access_token) throws IOException;
 	public void payMentCancel(String access_token, String imp_uid, int amount, String reason) throws IOException;
+	/*
+	 * public void insertOrderDirect(OrderDirectDTO orderDirectDTO) throws
+	 * Exception;
+	 */
+	
 }

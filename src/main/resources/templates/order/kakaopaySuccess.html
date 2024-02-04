@@ -4,6 +4,7 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:inline="javascript">
@@ -36,9 +37,7 @@ function fnOrderList() {
           
         </div> 
       </div>
-      <div id="footer">
-        <p>Copyright</p>
-      </div>
     </div>
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
 </body>
 </html>

@@ -30,7 +30,7 @@ public interface AdminService {
 	public void deliveryStatus(String itemOrderNo, String delivery);
 	public void UpdateItemStock(ItemDTO itemDTO);
 
-	// 주문 취소
+  //주문 취소
 	public void orderCancel(OrderCancelDTO orderCancelDTO);
 	public void insertOrderCancel(OrderCancelDTO orderCancelDTO) throws Exception;
 	

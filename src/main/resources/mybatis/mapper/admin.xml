@@ -146,7 +146,7 @@
 	</update>
 
 	<!-- 주문취소 -->
-	<update id="orderCancle">
+	<update id="orderCancel">
 		UPDATE ITEM_ORDER_T
 		SET DELIVERY = '주문취소'
 		WHERE ITEM_ORDER_NO = #{itemOrderNo}
@@ -159,9 +159,6 @@
 		FROM ITEM_ORDER_T
 	</insert>
 
-
-
-  
   <!-- 회원 전체 목록 가져오기 -->
 <select id="getTotalUserList" parameterType="Map" resultType="UserDTO">
   SELECT USER_NO, ID, NAME, GENDER, EMAIL, MOBILE, BIRTHYEAR, BIRTHDATE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, EXTRA_ADDRESS, AGREECODE, JOINED_AT, PW_MODIFIED_AT 
