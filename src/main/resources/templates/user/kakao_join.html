@@ -4,6 +4,7 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <style>
   .blind {
     display: none;
@@ -298,43 +299,36 @@ function fnJoinArea(){
         <label for="event" class="lblCheck">이벤트 동의(선택)</label>
       </div>
       <div>
-        <input type="button" id="btnCancel" value="취소">
-        <input type="button" id="btnNext" value="다음">
+        <input class="red-small-Btn" type="button" id="btnCancel" value="취소">
+        <input class="deepGreen-small-Btn" type="button" id="btnNext" value="다음">
       </div>
         </div>
         </div>
-        
-        
-        
-        
         <div id="joinArea">
-      <div id="container-title">
-        <h3>join</h3>
-      </div>
+        <div id="container-title">
+          <h3>Kakao join</h3>
+        </div>
         <div class="card">
-    
-      <input type="hidden" name="id" th:value="${profile.id}">
-    
-      <div>
-        <label for="name">*이름*</label>
-        <input class="input-middlehalf-Box" type="text" name="name" id="name" th:value="${profile.name}">
-      </div>
-      
-      <div>
-        <span>*성별*</span>
-        <div class="form_radio_btn">
-        <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == ''}">
-        <label for="none">선택 안함</label>
-        </div>
-        <div class="form_radio_btn_male">
-        <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'male'}">
-        <label for="male">남자</label>
-        </div>
-        <div class="form_radio_btn_female">
-        <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'female'}">
-        <label for="female">여자</label>
-        </div>
-      </div>
+          <input type="hidden" name="id" th:value="${profile.id}">
+          <div>
+            <label for="name">*이름*</label>
+            <input class="input-middlehalf-Box" type="text" name="name" id="name" th:value="${profile.name}">
+          </div>
+          <div>
+            <span>*성별*</span>
+            <div class="form_radio_btn">
+            <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == ''}">
+            <label for="none">선택 안함</label>
+            </div>
+            <div class="form_radio_btn_male">
+            <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'male'}">
+            <label for="male">남자</label>
+            </div>
+            <div class="form_radio_btn_female">
+            <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'female'}">
+            <label for="female">여자</label>
+            </div>
+          </div>
           <div>
           <div th:unless="${#strings.isEmpty(profile.mobile)}">
             <label for="mobile">*핸드폰번호*</label>
@@ -370,22 +364,22 @@ function fnJoinArea(){
       <hr>
       
       <div>
-        <input class="red-middle-Btn" type="button" id="btnHome" value="취소하기">
-        <input type="button" id="btnBefore" value="약관동의가기">
+        <input class="deepGreen-small-Btn" type="button" id="btnBefore" value="약관동의가기">
+        <br>
+        <input class="red-small-Btn" type="button" id="btnHome" value="취소하기">
         <button class="deepGreen-small-Btn">가입하기</button>
       </div>
-    
-        </div> 
-        
+        </div>      
         </div>
-        
-        
-        
     </form>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

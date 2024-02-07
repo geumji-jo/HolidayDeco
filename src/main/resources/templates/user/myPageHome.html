@@ -4,7 +4,7 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
-
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <body>
      <div id="container">
       <div id="container-title">
@@ -30,9 +30,13 @@
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

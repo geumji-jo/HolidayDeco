@@ -12,16 +12,26 @@
 
 	<!-- typeAliases -->
 	<typeAliases>
-		<typeAlias alias="UserDTO" type="com.hdd.hdeco.domain.UserDTO" />
-		<typeAlias alias="UserAccessDTO" type="com.hdd.hdeco.domain.UserAccessDTO" />
-		<typeAlias alias="OutUserDTO" type="com.hdd.hdeco.domain.OutUserDTO" />
-		<typeAlias alias="SleepUserDTO" type="com.hdd.hdeco.domain.SleepUserDTO" />
-		<typeAlias alias="CartDTO" type="com.hdd.hdeco.domain.CartDTO" />
-		<typeAlias alias="ItemDTO" type="com.hdd.hdeco.domain.ItemDTO" />
-		<typeAlias alias="ItemOrderDTO" type="com.hdd.hdeco.domain.ItemOrderDTO" />
-		<typeAlias alias="OrderDetailDTO" type="com.hdd.hdeco.domain.OrderDetailDTO" />
-		<typeAlias alias="OrderListDTO" type="com.hdd.hdeco.domain.OrderListDTO" />
-		<typeAlias alias="OrderCancelDTO" type="com.hdd.hdeco.domain.OrderCancelDTO" />
+		<typeAlias alias="Amount"               type="com.hdd.hdeco.domain.Amount" />
+		<typeAlias alias="CartDetailDTO"        type="com.hdd.hdeco.domain.CartDetailDTO" />
+		<typeAlias alias="CartDTO"              type="com.hdd.hdeco.domain.CartDTO" />
+		
+		<typeAlias alias="ItemDTO"              type="com.hdd.hdeco.domain.ItemDTO" />
+		<typeAlias alias="ItemOrderDTO"         type="com.hdd.hdeco.domain.ItemOrderDTO" />
+		
+		<typeAlias alias="KakaoApproveResponse" type="com.hdd.hdeco.domain.KakaoApproveResponse" />
+		<typeAlias alias="KakaoReadyResponse"   type="com.hdd.hdeco.domain.KakaoReadyResponse" />
+		
+		<typeAlias alias="LikeDTO"              type="com.hdd.hdeco.domain.LikeDTO" />
+		
+		<typeAlias alias="OrderCancelDTO"       type="com.hdd.hdeco.domain.OrderCancelDTO" />
+		<typeAlias alias="OrderDetailDTO"       type="com.hdd.hdeco.domain.OrderDetailDTO" />
+		<typeAlias alias="OrderListDTO"         type="com.hdd.hdeco.domain.OrderListDTO" />
+		
+		<typeAlias alias="OutUserDTO"           type="com.hdd.hdeco.domain.OutUserDTO" />
+		<typeAlias alias="SleepUserDTO"         type="com.hdd.hdeco.domain.SleepUserDTO" />
+		<typeAlias alias="UserAccessDTO"        type="com.hdd.hdeco.domain.UserAccessDTO" />
+		<typeAlias alias="UserDTO"              type="com.hdd.hdeco.domain.UserDTO" />
 	</typeAliases>
 
 </configuration>

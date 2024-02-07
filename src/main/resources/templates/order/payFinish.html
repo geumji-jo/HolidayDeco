@@ -7,6 +7,43 @@
     <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
     <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
+
+<style>
+/* #Title {
+  font-family: 'Domine', serif;
+  color: #000000;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+  padding: 5px;
+  user-select: none;
+}
+
+#main_box {
+ font-family: 'SUITE-Regular';
+ text-align: center;
+ margin-top: 50px;
+ margin-bottom: 70px;
+}
+
+#continueShopping, #myOrderList {
+  width: 120px;
+  height: 50px;
+  border: 1px solid #D8D8D8;
+  background-color:transparent;
+  font-family: 'SUITE-Regular';
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+  cursor: pointer;
+}
+  p span {  
+   font-weight: bold; 
+  } */
+
+</style>
+
 <script th:inline="javascript">
 
 function fnGoItemList() {
@@ -14,30 +51,35 @@ function fnGoItemList() {
 }
 
 function fnOrderList() {
-	  location.href="/order/orderList.do";
-	}
+    location.href="/order/orderList.do";
+  }
 
 </script>
 <body>
   <div id="container">
-      <div id="container-title">
-        <h3>Order completed</h3>
-      </div>
+    <div id="container-title">
+      <h3>Order completed</h3>
+    </div>
       <div id="onlyContent">
         <div class="card">
-        <div th:text="|${session.loginName}님|" id="userName"></div>
-        <div th:if="${orderList != null and orderList.size() > 0}">
-          <p><span>주문번호 <a th:href="@{/order/orderView.do(n=${orderList[0].itemOrderNo})}" th:text="${orderList[0].itemOrderNo}"></a></span></p>
-       </div>
-        결제가 완료되었습니다.
+          <div th:text="|${session.loginName}님|" id="userName"></div>
+          <div th:if="${orderList != null and orderList.size() > 0}">
+            <p><span>주문번호 <a th:href="@{/order/orderView.do(n=${orderList[0].itemOrderNo})}" th:text="${orderList[0].itemOrderNo}"></a></span></p>
+          </div>
+              결제가 완료되었습니다.
           <div class="button-group">
             <input class="deepGreen-middle-Btn" type="button" value="쇼핑 계속하기" id="continueShopping" onclick="fnGoItemList()"/>
             <input class="deepGreen-middle-Btn" type="button" value="나의 주문 정보" id="myOrderList" onclick="fnOrderList()"/>
           </div>
-          
-        </div> 
+        </div>
       </div>
+    <div id="container-footer">
+      <p>Copyright</p>
     </div>
-      <div th:replace="~{/layout/footer::footerFrag}"></div>
+  </div>
+  <div id="bottom"></div>
+  <div id="footer">
+    <div th:replace="~{/layout/footer::footerFrag}"></div>
+  </div>
 </body>
 </html>

@@ -5,6 +5,7 @@
   <th:block th:replace="~{/layout/header::headFrag('HolidayDeco')}"></th:block>
   <link rel="stylesheet" th:href="@{/css/font.css}">
   <link rel="stylesheet" th:href="@{/css/user.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
   <div th:replace="~{/layout/header::gnbFrag}"></div>
 <style>
@@ -101,7 +102,7 @@ img {
 <body>
      <div id="container">
       <div id="container-title">
-        <h4 id="likeTitle">Item In Love</h4>
+        <h3>Item In Love</h4>
       </div>
       <div id="sidebar-left">
         <div id="sidebar-left-inner">
@@ -111,7 +112,7 @@ img {
       <div id="content">
           <div>
   
-    <div class="likeBox">
+    <div>
       <div class="likeItem">
         <div class="emptyLike" th:if="${itemList == null or #lists.isEmpty(itemList)}">
           <h3>Item In love에 담긴 상품이 없습니다.</h3>
@@ -193,9 +194,13 @@ img {
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

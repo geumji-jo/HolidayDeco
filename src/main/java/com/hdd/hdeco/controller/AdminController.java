@@ -125,6 +125,7 @@ public class AdminController {
 	// 주문 상세 목록 - 상태 변경
 	@PostMapping(value = "/manageOrderView.do")
 	public String deliveryStatus(@RequestParam("itemOrderNo") String itemOrderNo, @RequestParam("delivery") String delivery, ItemOrderDTO itemOrderDTO) throws Exception {
+
 		adminService.deliveryStatus(itemOrderNo, delivery);
 		List<OrderListDTO> orderView = adminService.orderView(itemOrderDTO);
 
@@ -138,7 +139,6 @@ public class AdminController {
 		return "redirect:/admin/manageOrderView.do?n=" + itemOrderNo;
 	}
 
-	
 	// 주문 취소
 	@PostMapping(value= "/orderCancel.do", produces = "application/json")
 	public ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO orderCancelDTO) throws Exception {

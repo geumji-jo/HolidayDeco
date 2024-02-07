@@ -6,6 +6,7 @@
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <script th:inline="javascript">
   // 취소하면 이전 페이지로 돌아간다.
   function fnCancel() {
@@ -185,9 +186,13 @@
     </form>
         </div> 
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

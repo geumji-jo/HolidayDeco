@@ -7,6 +7,7 @@
 <link rel="stylesheet" th:href="@{/css/footer.css}">
 <!-- cdnjs.com 에서 jquery-cookie 검색 후 jquery-cookie 라이브러리 포함 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <script th:inline="javascript">
 
 function fnGoItemList() {
@@ -37,7 +38,13 @@ function fnOrderList() {
           
         </div> 
       </div>
+    <div id="container-footer">
+      <p>Copyright</p>
     </div>
-      <div th:replace="~{/layout/footer::footerFrag}"></div>
+  </div>
+        <div id="bottom"></div>
+        <div id="footer">
+          <div th:replace="~{/layout/footer::footerFrag}"></div>
+        </div>
 </body>
 </html>

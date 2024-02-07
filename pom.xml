@@ -14,9 +14,14 @@
   <packaging>war</packaging>
   <name>hdeco</name>
   <description>Demo project for Spring Boot</description>
+  
+  
   <properties>
     <java.version>11</java.version>
   </properties>
+  
+  
+  
   <dependencies>
   <!-- https://mvnrepository.com/artifact/org.json/json -->
   <dependency>
@@ -64,6 +69,8 @@
     <artifactId>mybatis-spring-boot-starter</artifactId>
     <version>2.3.1</version>
   </dependency>
+  
+  
   <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
   <dependency>
     <groupId>commons-io</groupId>
@@ -104,16 +111,17 @@
     <scope>test</scope>
   </dependency>
   
+  <!-- Gson -->
+  <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
   <dependency>
-	<groupId>com.google.code.gson</groupId>
-	<artifactId>gson</artifactId>
-	<version>2.8.7</version>
-</dependency>
-<dependency>
-  <groupId>com.github.iamport</groupId>
-  <artifactId>iamport-rest-client-java</artifactId>
-  <version>0.2.14</version>
-</dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+  </dependency>
+	<dependency>
+	  <groupId>com.github.iamport</groupId>
+	  <artifactId>iamport-rest-client-java</artifactId>
+	  <version>0.2.14</version>
+	</dependency>
 </dependencies>
 
 <build>
@@ -132,6 +140,7 @@
     </plugin>
   </plugins>
 </build>
+
 <repositories>
   <repository>
     <id>jitpack.io</id>

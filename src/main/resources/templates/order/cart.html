@@ -5,6 +5,7 @@
     <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
     <div th:replace="~{/layout/header::gnbFrag}"></div>
     <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/user.css}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
@@ -299,8 +300,13 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
+      <div id="container-footer">
+        <p>Copyright</p>
+      </div>
 </div>
-
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
+    </div>
 </body>
-<div th:replace="~{/layout/footer::footerFrag}"></div>
 </html>

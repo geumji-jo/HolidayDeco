@@ -1,7 +1,6 @@
 package com.hdd.hdeco.service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -30,7 +29,6 @@ import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.UserMapper;
 import com.hdd.hdeco.util.JavaMailUtil;
 import com.hdd.hdeco.util.SecurityUtil;
-import com.mchange.v2.cfg.PropertiesConfigSource.Parse;
 import com.sun.mail.util.logging.MailHandler;
 
 import lombok.RequiredArgsConstructor;
@@ -310,7 +308,7 @@ public class UserServiceImpl implements UserService {
 		cookie.setMaxAge(0); // 쿠키 유지시간을 0초로 설정
 		cookie.setPath("/"); // autologinId 쿠키의 path와 동일하게 설정
 		response.addCookie(cookie);
-		
+
 		// 2. session에 저장된 모든 정보를 지운다.
 		session.invalidate();
 
@@ -935,7 +933,7 @@ public class UserServiceImpl implements UserService {
 			con.setDoOutput(true);
 			// 결과 코드가 200이라면 성공
 			int responseCode = con.getResponseCode();
-			
+
 			BufferedReader br;
 			if (responseCode == 200) {
 				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -956,13 +954,13 @@ public class UserServiceImpl implements UserService {
 		JSONObject obj = new JSONObject(res.toString());
 		String accessToken = obj.getString("access_token");
 		String refreshToken = obj.getString("refresh_token");
-		
+
 		HttpSession session = request.getSession();
 		session.setAttribute("accessToken", accessToken);
 		session.setAttribute("refreshToken", refreshToken);
-		
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^refreshToken"+refreshToken);
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^accessToken"+accessToken);
+
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^refreshToken" + refreshToken);
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^accessToken" + accessToken);
 
 		return accessToken;
 
@@ -1023,7 +1021,7 @@ public class UserServiceImpl implements UserService {
 			String name = kakao_account.getString("name");
 			String gender = kakao_account.getString("gender");
 			String email = kakao_account.getString("email");
-			
+
 			String birthyear = kakao_account.getString("birthyear");
 			String birthday = kakao_account.getString("birthday");
 
@@ -1034,8 +1032,8 @@ public class UserServiceImpl implements UserService {
 			userDTO.setEmail(email);
 			userDTO.setBirthyear(birthyear);
 			userDTO.setBirthdate(birthday);
-			
-			Boolean has_phone_number =kakao_account.getBoolean("has_phone_number");
+
+			Boolean has_phone_number = kakao_account.getBoolean("has_phone_number");
 			if (has_phone_number == true) {
 				String phone_number = kakao_account.getString("phone_number").replaceAll("-", "");
 				userDTO.setMobile(phone_number);
@@ -1152,53 +1150,40 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
-	
 
+	/*
+	 * @Override public void kakaoLogout(String kakaoUserId, String accessToken) {
+	 * 
+	 * String logoutRedirectURI = null; try { logoutRedirectURI =
+	 * URLEncoder.encode(kakaoLogoutRedirectURL, "UTF-8"); } catch
+	 * (UnsupportedEncodingException e) { e.printStackTrace(); }
+	 * 
+	 * StringBuffer res = new StringBuffer(); // StringBuffer는 StringBuilder와 동일한
+	 * 역할을 수행한다.
+	 * 
+	 * try {
+	 * 
+	 * String kakaoApiURL; kakaoApiURL = "https://kapi.kakao.com/v1/user/logout?";
+	 * // kakaoApiURL += "client_id=" + kakaoClientId; // kakaoApiURL +=
+	 * "&logout_redirect_uri=" + logoutRedirectURI;
+	 * 
+	 * URL url = new URL(kakaoApiURL); HttpURLConnection con = (HttpURLConnection)
+	 * url.openConnection(); con.setRequestMethod("POST"); con.setDoOutput(true);
+	 * con.setRequestProperty("Authorization", "Bearer " + accessToken); // 결과 코드가
+	 * 200이라면 성공 int responseCode = con.getResponseCode(); BufferedReader br;
+	 * System.out.println("------------------------------responseCode^^ : " +
+	 * responseCode); if (responseCode == 200) { br = new BufferedReader(new
+	 * InputStreamReader(con.getInputStream())); } else { br = new
+	 * BufferedReader(new InputStreamReader(con.getErrorStream())); } String
+	 * inputLine; while ((inputLine = br.readLine()) != null) {
+	 * res.append(inputLine); } br.close(); con.disconnect();
+	 * 
+	 * 
+	 * } catch (Exception e) { e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 
-	public void kakaoLogout1(String kakaoUserId, String accessToken) {
-		/*
-		 * String logoutRedirectURI = null; try { logoutRedirectURI =
-		 * URLEncoder.encode(kakaoLogoutRedirectURL, "UTF-8"); } catch
-		 * (UnsupportedEncodingException e) { e.printStackTrace(); }
-		 */
-		StringBuffer res = new StringBuffer(); // StringBuffer는 StringBuilder와 동일한 역할을 수행한다.
-		
-		try {
-
-			String kakaoApiURL;
-			kakaoApiURL = "https://kapi.kakao.com/v1/user/logout?";
-		//	kakaoApiURL += "client_id=" + kakaoClientId;
-		//	kakaoApiURL += "&logout_redirect_uri=" + logoutRedirectURI;
-
-			URL url = new URL(kakaoApiURL);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("POST");
-			con.setDoOutput(true);
-      con.setRequestProperty("Authorization", "Bearer " + accessToken);
-			// 결과 코드가 200이라면 성공
-			int responseCode = con.getResponseCode();
-			BufferedReader br;
-			System.out.println("------------------------------responseCode^^ : " + responseCode);
-			if (responseCode == 200) {
-				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			} else {
-				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-			}
-			String inputLine;
-			while ((inputLine = br.readLine()) != null) {
-				res.append(inputLine);
-			}
-			br.close();
-			con.disconnect();
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
 	/*
 	 * @Override public void kakaoLogout(String accessToken) {
 	 * System.out.println("accessToken ---------------------------: " +
@@ -1219,8 +1204,7 @@ public class UserServiceImpl implements UserService {
 	 * System.out.println(result); } catch (IOException e) { // TODO Auto-generated
 	 * catch block e.printStackTrace(); } }
 	 */
-	
-	
+
 	@Override
 	public String getKakaoLogoutApiURL(HttpServletRequest request, HttpServletResponse response) {
 		String kakaoLogoutURL = null;
@@ -1231,19 +1215,18 @@ public class UserServiceImpl implements UserService {
 			kakaoLogoutURL = "https://kauth.kakao.com/oauth/logout?";
 			kakaoLogoutURL += "client_id=" + kakaoClientId;
 			kakaoLogoutURL += "&logout_redirect_uri=" + redirectURI;
-			
+
 			URL url = new URL(kakaoLogoutURL);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setDoOutput(true);
 
-			
 			int responseCode = con.getResponseCode();
 			BufferedReader br;
 			System.out.println("------------------------------responseCode^^ : " + responseCode);
 			if (responseCode == 302) {
 				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				
+
 			} else {
 				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			}
@@ -1260,7 +1243,7 @@ public class UserServiceImpl implements UserService {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("loginId");
 		userMapper.deleteAutologin(id);
-		
+
 		Cookie cookie1 = new Cookie("autologinId", "");
 		Cookie cookie2 = new Cookie("_kawltea", "");
 		Cookie cookie3 = new Cookie("_kahai", "");
@@ -1278,11 +1261,10 @@ public class UserServiceImpl implements UserService {
 		response.addCookie(cookie2);
 		response.addCookie(cookie3);
 		session.invalidate();
-		
-		
+
 		return kakaoLogoutURL;
 	}
-	
+
 	@Override
 	public void getKakaoOut(String accessToken) {
 		StringBuffer sb = new StringBuffer();
@@ -1300,8 +1282,8 @@ public class UserServiceImpl implements UserService {
 			String result = "";
 			String inputLine;
 			while ((inputLine = br.readLine()) != null) {
-			result =sb.append(inputLine).toString();
-			System.out.println("--------------------result : " + result);
+				result = sb.append(inputLine).toString();
+				System.out.println("--------------------result : " + result);
 			}
 			br.close();
 			con.disconnect();
@@ -1320,6 +1302,5 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 	}
-
 
 }

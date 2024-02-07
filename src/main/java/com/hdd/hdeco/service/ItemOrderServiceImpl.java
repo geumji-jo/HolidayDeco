@@ -120,6 +120,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
 
+
 	// ---------------------환불, 결제 토큰생성
 	@Value("${imp_key}")
 	private String impKey;
@@ -127,6 +128,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	@Value("${imp_secret}")
 	private String impSecret;
 	
+
 	@Data
 	private class Response{
 		private PaymentInfo response;
