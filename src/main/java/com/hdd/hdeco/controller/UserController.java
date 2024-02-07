@@ -245,23 +245,6 @@ public class UserController {
     userService.out(request, response);
   }
   
-	
-
-  
-	  
-	 
-	 
-	 
-	 
-	//실험페이지
-	  @GetMapping("/myPageHome2.html")
-	  public String mypage1111(HttpSession session, Model model) {  // 마이페이지로 이동
-	  	String id = (String) session.getAttribute("loginId");
-	  	model.addAttribute("loginUser", userService.getUserById(id));
-	  	return "user/myPageHome2";
-	  }
-	  
-	  
 	  
 	  
   @GetMapping("/naver/login.do")  // 네이버로그인
