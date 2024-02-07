@@ -1,7 +1,5 @@
 package com.hdd.hdeco.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.hdd.hdeco.domain.OutUserDTO;

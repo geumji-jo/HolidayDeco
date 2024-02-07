@@ -4,6 +4,7 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <style>
   .blind {
     display: none;
@@ -51,6 +52,13 @@
 function fnCancel() {
   $('#btnCancel').on('click', function() {
     history.back();
+  })
+}
+
+//홈으로가기 누르면 홈페이지로 돌아간다.
+function fnHome() {
+  $('#btnHome').on('click', function() {
+    location='/';
   })
 }
 
@@ -256,82 +264,75 @@ function fnJoinArea(){
         <label for="event" class="lblCheck">이벤트 동의(선택)</label>
       </div>
       <div>
-        <input type="button" id="btnCancel" value="취소">
-        <input type="button" id="btnNext" value="다음">
+        <input class="red-small-Btn" type="button" id="btnCancel" value="취소">
+        <input class="deepGreen-small-Btn" type="button" id="btnNext" value="다음">
       </div>
         </div>
         </div>
-        
-        
-        
         
         <div id="joinArea">
-      <div id="container-title">
-        <h3>join</h3>
-      </div>
+        <div id="container-title">
+          <h3>Naver join</h3>
+        </div>
         <div class="card">
-    
-      <input type="hidden" name="id" th:value="${profile.id}">
-    
-      <div>
-        <label for="name">이름*</label>
-        <input type="text" name="name" id="name" th:value="${profile.name}">
-      </div>
-      
-      <div>
-        <span>성별*</span>
-        <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == 'NO'}">
-        <label for="none">선택 안함</label>
-        <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'M'}">
-        <label for="male">남자</label>
-        <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'F'}">
-        <label for="female">여자</label>
-        <script th:inline=javascript>
-          $(':radio[name="gender"][th:value="${profile.gender}"]').prop('checked', true);
-        </script>
-      </div>
+          <input type="hidden" name="id" th:value="${profile.id}">
+          <div>
+            <label for="name">이름*</label>
+            <input class="input-middlehalf-Box" type="text" name="name" id="name" th:value="${profile.name}">
+          </div>
+           <div>
+            <span>*성별*</span>
+            <div class="form_radio_btn">
+            <input type="radio" name="gender" id="none" value="NO" th:checked="${profile.gender == 'NO'}">
+            <label for="none">선택 안함</label>
+            </div>
+            <div class="form_radio_btn_male">
+            <input type="radio" name="gender" id="male" value="M" th:checked="${profile.gender == 'M'}">
+            <label for="male">남자</label>
+            </div>
+            <div class="form_radio_btn_female">
+            <input type="radio" name="gender" id="female" value="F" th:checked="${profile.gender == 'F'}">
+            <label for="female">여자</label>
+            </div>
+          </div>
     
       <div>
         <label for="mobile">휴대전화*</label>
-        <input type="text" name="mobile" id="mobile" th:value="${profile.mobile}">
+        <input class="input-middlehalf-Box" type="text" name="mobile" id="mobile" th:value="${profile.mobile}">
       </div>
     
       <div>
         <label for="birthyear">생년월일*</label>
-        <input type="text" name="birthyear" id="birthyear" th:value="${profile.birthyear}">
-        <input type="text" name="birthmonth" th:value="${profile.birthdate.substring(0, 2)}">
-        <input type="text" name="birthdate" th:value="${profile.birthdate.substring(2)}">
+        <input class="input-small-Box" type="text" name="birthyear" id="birthyear" th:value="${profile.birthyear}">
+        <input class="input-small-Box"  type="text" name="birthmonth" th:value="${profile.birthdate.substring(0, 2)}">
+        <input class="input-small-Box" type="text" name="birthdate" th:value="${profile.birthdate.substring(2)}">
       </div>
       
       <div>
         <label for="email">이메일*</label>
-        <input type="text" name="email" id="email" th:value="${profile.email}">
-        <input type="button" value="이메일중복체크" id="btnVerifyEmail">
+        <input class="input-middlehalf-Box"  type="text" name="email" id="email" th:value="${profile.email}">
+        <input class="gray-middle-Btn" type="button" value="이메일중복체크" id="btnVerifyEmail">
         <span id="msgEmail"></span>
-      </div>
-      
+      </div>     
       <hr>
-      
-
-      
-      <hr>
-      
+      <hr>   
       <div>
-        <button>가입하기</button>
-        <input type="button" id="btnBefore" value="이전으로가기">
+        <input class="deepGreen-small-Btn" type="button" id="btnBefore" value="약관동의가기">
+        <br>
+        <input class="red-small-Btn" type="button" id="btnHome" value="취소하기">
+        <button class="deepGreen-small-Btn">가입하기</button>
       </div>
-    
         </div> 
-        
         </div>
-        
-        
-        
     </form>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

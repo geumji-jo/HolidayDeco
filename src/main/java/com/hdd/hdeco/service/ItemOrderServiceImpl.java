@@ -109,12 +109,11 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
 
-	// ---------------------환불, 결제 토큰생성
-	/*
-	 * @Value("${imp_key}") private String impKey;
-	 * 
-	 * @Value("${imp_secret}") private String impSecret;
-	 */
+	
+	  @Value("${imp_key}") private String impKey;
+	 
+	  @Value("${imp_secret}") private String impSecret;
+	 
 	@Data
 	private class Response{
 		private PaymentInfo response;
@@ -141,8 +140,8 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		conn.setDoOutput(true);
 		JsonObject json = new JsonObject();
 
-		json.addProperty("imp_key", "12343");
-		json.addProperty("imp_secret", "12343");
+		json.addProperty("imp_key", impKey);
+		json.addProperty("imp_secret", impSecret);
 		
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 		

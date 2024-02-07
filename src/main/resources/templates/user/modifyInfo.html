@@ -6,6 +6,7 @@
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <link rel="stylesheet" th:href="@{/css/modal.css}"> <!-- modal -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <style>
 .custom-hr {
   display: flex;
@@ -553,18 +554,19 @@ $(function(){
       <div>
         <input class="red-middle-Btn" type="button" value="개인정보수정완료" id="btnModifyInfo">
       </div>
-    
-    </form>
-  
-
+        </form>
         </div> 
       </div>
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 <script th:src="@{/js/user/modal.js}"></script>

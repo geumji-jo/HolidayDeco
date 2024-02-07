@@ -68,12 +68,15 @@
   visibility:hidden
 
 }
-#footer {
+
+#container-footer {
   clear: both;
   padding: 20px;
   border: 1px solid #bcbcbc;
-  visibility:hidden
+  visibility:hidden;
+  margin-bottom: 20px;
 }
+
 
 /* <------------ 레이아웃 css 끝 ------------> */
 

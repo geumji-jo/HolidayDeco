@@ -4,6 +4,7 @@
 <head th:replace="~{/layout/header::headFrag('HolidayDeco')}"></head>
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <script th:inline="javascript">
   function confirmOut() {
     var result = confirm('동일한 아이디로 재가입이 불가능합니다. 회원 탈퇴하시겠습니까?');
@@ -37,9 +38,13 @@
       <div id="sidebar-right">
         <h2>rightSidebar</h2>
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>

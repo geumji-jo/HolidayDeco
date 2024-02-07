@@ -5,6 +5,7 @@
 <div th:replace="~{/layout/header::gnbFrag}"></div>
 <link rel="stylesheet" th:href="@{/css/user.css}"> <!-- user페이지전용 css모음 -->
 <script th:src="@{/js/user/join.js}"></script>
+<link rel="stylesheet" th:href="@{/css/footer.css}">
 <style>
   
 </style>
@@ -163,9 +164,13 @@
         </form>
         </div> 
       </div>
-      <div id="footer">
+      <div id="container-footer">
         <p>Copyright</p>
       </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="footer">
+      <div th:replace="~{/layout/footer::footerFrag}"></div>
     </div>
 </body>
 </html>
