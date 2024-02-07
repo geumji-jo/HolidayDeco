@@ -37,37 +37,91 @@ th, td {
 
 </style>
 <body>
+<script th:inline="javascript">
+$(document).ready(function() {
+	  $('.cancel-button').click(function() {
+	      var $tr = $(this).closest('tr');
+	      var itemOrderNo = $tr.find('td:eq(0)').text();
+	      var userNo = $("#userNo").val();
+	      var orderTotalText = $tr.find('td:eq(3)').text();
+	      var orderTotal = parseInt(orderTotalText.replace(/[^\d]/g, ''));
+	      var imp_uid = $("#imp_uid").val();
+	      console.log("itemOrderNo: " + itemOrderNo);
+	      console.log("userNo: " + userNo);
+	      console.log("orderTotal: " + orderTotal);
+	      console.log("imp_uid: " + imp_uid);
+	      var orderStatus = $tr.find('td:eq(4)').text().trim(); // 배송 상태 열의 텍스트 가져오기
+	        if (orderStatus === '주문취소') {
+	            alert("이미 취소된 주문 건입니다.");
+	            return; // 이미 주문 취소된 경우 함수 종료
+	          } else if (orderStatus !== '배송준비') {
+	            alert("배송 준비 중인 주문만 취소할 수 있습니다.");
+	            return; // 배송 준비 상태가 아닌 경우 함수 종료
+	          }
+
+	      $.ajax({
+	        url : '/admin/orderCancel.do',
+	        method : 'post',
+	        contentType : 'application/json',
+	        data : JSON.stringify({
+	          itemOrderNo : itemOrderNo,
+	          orderTotal : orderTotal,
+	          userNo : userNo,
+	          imp_uid : imp_uid
+	        })
+	      }).done(function(response) {
+	        console.log("서버 응답:", response);
+	        alert("주문 취소 완료");
+	        location.reload();
+	      }).fail(function(error) {
+	        console.log("서버 요청 실패:", error);
+	        alert("서버 요청에 실패했습니다.");
+	      });
+	    });
+	  });
+</script>
     <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
-    <div id="onlyContent" style="margin-bottom:30px; height:700px;">
-      <h2></h2>
-      <br>
-      <section id="content">
-        <table class="orderList">
-            <thead>
-                <tr>
-                    <th>주문번호</th>
-                    <th>수령인</th>
-                    <th>주소</th>
-                    <th>가격</th>
-                    <th>상태</th>
-                </tr>
-            </thead>
-            <tbody>
-                <th:block th:each="orderItem : ${orderList}">
-                    <tr>
-                        <td><a th:href="@{/admin/manageOrderView.do(n=${orderItem.itemOrderNo})}" th:text="${orderItem.itemOrderNo}"></a></td>
-                        <td><span th:text="${orderItem.name}"></span></td>
-                        <td>(<span th:text="${orderItem.postcode}"></span>) <span th:text="${orderItem.roadAddress}"></span> <span th:text="${orderItem.detailAddress}"></span></td>
-                        <td><span th:text="${#numbers.formatDecimal(orderItem.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></td>
-                         <td th:class="${orderItem.delivery == '배송준비' ? 'status-ready' : (orderItem.delivery == '배송 중' ? 'status-in-transit' : (orderItem.delivery == '배송완료' ? 'status-complete' : ''))}">
-                            <span th:text="${orderItem.delivery}"></span>
-                        </td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
+  <div id="onlyContent" style="margin-bottom: 30px; height: 700px;">
+    <h2></h2>
+    <br>
+    <section id="content">
+      <table class="orderList">
+        <thead>
+          <tr>
+            <th>주문번호</th>
+            <th>수령인</th>
+            <th>주소</th>
+            <th>가격</th>
+            <th>상태</th>
+            <th>취소처리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <th:block th:each="orderItem : ${orderList}">
+            <tr>
+              <td><a th:href="@{/admin/manageOrderView.do(n=${orderItem.itemOrderNo})}" th:text="${orderItem.itemOrderNo}"></a></td>
+              <td><span th:text="${orderItem.name}"></span></td>
+              <td>(<span th:text="${orderItem.postcode}"></span>) <span
+                th:text="${orderItem.roadAddress}"></span> <span
+                th:text="${orderItem.detailAddress}"></span></td>
+              <td><span
+                th:text="${#numbers.formatDecimal(orderItem.orderTotal, 0, 'COMMA', 0, 'POINT')} + '원'"></span></td>
+              <td
+                th:class="${orderItem.delivery == '배송준비' ? 'status-ready' : (orderItem.delivery == '배송 중' ? 'status-in-transit' : (orderItem.delivery == '배송완료' ? 'status-complete' : ''))}">
+                <span th:text="${orderItem.delivery}"></span>
+              </td>
+              <td>
+                <!-- 결제 취소 버튼 --> 
+                <input type="hidden" id="userNo"th:value="${orderItem.userNo}"> 
+                <input type="hidden" id="imp_uid" th:value="${orderItem.imp_uid}">
+                <button class="cancel-button">취소</button>
+              </td>
+            </tr>
+          </th:block>
+        </tbody>
+      </table>
     </section>
-      </div>
+  </div>
 </body>
 </html>
 

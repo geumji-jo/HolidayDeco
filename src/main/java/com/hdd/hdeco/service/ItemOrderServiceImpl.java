@@ -50,6 +50,16 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
 		itemOrderMapper.insertOrderDetail(orderDetailDTO);
 	}
+	
+	/*
+	 * @Override public void insertOrderDirectDetail(OrderDetailDTO orderDetailDTO)
+	 * throws Exception { itemOrderMapper.insertOrderDirectDetail(orderDetailDTO); }
+	 * 
+	 * @Override public void insertOrderDirect(OrderDirectDTO orderDirectDTO) throws
+	 * Exception { itemOrderMapper.insertOrderDirect(orderDirectDTO); }
+	 */
+
+
 
 	// user정보 조회 : 아이디를 통해 userNo 확인
 	@Override
@@ -71,6 +81,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		}
 		return list;
 	}
+	
 
 	@Override
 	public ItemDTO getItem(HttpServletRequest request) {
@@ -109,11 +120,15 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		itemOrderMapper.deleteOrder(itemOrderNo);
 	}
 
+
+	// ---------------------환불, 결제 토큰생성
+	@Value("${imp_key}")
+	private String impKey;
+
+	@Value("${imp_secret}")
+	private String impSecret;
 	
-	  @Value("${imp_key}") private String impKey;
-	 
-	  @Value("${imp_secret}") private String impSecret;
-	 
+
 	@Data
 	private class Response{
 		private PaymentInfo response;

@@ -18,5 +18,6 @@ public interface ItemMapper {
 	// itemNo를 이용하여 아이템 정보 읽어오기
 	public ItemDTO getItemByNo(int itemNo);
 	
+	// 상품 검색
 	List<ItemDTO> searchItem(String query);
 }

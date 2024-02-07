@@ -124,8 +124,8 @@ public class AdminController {
 
 	// 주문 상세 목록 - 상태 변경
 	@PostMapping(value = "/manageOrderView.do")
-	public String deliveryStatus(@RequestParam("itemOrderNo") String itemOrderNo,
-			@RequestParam("delivery") String delivery, ItemOrderDTO itemOrderDTO) throws Exception {
+	public String deliveryStatus(@RequestParam("itemOrderNo") String itemOrderNo, @RequestParam("delivery") String delivery, ItemOrderDTO itemOrderDTO) throws Exception {
+
 		adminService.deliveryStatus(itemOrderNo, delivery);
 		List<OrderListDTO> orderView = adminService.orderView(itemOrderDTO);
 
@@ -139,24 +139,22 @@ public class AdminController {
 		return "redirect:/admin/manageOrderView.do?n=" + itemOrderNo;
 	}
 
-	
-	  // 주문 취소
+	// 주문 취소
+	@PostMapping(value= "/orderCancel.do", produces = "application/json")
+	public ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO orderCancelDTO) throws Exception {
+	    adminService.insertOrderCancel(orderCancelDTO);
+	    System.out.println(orderCancelDTO.toString());
+	    if(!"".equals(orderCancelDTO.getImp_uid())) {
+	        String token = itemOrderService.getToken();
+	        int amount = itemOrderService.paymentInfo(orderCancelDTO.getImp_uid(), token);
+	        itemOrderService.payMentCancel(token, orderCancelDTO.getImp_uid(), amount, "관리자 취소");
+	    }
+	    
+	    adminService.orderCancel(orderCancelDTO);
 
-		@PostMapping(value = "/orderCancel", produces = "application/json")
-		public ResponseEntity<String> orderCancel(@RequestBody OrderCancelDTO orderCancelDTO) throws Exception {
-			adminService.insertOrderCancel(orderCancelDTO);
-			System.out.println(orderCancelDTO.toString());
-			if (!"".equals(orderCancelDTO.getImp_uid())) {
-				String token = itemOrderService.getToken();
-				int amount = itemOrderService.paymentInfo(orderCancelDTO.getImp_uid(), token);
-				itemOrderService.payMentCancel(token, orderCancelDTO.getImp_uid(), amount, "관리자 취소");
-			}
-
-			adminService.orderCancel(orderCancelDTO);
-
-			// 주문 취소가 성공했음을 응답으로 반환 
-			return ResponseEntity.ok().body("{\"message\": \"주문취소완료\"}");
-		}
+	    // 주문 취소가 성공했음을 응답으로 반환
+	    return ResponseEntity.ok().body("{\"message\": \"주문취소완료\"}");
+	}
 	 
 
 	// 전체 회원리스트보기

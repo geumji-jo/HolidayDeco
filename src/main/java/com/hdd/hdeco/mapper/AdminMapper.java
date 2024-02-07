@@ -55,9 +55,11 @@ public interface AdminMapper {
 	// 전체 회원 리스트 
 	public List<UserDTO> getTotalUserList(Map<String, Object> map);
   public int getUserSearchCount(Map<String, Object> map);
+  
   //휴면 회원 리스트 
   public List<UserDTO> getSleepUserList(Map<String, Object> map);
   public int getSleepUserSearchCount(Map<String, Object> map);
+  
   //탈퇴 회원 리스트 
   public List<UserDTO> getOutUserList(Map<String, Object> map);
   public int getOutUserSearchCount(Map<String, Object> map);
