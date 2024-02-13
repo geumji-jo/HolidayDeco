@@ -3,11 +3,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" />
 <link rel="stylesheet" th:href="@{/css/admin.css}"> <!-- admin css모음 -->
 <link rel="stylesheet" th:href="@{/css/font.css}"> <!-- 폰트 css모음 -->
-<head th:replace="~{/layout/adminheader::adminHeadFrag('HolidayDeco::adminPage')}">
+<head th:replace="~{/layout/adminHeader::adminHeadFrag('HolidayDeco::adminPage')}">
 </head>
 <div th:replace="~{/layout/adminHeader::adminHeaderFrag}"></div>
 <body>
-      
      <div>
      <!-- admin 사이드바 코드-->
      <div th:replace="~{/layout/adminPageSidebar::adminSidebarFrag}"></div>
