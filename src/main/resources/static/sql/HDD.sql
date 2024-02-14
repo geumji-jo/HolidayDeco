@@ -1,4 +1,4 @@
-USE hdeco;	
+USE holidaydeco;	
 
 -- 테이블 드랍
 DROP TABLE IF EXISTS LIKE_T;

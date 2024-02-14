@@ -43,11 +43,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addInterceptor(pwCheckInterceptor)
 						.addPathPatterns("/user/modifyInfo.html");
 	}
-	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/imageLoad/**")
-		 				.addResourceLocations("file:" + myFileUtil.getSummernoteImagePath() + "/");
+	    registry.addResourceHandler("/imageLoad/**")
+	            .addResourceLocations("file:" + myFileUtil.getSummernoteImagePath() + "/");
+	    
+	    registry.addResourceHandler("/admin/images/itemImg/**") // admin 페이지에서 사용하는 이미지 경로 설정
+	            .addResourceLocations("file:" + myFileUtil.getPath() + "/"); // 업로드된 이미지가 저장된 경로 설정
 	}
-	
+
 }

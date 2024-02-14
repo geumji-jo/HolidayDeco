@@ -25,6 +25,8 @@ public interface AdminService {
 	public void getItemEdit(HttpServletRequest request, Model model);
 	public int itemModify(MultipartHttpServletRequest multipartRequest) throws Exception;
 	List<ItemDTO> searchItem(String query);
+	
+	// 주문 관리 
 	public List<ItemOrderDTO> orderList(ItemOrderDTO itemOrderDTO) throws Exception;
 	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
 	public void deliveryStatus(String itemOrderNo, String delivery);

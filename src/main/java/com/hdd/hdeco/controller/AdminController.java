@@ -55,8 +55,7 @@ public class AdminController {
 
 	// 상품 추가
 	@PostMapping("/uploadItem.do")
-	public String uploadItem(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes)
-			throws Exception {
+	public String uploadItem(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
 		adminService.uploadItem(multipartRequest);
 		return "redirect:/admin/itemManageList.do";
 	}
