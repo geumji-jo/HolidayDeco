@@ -194,7 +194,7 @@ input[type="button"] {
 */
 
 .kakaoPay {
-  width: 100px;
+  width: 150px;
   border: 1px solid #EAE7E7;
   border-radius: 10px;
   display:inline-block;
@@ -203,7 +203,7 @@ input[type="button"] {
   background-color: #EAE7E7;
 }
     
-.naverPay {
+/* .naverPay {
   width: 100px;
   border: 1px solid #EAE7E7;
   border-radius: 10px;
@@ -211,10 +211,10 @@ input[type="button"] {
   margin:0px 0 0 0;
   cursor: pointer;
   background-color: #EAE7E7;
-}
+} */
     
 .creditCard {
-  width: 100px;
+  width: 150px;
   border: 1px solid #EAE7E7;
   border-radius: 10px;
   display:inline-block;
