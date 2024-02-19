@@ -19,7 +19,7 @@ public class MyFileUtil {
     LocalDate now = LocalDate.now();
     // 루트/storage/2023/05/08
     String sep = File.separator; // 현재 운영체제의 파일 경로 구분자
-    String path = "/storage" + sep + now.getYear() + sep + String.format("%02d", now.getMonthValue()) + sep + String.format("%02d", now.getDayOfMonth());
+    String path = "/holidaydeco" + sep + "/storage" + sep + now.getYear() + sep + String.format("%02d", now.getMonthValue()) + sep + String.format("%02d", now.getDayOfMonth());
 
     // Windows에서 \를 /로 대체
     path = path.replace("\\", "/");
