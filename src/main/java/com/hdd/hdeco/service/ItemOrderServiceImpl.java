@@ -50,16 +50,6 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
 		itemOrderMapper.insertOrderDetail(orderDetailDTO);
 	}
-	
-	/*
-	 * @Override public void insertOrderDirectDetail(OrderDetailDTO orderDetailDTO)
-	 * throws Exception { itemOrderMapper.insertOrderDirectDetail(orderDetailDTO); }
-	 * 
-	 * @Override public void insertOrderDirect(OrderDirectDTO orderDirectDTO) throws
-	 * Exception { itemOrderMapper.insertOrderDirect(orderDirectDTO); }
-	 */
-
-
 
 	// user정보 조회 : 아이디를 통해 userNo 확인
 	@Override
@@ -74,12 +64,16 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 
 	@Override
 	public List<CartDTO> getSelectItemList(HttpServletRequest request) {
-		String[] items = request.getParameter("selectedItems").split(",");
-		List<CartDTO> list = new ArrayList<>();
-		for (String itemNo : items) {
-			list.add(itemOrderMapper.getItemByNo(Integer.parseInt(itemNo)));
-		}
-		return list;
+	    HttpSession session = request.getSession();
+	    String userId = (String) session.getAttribute("loginId");
+	    int userNo = cartMapper.selectUserNobyId(userId);
+	    
+	    String[] items = request.getParameter("selectedItems").split(",");
+	    List<CartDTO> list = new ArrayList<>();
+	    for (String itemNo : items) {
+	        list.add(itemOrderMapper.selectCartByItemAndUser(Integer.parseInt(itemNo), userNo));
+	    }
+	    return list;
 	}
 	
 

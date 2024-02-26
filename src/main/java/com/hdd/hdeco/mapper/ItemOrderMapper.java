@@ -18,7 +18,7 @@ public interface ItemOrderMapper {
 	public int insertOrder(ItemOrderDTO itemOrderDTO);
 	public ItemOrderDTO selectUserOrder(int userNo);
 	public UserDTO getUserByUserNo(int userNo);
-	public CartDTO getItemByNo(int itemNo);
+	public CartDTO selectCartByItemAndUser(int itemNo, int userNo);
 	public ItemDTO getFromItem(int itemNo);
 	public void deleteOrder(String itemOrderNo);
 	public int deleteCartByUserNo(int userNo);
