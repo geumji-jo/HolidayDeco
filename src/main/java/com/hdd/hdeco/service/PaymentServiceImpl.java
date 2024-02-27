@@ -19,7 +19,6 @@ import com.hdd.hdeco.domain.ItemOrderDTO;
 import com.hdd.hdeco.domain.KakaoApproveResponse;
 import com.hdd.hdeco.domain.KakaoReadyResponse;
 import com.hdd.hdeco.domain.OrderDetailDTO;
-import com.hdd.hdeco.mapper.CartMapper;
 import com.hdd.hdeco.mapper.ItemOrderMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,6 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private final ItemOrderService itemOrderService;
 	private final ItemOrderMapper itemOrderMapper;
-	private final CartMapper cartMapper;
-	
 	
 	
 	
@@ -75,15 +72,20 @@ public class PaymentServiceImpl implements PaymentService {
 		parameters.add("quantity", String.valueOf(quantityTotalCount)); // String.valueOf(carts.size()) 총개수  
 		parameters.add("total_amount", String.valueOf(total)); // int total 받을 시에는 total대신 String.valueOf(total)
 		parameters.add("tax_free_amount", "0");
-		parameters.add("approval_url", "http://holidaydeco/pay/kakaopaySuccess"); // 결제승인시 넘어갈 url
-		parameters.add("cancel_url", "http://holidaydeco/order/kakaopayCancel"); // 결제취소시 넘어갈 url
-		parameters.add("fail_url", "http://holidaydeco/order/kakaopayFail"); // 결제 실패시 넘어갈 url
+		
+		parameters.add("approval_url", "http://holidaydeco.cafe24.com/pay/kakaopaySuccess"); // 결제승인시 넘어갈 url
+		parameters.add("cancel_url", "http://holidaydeco.cafe24.com/order/kakaopayCancel"); // 결제취소시 넘어갈 url
+		parameters.add("fail_url", "http://holidaydeco.cafe24.com/order/kakaopayFail"); // 결제 실패시 넘어갈 url
+		
+		
+	//	parameters.add("approval_url", "http://localhost:8080/pay/kakaopaySuccess"); // 결제승인시 넘어갈 url
+	//	parameters.add("cancel_url", "http://localhost:8080/order/kakaopayCancel"); // 결제취소시 넘어갈 url
+	//	parameters.add("fail_url", "http://localhost:8080/order/kakaopayFail"); // 결제 실패시 넘어갈 url
 
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeader());
 		/*
 		 * 외부 url 요청 통로 열기
-		 *
-		 */
+		 * */
 		RestTemplate template = new RestTemplate();
 		String url = "https://kapi.kakao.com/v1/payment/ready";
 		
@@ -175,19 +177,30 @@ public class PaymentServiceImpl implements PaymentService {
             // 1. 아이템 주문정보 itemOrderDTO에 저장히기
      				itemOrderService.insertOrder(itemOrderDTO);
      				
-     				// 2. 아이템 주문저장 orderDetailDTO에도 저장해주기
+     				// 2. 아이템 주문저장 orderDetailDTO에 담아주기
      				OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
      				orderDetailDTO.setItemOrderNo(itemOrderDTO.getItemOrderNo());
-
-     				itemOrderService.insertOrderDetail(orderDetailDTO);
      				
-            HttpSession session = request.getSession();
-            
-            // 3. 아이템 주문저장 후 카트 비워주기
-        		String userId = (String)session.getAttribute("loginId");
-        		int userNo = cartMapper.selectUserNobyId(userId);
-        		itemOrderMapper.deleteCartByUserNo(userNo);
-        		
+     				int userNo = itemOrderDTO.getUserNo();
+     				HttpSession session = request.getSession();
+     				String basket = (String) session.getAttribute("basket");
+     				System.out.println("/pay/kakaopaySuccess session에 저장된 객체: " + session.getAttribute("basket"));
+
+   
+     				
+     				
+     				
+     				if(basket != null && basket.equals("장바구니구매")) {
+     					itemOrderService.insertOrderDetail(orderDetailDTO);
+     					itemOrderService.deleteCartByUserNo(request);
+     					itemOrderMapper.deleteGoBuyItemNo(userNo);
+     					} else if(basket != null && basket.equals("바로구매")) {
+     						itemOrderService.insertGoBuyOrderDetail(orderDetailDTO);
+       					itemOrderMapper.deleteGoBuyItemNo(userNo);
+     					}
+     				
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

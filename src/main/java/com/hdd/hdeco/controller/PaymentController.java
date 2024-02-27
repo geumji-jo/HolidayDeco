@@ -52,7 +52,22 @@ public class PaymentController {
 		session.setAttribute("itemOrderDTO", itemOrderDTO);
 		System.out.println("kakaopayReady tid : " + readyResponse.getTid());
 		System.out.println("카카오준비 컨트롤러 itemOrderDTO : " + session.getAttribute("itemOrderDTO"));
-		//log.info(".........주문가격 : "+totalAmount);
+		System.out.println("카카코페이장바구니결제확인 : >>>>" + request.getParameter("basket")+"<<<<<장바구니결제확인 : ");
+		System.out.println("카카오페이바로결제준비확인 : >>>>" + request.getParameter("goBuyBasket")+"<<<<바로결제확인 : ");
+		
+		String cartbasket = request.getParameter("basket");
+		String goBuyBasket = request.getParameter("goBuyBasket");
+		
+		
+		// session에 저장하는 이름은 바스켓으로 통일
+		if(cartbasket.equals("장바구니구매")) {
+			session.setAttribute("basket", cartbasket);
+			
+		} else if(goBuyBasket.equals("바로구매")) {
+			session.setAttribute("basket", goBuyBasket);
+		}
+		
+		System.out.println("카카오페이 장바구니체크 session에 저장된 객체: " + session.getAttribute("basket"));
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("url", readyResponse.getNext_redirect_pc_url());
@@ -76,9 +91,10 @@ public class PaymentController {
 		KakaoApproveResponse approveResponse = paymentService.kakaoPayApprove(tid, pgToken, itemOrderDTO ,request);
 		
 		System.out.println("kakaopaySuccess 찐찐성공 : " + approveResponse);
-		// 성공한 카트애들을 ORDER 테이블로 이동하기
 		
-
+			// 혹시 모를 세션지우기
+			request.getSession().removeAttribute("basket");
+		
 		
 		return "redirect:/order/kakaopaySuccess";
 	}
@@ -93,6 +109,7 @@ public class PaymentController {
 		model.addAttribute("orderList", orderList);
 		model.addAttribute("map", itemOrderService.getUserInfo(request));
 		
+		
 		return "/order/kakaopaySuccess";
 	}
 	
@@ -102,6 +119,10 @@ public class PaymentController {
 	@GetMapping("/order/kakaopayCancel")
 	public void kakaoPayCancel(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("kakaopayCancel 취소..............");
+		
+		
+		
+		
 		try {
 
 			response.setContentType("text/html; charset=UTF-8");
