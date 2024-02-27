@@ -92,7 +92,7 @@ CREATE TABLE ITEM_T(
 	ITEM_NO INT NOT NULL AUTO_INCREMENT,	-- PK 상품 번호
 	ITEM_TITLE VARCHAR(400) ,	        -- 상품명 
 	ITEM_PRICE VARCHAR(400) ,                -- 상품 가격
-	ITEM_MAIN_IMG VARCHAR(1000) ,	        -- 상품 메인이미지
+	ITEM_MAIN_IMG VARCHAR(1000),	        -- 상품 메인이미지
 	ITEM_DETAIL_IMG VARCHAR(1000),           -- 상품 상세이미지
 	ITEM_STOCK INT,                         -- 상품 재고
     ITEM_WRITED_AT DATETIME,
@@ -147,7 +147,6 @@ CREATE TABLE ITEM_ORDER_T (
 	ORDER_TOTAL             INT,                                      -- 전체 주문 금액
 	IMP_UID                 VARCHAR(50),                   	          -- 아임포트 결제 번호
 	PAY_METHOD              INT, 				                      -- 결제 방식 
-	PAY_SUCCESS		        INT, 				                      -- 결제 여부   
     DELIVERY				VARCHAR(20) DEFAULT '배송준비',			  -- 배송 정보 
 	CONSTRAINT PK_ITEM_ORDER_T PRIMARY KEY(ITEM_ORDER_NO),
 	CONSTRAINT FK_ITEM_ORDER_T_USER_T FOREIGN KEY(USER_NO) REFERENCES USER_T(USER_NO) ON DELETE CASCADE

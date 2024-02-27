@@ -249,11 +249,6 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	
 	
 	/* 바로구매 기능 */
-	/* 바로구매 기능 */
-	/* 바로구매 기능 */
-	/* 바로구매 기능 */
-	/* 바로구매 기능 */
-	
 	
 	// go_buy_t에 선택한 아이템 저장
 	@Override

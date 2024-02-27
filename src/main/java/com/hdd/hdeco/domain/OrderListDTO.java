@@ -20,11 +20,8 @@ public class OrderListDTO {
 	private String detailAddress;
 	private int orderTotal;
 	private int deliveryFee;
-	private int payNo;
 	private int payMethod;
-	private int paySuccess;
 	private String imp_uid;
-	private int cartNo;
 
 	private int orderDetailNo;
 	private int userNo;

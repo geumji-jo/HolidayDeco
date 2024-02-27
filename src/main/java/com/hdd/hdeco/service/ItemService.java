@@ -13,7 +13,6 @@ public interface ItemService {
 	
   public void getItemList(HttpServletRequest request, Model model);
   public void getItemByNo(Model model,HttpServletRequest request);
-  
   List<ItemDTO> searchItem(String query);
 
 }

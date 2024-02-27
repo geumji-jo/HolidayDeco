@@ -80,14 +80,12 @@
 	</update>
 
 	<!-- 상품 검색 -->
-	<select id="searchItem" parameterType="String"
-		resultType="ItemDTO">
-		SELECT *
-		FROM ITEM_T
+	<select id="searchItem" parameterType="String" resultType="ItemDTO">
+		SELECT * 
+		  FROM ITEM_T
 		<where>
 			<if test="query != ''">
-				ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT
-				('%',LOWER(#{query}),'%')
+				ITEM_TITLE LIKE CONCAT ('%',#{query},'%') || ITEM_TITLE LIKE CONCAT('%',LOWER(#{query}),'%')
 			</if>
 		</where>
 	</select>
@@ -109,25 +107,18 @@
 	</resultMap>
 
 
-	<select id="orderList" resultType="ItemOrderDTO"
-		resultMap="orderResultMap">
-		SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE,
-		ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY,
-		IMP_UID
-		FROM ITEM_ORDER_T
+	<select id="orderList" resultType="ItemOrderDTO" resultMap="orderResultMap">
+		SELECT ITEM_ORDER_NO, USER_NO, ORDER_DATE, NAME, MOBILE, POSTCODE, ROAD_ADDRESS, DETAIL_ADDRESS, ORDER_TOTAL, PAY_METHOD, DELIVERY, IMP_UID
+		  FROM ITEM_ORDER_T
 		ORDER BY ORDER_DATE DESC;
 	</select>
 
 
 	<!-- 특정 주문 목록 -->
 	<select id="orderView" resultType="OrderListDTO">
-		SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE,
-		A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD,
-		A.DELIVERY, A.IMP_UID,
-		B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
-		FROM ITEM_ORDER_T A
-		INNER JOIN ORDER_DETAIL_T B
-		ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
+		SELECT A.ITEM_ORDER_NO, A.USER_NO, A.ORDER_DATE, A.NAME, MOBILE, A.POSTCODE, A.ROAD_ADDRESS, A.DETAIL_ADDRESS, A.ORDER_TOTAL, A.PAY_METHOD, A.DELIVERY, A.IMP_UID, B.ITEM_NO, B.QUANTITY, B.ITEM_TITLE, B.ITEM_PRICE, B.ITEM_MAIN_IMG
+		 FROM ITEM_ORDER_T A INNER JOIN ORDER_DETAIL_T B
+	   	 ON A.ITEM_ORDER_NO = B.ITEM_ORDER_NO
 		WHERE A.ITEM_ORDER_NO = #{itemOrderNo}
 	</select>
 
@@ -157,6 +148,7 @@
 		INSERT INTO ORDER_CANCEL_T (USER_NO, ITEM_ORDER_NO, ORDER_TOTAL, IMP_UID)
 		SELECT USER_NO, ITEM_ORDER_NO, ORDER_TOTAL, IMP_UID
 		FROM ITEM_ORDER_T
+		WHERE ITEM_ORDER_NO = #{itemOrderNo}
 	</insert>
 
   <!-- 회원 전체 목록 가져오기 -->
