@@ -101,14 +101,15 @@
     }
 
     function fnBtnMinus() {
-      if (count == 1) {
-        alert('최소 주문 수량은 1개입니다.');
-        return;
+        if (count == 1) {
+          alert('최소 주문 수량은 1개입니다.');
+          return;
+        }
+        count--;
+        $('#count').val(count); // 수정된 부분
+        updateTotalPrice();
       }
-      count--;
-      $('#countUp').val(count);
-      updateTotalPrice();
-    }
+
 
     // 페이지 로드시 초기 총합계금액 설정
     updateTotalPrice();

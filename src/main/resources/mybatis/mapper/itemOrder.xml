@@ -69,19 +69,22 @@
 	  WHERE A.USER_NO = #{userNo}
 	    AND A.ITEM_ORDER_NO = #{itemOrderNo}
 	</select>
-
+	
+ <!-- 회원 정보  -->
   <select id="getUserByUserNo" parameterType="int" resultType="UserDTO">
     SELECT USER_NO, NAME, EMAIL, MOBILE
     FROM USER_T
     WHERE USER_NO = #{userNo}
   </select>
   
-  <select id="getItemByNo" parameterType="int" resultType="CartDTO">
-    SELECT CART_NO, ITEM_NO, USER_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+  <!-- USER_NO와 ITEM_NO에 따른 장바구니 정보 -->
+  <select id="selectCartByItemAndUser" parameterType="map" resultType="CartDTO">
+    SELECT CART_NO, USER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
       FROM CART_T
-     WHERE ITEM_NO = #{itemNo}
+     WHERE ITEM_NO = #{itemNo} AND USER_NO = #{userNo}
   </select>
   
+  <!-- 상품 정보 -->
   <select id="getFromItem" parameterType="int" resultType="ItemDTO">
     SELECT *
       FROM ITEM_T

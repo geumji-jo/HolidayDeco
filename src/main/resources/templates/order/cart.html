@@ -284,7 +284,7 @@ $(document).ready(function() {
                     </div>
                 </th:block>
             </div>
-            <hr>
+            <hr th:unless="${#lists.isEmpty(cartList)}">
             <div class="totalPrice" th:unless="${#lists.isEmpty(cartList)}">
               <div class="priceBox">
                    <input type="hidden" name="cartPrice" th:value="${cartPrice}">
