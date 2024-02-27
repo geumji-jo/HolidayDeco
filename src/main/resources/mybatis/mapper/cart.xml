@@ -65,4 +65,51 @@
 		INNER JOIN ITEM_T I ON C.ITEM_NO = I.ITEM_NO
 		WHERE C.USER_NO = #{userNo}
 </select>
+
+
+
+<!--                 -->
+<!--                 -->
+<!-- 바로구매 mapper -->
+<!--                 -->
+<!--                 -->
+
+
+<!--GO_BUY_T에 담긴 itemList 보기-->
+  <select id="selectGoBuyItemList" parameterType="int" resultType="CartDTO">
+    SELECT CART_NO, USER_NO, ITEM_NO, ITEM_TITLE, QUANTITY, ITEM_PRICE, (QUANTITY * ITEM_PRICE) AS CART_PRICE, ITEM_MAIN_IMG
+      FROM GO_BUY_T
+     WHERE USER_NO = #{userNo}
+  </select>
+  
+<!--GO_BUY_T에 아이템정보 넣기-->
+  <insert id="insertGoBuyItem" parameterType="CartDTO">
+    INSERT INTO GO_BUY_T 
+    (
+    USER_NO, 
+    ITEM_NO, 
+    QUANTITY, 
+    ITEM_TITLE, 
+    ITEM_PRICE, 
+    ITEM_MAIN_IMG
+    ) VALUES (
+    #{userNo}, 
+    #{itemNo}, 
+    #{quantity}, 
+    #{itemTitle}, 
+    #{itemPrice}, 
+    #{itemMainImg}
+    )
+  </insert>
+  
+<!-- 아이템 전체 금액 :GO_BUY_T에 담긴 상품과 수량 전체 합산, GO_BUY_T가 비어있으면 0 -->
+  <select id="totalGoBuyItemPrice" parameterType="int" resultType="int">
+    SELECT COALESCE(SUM(I.ITEM_PRICE * C.QUANTITY), 0) AS CART_PRICE
+      FROM GO_BUY_T C
+     INNER JOIN ITEM_T I ON C.ITEM_NO = I.ITEM_NO
+     WHERE C.USER_NO = #{userNo}
+  </select>
+
+
+
 </mapper>

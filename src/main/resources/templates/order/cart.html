@@ -50,7 +50,15 @@ function fnGoItemList() {
 	        selectedItemsInput.type = 'hidden';
 	        selectedItemsInput.name = 'selectedItems';
 	        selectedItemsInput.value = selectedItems.join(',');
+	        // form 제출 전 <input type="hidden" name="basket" value="장바구니구매"/>만들어주기
+	        // 장바구니 구매인지 바로구매인지 구분하기위함
+	        var basketInput = document.createElement('input');
+          basketInput.type = 'hidden';
+          basketInput.name = 'basket'; // 장바구니 정보의 이름으로 'basket'을 설정
+          basketInput.value = '장바구니구매'; // 장바구니 정보의 값으로 'basket'을 설정
+	        
 	        form.appendChild(selectedItemsInput);
+	        form.appendChild(basketInput);
 	    }
 
 	    // 전체 상품 input 동적 추가
@@ -59,7 +67,15 @@ function fnGoItemList() {
 	        allItemsInput.type = 'hidden';
 	        allItemsInput.name = 'allItems';
 	        allItemsInput.value = allItems.join(',');
+	        // form 제출 전 <input type="hidden" name="basket" value="장바구니구매"/>만들어주기
+	        // 장바구니 구매인지 바로구매인지 구분하기위함
+	        var basketInput = document.createElement('input');
+          basketInput.type = 'hidden';
+          basketInput.name = 'basket'; // 장바구니 정보의 이름으로 'basket'을 설정
+          basketInput.value = '장바구니구매'; // 장바구니 정보의 값으로 'basket'을 설정
+	        
 	        form.appendChild(allItemsInput);
+	        form.appendChild(basketInput);
 	    }
 
 	    // 폼 제출

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.hdd.hdeco.domain.CartDTO;
 import com.hdd.hdeco.domain.ItemDTO;
@@ -38,4 +39,9 @@ public interface ItemOrderService {
 	 * Exception;
 	 */
 	
+	//바로구매 기능에 관련된 서비스
+	public CartDTO addGoBuyItem(HttpServletRequest request);
+	public List<CartDTO> getGoBuyItemList(HttpServletRequest request, HttpServletResponse response);
+	public int getGoBuyItemPrice(int userNo);
+	public void insertGoBuyOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception;
 }

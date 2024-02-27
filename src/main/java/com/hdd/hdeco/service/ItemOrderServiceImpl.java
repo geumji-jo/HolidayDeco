@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ import com.hdd.hdeco.domain.OrderDetailDTO;
 import com.hdd.hdeco.domain.OrderListDTO;
 import com.hdd.hdeco.domain.UserDTO;
 import com.hdd.hdeco.mapper.CartMapper;
+import com.hdd.hdeco.mapper.ItemMapper;
 import com.hdd.hdeco.mapper.ItemOrderMapper;
 
 import lombok.Data;
@@ -38,6 +40,7 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 
 	private final ItemOrderMapper itemOrderMapper;
 	private final CartMapper cartMapper;
+	private final ItemMapper itemMapper;
 
 	// 주문하기 : 주문 후 주문 정보 return
 	@Override
@@ -49,7 +52,9 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 	@Override
 	public void insertOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
 		itemOrderMapper.insertOrderDetail(orderDetailDTO);
+		itemOrderMapper.insertGoBuyOrderDetail(orderDetailDTO);
 	}
+
 	
 	/*
 	 * @Override public void insertOrderDirectDetail(OrderDetailDTO orderDetailDTO)
@@ -246,6 +251,80 @@ public class ItemOrderServiceImpl implements ItemOrderService {
 		br.close();
 		conn.disconnect();
 	}
+	
+	
+	
+	
+	/* 바로구매 기능 */
+	/* 바로구매 기능 */
+	/* 바로구매 기능 */
+	/* 바로구매 기능 */
+	/* 바로구매 기능 */
+	
+	
+	// go_buy_t에 선택한 아이템 저장
+	@Override
+	public CartDTO addGoBuyItem(HttpServletRequest request) {
+	// userId 가져오기
+    HttpSession session = request.getSession();
+    String userId = (String) session.getAttribute("loginId");
+
+    // 요청 파라미터
+    int userNo = cartMapper.selectUserNobyId(userId);
+    int itemNo = Integer.parseInt(request.getParameter("itemNo"));
+    int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+    // 상품 번호로 상품 정보(이름, 이미지, 가격) 카트에 담기
+    CartDTO cartDTO = new CartDTO();
+    //cartDTO = cartMapper.selectItembyNo(itemNo);
+
+    // 장바구니에 상품 담기
+    cartDTO.setUserNo(userNo);
+    cartDTO.setItemNo(itemNo); 
+    cartDTO.setQuantity(quantity);
+    
+    ItemDTO item = itemMapper.getItemByNo(itemNo);
+    String itemTitle = item.getItemTitle();
+    String itemPrice = item.getItemPrice();
+    String itemMainImg = item.getItemMainImg();
+    
+    cartDTO.setItemTitle(itemTitle);
+    cartDTO.setItemPrice(itemPrice);
+    cartDTO.setItemMainImg(itemMainImg);
+    
+    
+    cartMapper.insertGoBuyItem(cartDTO);
+    
+    
+    
+    return cartDTO;
+	}
+	
+	@Override
+	public List<CartDTO> getGoBuyItemList(HttpServletRequest request, HttpServletResponse response) {
+		// userId 가져오기
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("loginId"); 
+		int userNo = cartMapper.selectUserNobyId(userId);
+
+		//CartDTO cartDTO =  cartMapper.selectAlreadyInGoBuyItem(userNo);
+		// userNo 가져오기
+		List<CartDTO> cartList = cartMapper.selectGoBuyItemList(userNo);
+	
+		return cartList;
+	}
+	
+	// 바로구매 아이템 총 가격 
+	@Override
+	public int getGoBuyItemPrice(int userNo) {
+		return cartMapper.totalGoBuyItemPrice(userNo);
+	}
+	
+	@Override
+	public void insertGoBuyOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
+		itemOrderMapper.insertGoBuyOrderDetail(orderDetailDTO);
+	}
+	
 }
 
 

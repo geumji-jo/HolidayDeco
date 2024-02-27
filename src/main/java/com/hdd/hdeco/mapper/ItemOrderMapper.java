@@ -31,4 +31,9 @@ public interface ItemOrderMapper {
 	public List<OrderListDTO> orderView(ItemOrderDTO itemOrderDTO) throws Exception;
 	public OrderDetailDTO selectUserOrderDetail(int userNo);
 	public void orderCancel(OrderCancelDTO orderCancelDTO);
+	
+	
+	//바로구매 기능에 관련된 mapper
+	public int deleteGoBuyItemNo(int userNo);
+	public int insertGoBuyOrderDetail(OrderDetailDTO orderDetailDTO);
 }

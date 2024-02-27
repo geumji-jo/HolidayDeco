@@ -45,20 +45,24 @@
             <input type="button" class="btnBuyCount" onclick="fnBtnMinus()" value="▼">
           </div>
         </div>
-        <hr style="width:380px; margin-bottom : 20px;">
-        <div class="total-group" style="display: flex;">
-          <span class="total-quantity" style="width: 300px; font-size:18px;">총 수량&nbsp;&nbsp;&nbsp;<span
-              class="total-quantity-value" id="totalQuantity">1</span></span>
-          <span class="total" style="margin-bottom: 20px; width: 280px; font-size:18px; font-weight:600; color:#EB5858">
-            <div class="price" id="price"></div>
-          </span>
-        </div>
-        <div class="button-group">
-          <input type="hidden" id="itemNo" name="itemNo" value="${item.itemNo}">
-          <input type="button" id="btnAddToCart" value="장바구니" onclick="addToCart()" />
-          <input type="hidden" id="getQuantity" name="quantity">
-          <input type="button" id="btnBuy" class="btnBuy" value="구매하기" />
-        </div>
+        <form method="post" id="goBuyLocation">
+          <hr style="width:380px; margin-bottom : 20px;">
+          <div class="total-group" style="display: flex;">
+            <span class="total-quantity" style="width: 300px; font-size:18px;">총 수량&nbsp;&nbsp;&nbsp;
+              <span class="total-quantity-value" id="totalQuantity">1</span>
+            </span>
+            <span class="total" style="margin-bottom: 20px; width: 280px; font-size:18px; font-weight:600; color:#EB5858">
+              <div class="price" id="price"></div>
+            </span>
+          </div>
+          <div class="button-group">
+            <input type="hidden" id="itemNo" name="itemNo" value="${item.itemNo}">
+            <input type="button" id="btnAddToCart" value="장바구니" onclick="addToCart()" />
+            <input type="hidden" id="getQuantity" name="quantity">
+            <input type="hidden" id="goBuyBasket" name="goBuyBasket" value="바로구매">
+            <input type="button" id="btnBuy" class="btnBuy" value="구매하기" onclick="goBuy()"/>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -118,6 +122,8 @@
         // 재고 가져오기
          
         var stock = /*[[${item.itemStock}]]*/null;
+        
+        var loginId = /*[[${session.loginId}]]*/null;
 
         if (stock === 0) {
           alert('품절된 상품으로 장바구니에 담을 수 없습니다.');
@@ -147,8 +153,61 @@
             location.href = '/user/login.html';
           }
         });
-      }
+       }
+    
+    
+  // 바로구매버튼
+  function goBuy() {
+	  // 수량 값 가져오기
+    const quantity = parseInt($('#totalQuantity').text());
+    // 상품 번호 가져오기
+    var itemNo = /*[[${item.itemNo}]]*/ null;
+    var userId = /*[[${session.loginId}]]*/ null;
+    // 바로구매인지 체크하는 basket값 가져오기
+    var goBuyBasket = $("#goBuyBasket").val();
+    
+    // 재고 가져오기
+    var stock = /*[[${item.itemStock}]]*/null;
 
+    if (stock === 0) {
+      alert('품절된 상품으로 장바구니에 담을 수 없습니다.');
+      return;
+    }
+      
+      //데이터 값 설정
+    const data = {
+     itemNo : itemNo,
+     quantity : quantity,
+     goBuyBasket : goBuyBasket
+    };
+
+    $.ajax({
+      type : 'post',
+      url : '/order/addItem.do',
+      data : data,
+      dataType : 'json',
+      success : function(resData) {
+       var form = document.getElementById("goBuyLocation");
+           form.setAttribute("action", "/order/orderDetails.html");
+             form.submit();
+             },
+             error : function(xhr, status, error) {
+            	  if(userId == null) {
+            		  // 로그인이 필요한 서비스 경고 메시지
+                  alert('로그인이 필요한 서비스입니다.');
+                  // 로그인 페이지로 이동
+                  location.href = '/user/login.html';
+     
+                  }else {
+                  console.log('에러가 발생했습니다.');
+                  console.log('상태 코드:', xhr.status);
+                  console.log('에러:', error);
+                  }
+       }
+    });
+  }
+
+    
       $(document).ready(function() {
         var loginStatus = /*[[${session.loginId}]]*/null;
         var likeList = /*[[${likeList}]]*/null;
@@ -191,6 +250,61 @@
           });
         }
       });
+      
+      
+      
+      function goBuy() {
+          // 수량 값 가져오기
+          const quantity = parseInt($('#totalQuantity').text());
+          // 상품 번호 가져오기
+          var itemNo = /*[[${item.itemNo}]]*/ null;
+      var userId = /*[[${session.loginId}]]*/ null;
+          
+          // 재고 가져오기 */
+           
+          var stock = /*[[${item.itemStock}]]*/null;
+
+          if (stock === 0) {
+            alert('품절된 상품으로 장바구니에 담을 수 없습니다.');
+            return;
+          }
+          
+          // 값 사용하여 데이터 전송
+              const data = {
+               itemNo : itemNo,
+               quantity : quantity
+             };
+
+             $.ajax({
+               type : 'post',
+               // GO_BUY_T에 데이터 저장
+               url : '/order/addItem.do',
+               data : data,
+               dataType : 'json',
+               success : function(resData) {
+                 var form = document.getElementById("goBuyLocation");
+                     form.setAttribute("action", "/order/orderDetails.html");
+                       form.submit();
+                       // orderDetail페이지 post요청하기 위한 form
+                
+               },
+               error : function(xhr, status, error) {
+                 if(userId == null) {
+                   
+                   // 로그인이 필요한 서비스 경고 메시지
+                   alert('로그인이 필요한 서비스입니다.');
+                   // 로그인 페이지로 이동
+                   location.href = '/user/login.html';
+                   
+                 }else {
+                      console.log('에러가 발생했습니다.');
+                      console.log('상태 코드:', xhr.status);
+                      console.log('에러:', error);
+
+                 }
+                 }
+             });
+        }
     </script>
 </body>
 <div th:replace="~{/layout/footer::footerFrag}"></div>

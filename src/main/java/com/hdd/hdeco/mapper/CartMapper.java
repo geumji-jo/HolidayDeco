@@ -21,5 +21,10 @@ public interface CartMapper {
 	public int updateCartQuantity(Map<String, Object> map);
 	public int updateCart(Map<String, Object> map);
 	public int totalCartItemPrice(int userNo);
+	
+	// 바로구매 기능에 관련된 mapper
+	public List<CartDTO> selectGoBuyItemList(int userNo);
+	public int insertGoBuyItem(CartDTO cartDTO);
+	public int totalGoBuyItemPrice(int userNo);
 
 }

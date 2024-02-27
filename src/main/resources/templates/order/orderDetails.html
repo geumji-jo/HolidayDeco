@@ -96,6 +96,9 @@
 		var userNo = $("#userNo").val();
 		var orderDate = new Date();
 		var payMethod = $('input[name="payMethod"]:checked').val();
+		// 장바구니구매 OR 바로구매 인지 구분하기
+    var basket = $("#basket").val();
+    var goBuyBasket = $("#goBuyBasket").val();
 
 		console.log("userNo:", userNo);
 		console.log("itemTitle:", itemTitle);
@@ -152,10 +155,16 @@
 						roadAddress : roadAddress,
 						detailAddress : detailAddress,
 						imp_uid : rsp.imp_uid,
-						payMethod : payMethod
+						payMethod : payMethod,
+						basket: basket ,
+			      goBuyBasket : goBuyBasket
 					},
 					success : function(response) {
 						console.log("주문 정보 등록 성공:", response);
+						 var form = document.getElementById("frmPay");
+	               form.setAttribute("action", "/order/payFinish.do");
+	               // payFinish.do에 데이터 전달하기 위함
+	               form.submit();
 					},
 					error : function(jqXHR, textStatus, errorThrown) {
 						console.error("주문 정보 등록 실패:", textStatus, errorThrown);
@@ -350,6 +359,8 @@
                 </div>
                 <div class="purchase">
                   <input type="hidden" id="userNo" name="userNo" th:value="${orderUser.userNo}" />
+                  <input type="hidden" id="basket" name="basket" th:value="${basket}" />
+                  <input type="hidden" id="goBuyBasket" name="goBuyBasket" th:value="${goBuyBasket}" />
                   <button type="button" id="btnPay">결제하기</button>
                 </div>
               </div>

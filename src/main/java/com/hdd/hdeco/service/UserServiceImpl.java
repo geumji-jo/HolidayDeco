@@ -597,7 +597,7 @@ public class UserServiceImpl implements UserService {
 
 		try {
 
-			String redirectURI = URLEncoder.encode("http://localhost:8080/user/naver/login.do", "UTF-8");
+			String redirectURI = URLEncoder.encode("http://holidaydeco.cafe24.com/user/naver/login.do", "UTF-8");
 			SecureRandom secureRandom = new SecureRandom();
 			String state = new BigInteger(130, secureRandom).toString();
 
@@ -627,7 +627,7 @@ public class UserServiceImpl implements UserService {
 
 		String redirectURI = null;
 		try {
-			redirectURI = URLEncoder.encode("http://localhost:8080" + request.getContextPath(), "UTF-8");
+			redirectURI = URLEncoder.encode("http://holidaydeco.cafe24.com" + request.getContextPath(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

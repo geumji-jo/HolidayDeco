@@ -42,12 +42,12 @@
             ORDER BY ITEM_ORDER_NO DESC
               LIMIT 1) AS A
   </select>
-  
-  <!-- 주문 상세 정보 -->
+
+   <!-- 주문 상세 정보 -->
   <insert id="insertOrderDetail" parameterType="OrderDetailDTO">
    INSERT INTO ORDER_DETAIL_T (USER_NO, ITEM_ORDER_NO, ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG)
-		SELECT USER_NO, #{itemOrderNo},ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
-		FROM CART_T
+    SELECT USER_NO, #{itemOrderNo},ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+    FROM CART_T
   </insert> 
 
   
@@ -106,5 +106,34 @@
     SET DELIVERY = '주문 취소'
     WHERE ITEM_ORDER_NO = #{itemOrderNo}
 </update>
+
+
+
+
+  <!--          -->
+  <!-- 바로결제 -->
+  <!--          -->
+  <!--          -->
+  
+<!-- 바로주문 아이템 주문 상세 정보 -->
+  <insert id="insertGoBuyOrderDetail" parameterType="OrderDetailDTO">
+    INSERT INTO ORDER_DETAIL_T (
+    USER_NO, 
+    ITEM_ORDER_NO, 
+    ITEM_NO, 
+    QUANTITY, 
+    ITEM_TITLE, 
+    ITEM_PRICE, 
+    ITEM_MAIN_IMG
+    ) 
+    SELECT USER_NO, #{itemOrderNo},ITEM_NO, QUANTITY, ITEM_TITLE, ITEM_PRICE, ITEM_MAIN_IMG
+      FROM GO_BUY_T
+  </insert>
+  
+  <delete id="deleteGoBuyItemNo" parameterType="int">
+    DELETE FROM GO_BUY_T
+     WHERE USER_NO = #{userNo}
+  </delete>
+  
   
 </mapper>
