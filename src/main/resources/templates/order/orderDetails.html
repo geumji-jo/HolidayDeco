@@ -130,10 +130,8 @@
 					type : "post",
 				}).done(function(data) {
 					if (rsp.paid_amount == data.response.amount) {
-						alert('결제 및 검증 성공')
 						location.href = '/order/payFinish.do';
 					} else {
-						alert('결제 실패: 결제 금액 불일치');
 						//결제 실패 시 주문번호를 통해 해당 주문정보를 삭제
 						location.href = '/order/payFail.do';
 					}
@@ -160,7 +158,7 @@
 			      goBuyBasket : goBuyBasket
 					},
 					success : function(response) {
-						console.log("주문 정보 등록 성공:", response);
+						console.log("결제 및 검증 성공:", response);
 						 var form = document.getElementById("frmPay");
 	               form.setAttribute("action", "/order/payFinish.do");
 	               // payFinish.do에 데이터 전달하기 위함
