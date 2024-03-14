@@ -38,6 +38,7 @@ public class AutologinIntercepter implements HandlerInterceptor {
         UserDTO loginUserDTO = userMapper.selectAutologin(autologinId);
         if(loginUserDTO != null) {
           session.setAttribute("loginId", loginUserDTO.getId());
+          session.setAttribute("loginName", loginUserDTO.getName());
           session.setAttribute("adminChk", loginUserDTO.getAdminCheck());
           System.out.println("자동로그인 합니다." +loginUserDTO);
         }
