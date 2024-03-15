@@ -128,7 +128,7 @@ public class UserController {
   	userService.restore(request, response);
   }
   
-  //아이디 찾기
+  //아이디 찾기 화면
   @GetMapping("/findId.html")
   public String findIdForm() {
   	return "user/findId";

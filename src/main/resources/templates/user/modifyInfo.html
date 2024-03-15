@@ -124,6 +124,7 @@ function fnModifyPw(){
           fnInitEditPwArea();
           const modal1 = document.getElementById("modal1");
           modal1.style.display = "none";
+          document.body.style.overflow = "auto";
         } else {
           alert('비밀번호 변경이 실패했습니다.');
         }
@@ -233,6 +234,7 @@ function fnModifyEmail(){
             fnInitEditEmailArea();
             const modal2 = document.getElementById("modal2");
             modal2.style.display = "none";
+            document.body.style.overflow = "auto";
           } else {
             alert('이메일 변경이 실패했습니다.');
           }

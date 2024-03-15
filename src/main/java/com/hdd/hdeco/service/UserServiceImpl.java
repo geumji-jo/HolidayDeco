@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 		MailHandler sendMail = new MailHandler();
 		sendMail.setSubject("[HolidayDeco 인증메일 입니다.]");
 		javaMailUtil.sendJavaMail(email, "[HolidayDeco] 인증메일 입니다.",
-				"<h2>HolidayDeco 회원가입 메일 인증</h2><br><br>HolidayDeco에 오신 것을 환영합니다!<br>아래 '이메일 인증 코드'를 확인해주세요!<br>인증번호는 <strong>"
+				"<h2>HolidayDeco 메일 인증</h2><br><br>아래 '이메일 인증 코드'를 확인해주세요!<br>인증번호는 <strong>"
 						+ authCode + "</strong>입니다.");
 
 		// 사용자에게 전송한 인증코드를 join.jsp로 응답

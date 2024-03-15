@@ -33,7 +33,7 @@ public class AutologinIntercepter implements HandlerInterceptor {
       Cookie cookie = WebUtils.getCookie(request, "autologinId");
       
       if(cookie != null) {  // 쿠키 autologinId가 존재하는가?
-        
+         
         String autologinId = cookie.getValue();
         UserDTO loginUserDTO = userMapper.selectAutologin(autologinId);
         if(loginUserDTO != null) {
