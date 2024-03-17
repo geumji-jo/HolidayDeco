@@ -98,13 +98,13 @@ HolidayDeco를 이용하는 고객들에게
   </tr>
 </table>
 <table>
-  <t align="center"r>
+  <tr align="center">
     <td>회원 정보수정</td>
     <td>탈퇴하기</td>
     <td>휴면</td>
   </tr>
   <tr align="center">
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/134e9c2e-4d05-4e3c-9ae5-1ce4ba43df41"/></td>
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
   </tr>
