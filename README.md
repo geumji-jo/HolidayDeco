@@ -18,7 +18,9 @@ HolidayDeco를 이용하는 고객들에게
 
 ![image](https://github.com/bbooom2/HolidayDeco/assets/118744207/de460bf3-74c2-4512-949e-2afe448b35e9)
 <br>
-# 📅프로젝트 기간 
+<br>
+<br>
+# 📅프로젝트 기간
 <strong>
   2023년11월21일 ~ 2024년02월08일
 </strong>
@@ -27,11 +29,11 @@ HolidayDeco를 이용하는 고객들에게
 <br>
 <br>
 
-# 📅프로젝트 팀원 및 담당 구현
+# 💁‍♀️프로젝트 팀원 및 담당 구현
 <table>
   <tr align="center">
-    <td>장지원</td>
-    <td>조은지</td>
+    <td>bbooom2(장지원)</td>
+    <td>geumji-jo(조은지)</td>
   </tr>
   <tr align="center">
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b8ec96ae-5fd4-44b3-b1ee-00ce06dedfc6" style="width: 200px;"></td>
