@@ -27,6 +27,15 @@ HolidayDeco를 이용하는 고객들에게
 <br>
 <br>
 
+# 📅프로젝트 인원
+<strong>
+  2023년11월21일 ~ 2024년02월08일
+</strong>
+
+<br>
+<br>
+<br>
+
 
 # 📂개발 환경 및 라이브러리 
 <strong>구현언어</strong> : JAVA, HTML, CSS, JavaScript, jQuery, SQL, Thymeleaf
@@ -84,6 +93,10 @@ HolidayDeco를 이용하는 고객들에게
     <td>회원 정보수정</td>
     <td>탈퇴하기</td>
     <td>휴면</td>
+  </tr>
+  <tr>
+    <td>![image](https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1)
+</td>
   </tr>
 </table>
 <br>
