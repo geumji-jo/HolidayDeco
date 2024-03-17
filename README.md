@@ -86,25 +86,24 @@ HolidayDeco를 이용하는 고객들에게
 # 🗨️프로젝트 담당 기능 설명  
 ### <회원기능> 
 <table>
-  <tr>
+  <tr align="center">
     <td>회원가입</td>
     <td>로그인, 로그아웃</td>
     <td>아이디 찾기, 비밀번호 찾기</td>
   </tr>
-  <tr>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/32b24e0b-a58d-4c22-a2e8-806eb51eae2b"/></td>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/999d3c1b-e824-41d2-819c-1dfdeff823be"/></td>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/1168a43f-2a03-4ed3-825a-679e2c6f2903"/></td>
-
+  <tr align="center">
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/f67e6d33-03f3-4823-99cc-cbf5c6a62383"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/17f49200-c45a-493d-af7f-70626bb75958"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/a6d6c453-492e-4c87-bf65-f3b53ccd4b60"/></td>
   </tr>
 </table>
 <table>
-  <tr>
+  <t align="center"r>
     <td>회원 정보수정</td>
     <td>탈퇴하기</td>
     <td>휴면</td>
   </tr>
-  <tr>
+  <tr align="center">
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
@@ -115,7 +114,7 @@ HolidayDeco를 이용하는 고객들에게
 
 ### <구매> 
 <table>
-  <tr>
+  <tr align="center">
     <td>단품구매</td>
     <td>카카오페이api</td>
 
@@ -127,7 +126,7 @@ HolidayDeco를 이용하는 고객들에게
 ### <관리자> 
   
 <table>
-  <tr>
+  <tr align="center">
     <td>일반회원리스트게시판</td>
     <td>휴면회원리스트게시판</td>
     <td>탈퇴회원리스트게시판</td>
