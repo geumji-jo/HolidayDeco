@@ -27,10 +27,42 @@ HolidayDeco를 이용하는 고객들에게
 <br>
 <br>
 
-# 📅프로젝트 인원
-<strong>
-  2023년11월21일 ~ 2024년02월08일
-</strong>
+# 📅프로젝트 팀원 및 담당 구현
+<table>
+  <tr align="center">
+    <td>장지원</td>
+    <td>조은지</td>
+  </tr>
+  <tr align="center">
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b8ec96ae-5fd4-44b3-b1ee-00ce06dedfc6" style="width: 200px;"></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/7756032f-661b-4732-8600-e75b074df7ba" style="width: 200px;"></td>
+  </tr>
+    <tr align="center">
+    <td>
+      
+#### <index.html>
+#### <관리자>
+  페이지네이션, 검색, CRUD, 주문 내역 관리<br>
+#### <판매>
+페이지네이션, 검색, 상품 상세페이지,<br> 장바구니, 찜하기, 구매<br>
+#### <회원>
+구매내역
+</td>
+    <td>
+      
+#### <회원>
+  회원가입, <br>
+  로그인(카카오,네이버)로그아웃<br>
+  아이디찾기, 비밀번호찾기<br>
+  내정보수정하기, 휴면, 탈퇴
+#### <단품결제,카카오API>
+#### <관리자>
+관리자사이드바, 관리자헤더<br>
+회원(일반,휴면,탈퇴)리스트게시판 
+
+  </td>
+  </tr>
+</table>
 
 <br>
 <br>
