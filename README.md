@@ -45,7 +45,8 @@ HolidayDeco를 이용하는 고객들에게
 <br>
 <br>
 <br>
-  # 🎀담당 기능 
+
+# 🎀담당 기능 
 <br>
 <strong><회원기능></strong>
 
