@@ -89,35 +89,7 @@ HolidayDeco를 이용하는 고객들에게
 <br>
 <br>
 
-# 🎀담당 기능 
-<br>
-<strong><회원기능></strong>
-
-회원가입
-
-로그인(일반,카카오,네이버 로그인 및 간편가입), 로그아웃
-
-아이디 찾기, 비밀번호 찾기
-
-회원 정보수정, 탈퇴하기, 회원휴면
-
-<br>
-<strong><구매></strong>
-
-단품구매,카카오API
-
-<br>
-<strong><관리자></strong>
-
-일반회원,휴면회원,탈퇴회원 리스트조회
-
-
-<br>
-<br>
-<br>
-
-
-# 🗨️프로젝트 담당 기능 설명  
+# 🗨️프로젝트 담당 기능 및 설명  
 ### <회원기능> 
 <table>
   <tr align="center">
@@ -131,6 +103,18 @@ HolidayDeco를 이용하는 고객들에게
     <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/a6d6c453-492e-4c87-bf65-f3b53ccd4b60"/></td>
   </tr>
 </table>
+<br>
+
+### ✅회원가입✅
+agree.html에서 필수동의 후 회원가입을 진행할 수 있습니다.(네이버,카카오 간편가입 가능)
+### ✅로그인/로그아웃✅
+session을 이용해서 로그인(자동로그인,아이디기억하기)/로그아웃 기능을 구현하였습니다.(네이버,카카오 간편로그인 가능)
+### ✅아이디찾기/비밀번호찾기✅
+db에 저장된 데이터를 select하여 아이디와 비밀번호를 찾을 수 있습니다.
+<br>
+<br>
+<br>
+<hr>
 <table>
   <tr align="center">
     <td>회원 정보수정</td>
@@ -143,6 +127,8 @@ HolidayDeco를 이용하는 고객들에게
 </table>
 <br>
 <br>
+<br>
+<hr>
 
 ### <구매> 
 <table>
@@ -157,6 +143,7 @@ HolidayDeco를 이용하는 고객들에게
 </table>
 <br>
 <br>
+<hr>
 
 ### <관리자> 
   
