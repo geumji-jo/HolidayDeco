@@ -132,6 +132,9 @@ HolidayDeco를 이용하는 고객들에게
     <td>휴면회원리스트게시판</td>
     <td>탈퇴회원리스트게시판</td>
   </tr>
+  <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/c6d137a3-ce9c-4d9b-86eb-27cb9ea68a3b"/></td>
+  <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/9a8468a9-8777-40f9-aff2-0f87d416b667"/></td>
+  <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/225f3f7f-66a0-4ddf-9d03-b7b14eafa073"/></td>
 </table>
 
 <br>
