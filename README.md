@@ -1,28 +1,67 @@
-
-
-![image](https://github.com/bbooom2/HolidayDeco/assets/118744207/de460bf3-74c2-4512-949e-2afe448b35e9)
+<div align="center">
 
 # 🎄HolidayDeco🎄
-- 크리스마스 기념용품을 판매하는 사이트입니다. 
+여러분의 크리스마스를 더욱 특별하게 만들어 드립니다!
+<br>
+화려한 장식품부터 따뜻한 겨울 소품까지 
+<br>
+모든 오너먼트를 한 자리에서 만날 수 있는 곳입니다. 
+<br>
+HolidayDeco를 이용하는 고객들에게 
+최고의 품질과 다양한 제품을 제공하여, 
+<br>
+특별한 기억을 만들 수 있도록 도와드립니다. 
+<br>
+함께해요,
+<br>특별한 크리스마스를 위한 모든 것을 
+제공합니다!
 
-
+![image](https://github.com/bbooom2/HolidayDeco/assets/118744207/de460bf3-74c2-4512-949e-2afe448b35e9)
+<br>
 # 📅프로젝트 기간 
-- 2023-11-21 ~ 2024-02-08
-  
+<strong>
+  2023년11월21일 ~ 2024년02월08일
+</strong>
+
+
+
 
 # 📂개발 환경 및 라이브러리 
-- 구현언어 : JAVA, Spring Boot, HTML, JavaScript, jQuery, SQL
-- WAS : Tomcat 9.0
-- DB 서버 : MySQL
-- 형상관리 : Github, Cafe24 Hosting
-  
+<strong>구현언어</strong> : JAVA, HTML, CSS, JavaScript, jQuery, SQL, Thymeleaf
+<br>
+<strong>WAS</strong> : Tomcat 9.0
+<br>
+<strong>IDE</strong> : Eclipse,MySQLWorkbench
+<br>
+<strong>프레임워크</strong> : SpringBoot, MyBatis
+<br>
+<strong>DB 서버</strong> : MySQL
+<br>
+<strong>형상관리</strong> : Github, Cafe24 Hosting
+  # 🎀담당 기능 
+<br>
+<strong><회원기능></strong>
 
-# 🎀담당 기능 
-- 인덱스
-- 관리자 : 페이지네이션, 검색, CRUD, 주문 내역 관리
-- 판매 : 페이지네이션, 검색, 상품 상세페이지, 장바구니, 찜하기, 구매
-- 회원 : 구매내역
-  
+회원가입
+
+로그인(일반,카카오,네이버 로그인 및 간편가입), 로그아웃
+
+아이디 찾기, 비밀번호 찾기
+
+회원 정보수정, 탈퇴하기, 회원휴면
+
+<br>
+<strong><구매></strong>
+
+단품구매,카카오API
+
+<br>
+<strong><관리자></strong>
+
+일반회원,휴면회원,탈퇴회원 리스트조회
+
+
+
 
 # 🗨️프로젝트 담당 기능 설명  
 📍 **(관리자/판매) 상품 CRUD, 페이지네이션 및 검색 기능**
@@ -66,3 +105,13 @@
   
 # 🔗웹페이지 
 http://holidayDeco.cafe24.com (ID/PW 포트폴리오 참조) 
+
+</div>
+
+
+
+
+
+
+
+  
