@@ -103,8 +103,8 @@ HolidayDeco를 이용하는 고객들에게
     <td>휴면, 탈퇴하기</td>
   </tr>
   <tr align="center">
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/134e9c2e-4d05-4e3c-9ae5-1ce4ba43df41"/></td>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/d10c7497-463a-4962-8b08-daae577d55fb"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/134e9c2e-4d05-4e3c-9ae5-1ce4ba43df41" style="width: 300px;"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/d10c7497-463a-4962-8b08-daae577d55fb" style="width: 300px;"/></td>
   </tr>
 </table>
 <br>
@@ -117,8 +117,8 @@ HolidayDeco를 이용하는 고객들에게
     <td>카카오페이api</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/ed75cb6c-87d5-40a3-ac20-670527394c4c"/></td>
-    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/455031ca-14e5-4173-91b3-9765451e04dd"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/ed75cb6c-87d5-40a3-ac20-670527394c4c" style="width: 300px;"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/455031ca-14e5-4173-91b3-9765451e04dd" style="width: 300px;"/></td>
   </tr>
 </table>
 <br>
