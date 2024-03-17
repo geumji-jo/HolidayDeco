@@ -90,13 +90,24 @@ HolidayDeco를 이용하는 고객들에게
     <td>회원가입</td>
     <td>로그인, 로그아웃</td>
     <td>아이디 찾기, 비밀번호 찾기</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/32b24e0b-a58d-4c22-a2e8-806eb51eae2b"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/999d3c1b-e824-41d2-819c-1dfdeff823be"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/1168a43f-2a03-4ed3-825a-679e2c6f2903"/></td>
+
+  </tr>
+</table>
+<table>
+  <tr>
     <td>회원 정보수정</td>
     <td>탈퇴하기</td>
     <td>휴면</td>
   </tr>
   <tr>
-    <td>![image](https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1)
-</td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
+    <td><img src="https://github.com/geumji-jo/HolidayDeco/assets/121929431/b97575e3-8d54-45c6-a905-7ac6064ef1a1"/></td>
   </tr>
 </table>
 <br>
